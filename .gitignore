@@ -1,0 +1,36 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local environment / secrets
+.env
+.env.*
+application/config/database.php
+
+# Concrete CMS generated config / proxies
+application/config/generated_overrides/
+application/config/doctrine/proxies/
+
+# Concrete CMS runtime content, uploads, cache, thumbnails, temp files
+application/files/
+updates/
+
+# Dependency directories
+vendor/
+concrete/vendor/
+packages/*/vendor/
+node_modules/
+
+# Test / coverage artifacts
+.phpunit.result.cache
+coverage/
+
+# Package manager logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
