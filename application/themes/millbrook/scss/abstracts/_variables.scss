@@ -1,0 +1,63 @@
+$font-family-base: 'Figtree', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-family-heading: 'Syne', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+$color-brand-primary: #298fc2;
+$color-brand-primary-dark: #35485e;
+$color-brand-secondary: #866eaf;
+$color-brand-coral: #ec5e61;
+$color-brand-highlight: #c5d32d;
+$color-brand-ink: #2f3438;
+$color-brand-ink-soft: #5f666c;
+$color-brand-accent: #866eaf;
+$color-brand-accent-soft: #e4dcf1;
+$color-surface: #f5f4f1;
+$color-surface-strong: #ece9e3;
+$color-surface-card: #f5f4f1;
+$color-text-main: #2f3438;
+$color-text-muted: #646d75;
+$color-header-mist: #f1ede6;
+
+$border-soft: rgba(47, 52, 56, 0.14);
+$shadow-soft: 0 28px 60px rgba(35, 43, 49, 0.14);
+$shadow-card: 0 16px 34px rgba(35, 43, 49, 0.08);
+$shadow-hero: 0 24px 50px rgba(18, 28, 35, 0.22);
+
+$radius-card: 22px;
+$radius-card-large: 1.75rem;
+$radius-pill: 999px;
+
+$container-width: 1180px;
+$container-narrow: 920px;
+
+$breakpoint-nav: 1100px;
+$breakpoint-tablet: 768px;
+$breakpoint-mobile: 760px;
+
+$hero-blend-logo-filter: brightness(0) saturate(100%) invert(96%) sepia(12%) saturate(125%)
+    hue-rotate(336deg) brightness(104%) contrast(95%);
+
+:root {
+    --brand-primary: #{$color-brand-primary};
+    --brand-primary-dark: #{$color-brand-primary-dark};
+    --brand-secondary: #{$color-brand-secondary};
+    --brand-coral: #{$color-brand-coral};
+    --brand-highlight: #{$color-brand-highlight};
+    --brand-ink: #{$color-brand-ink};
+    --brand-ink-soft: #{$color-brand-ink-soft};
+    --brand-accent: #{$color-brand-accent};
+    --brand-accent-soft: #{$color-brand-accent-soft};
+    --surface: #{$color-surface};
+    --surface-strong: #{$color-surface-strong};
+    --surface-card: #{$color-surface-card};
+    --border-soft: #{$border-soft};
+    --text-main: #{$color-text-main};
+    --text-muted: #{$color-text-muted};
+    --shadow-soft: #{$shadow-soft};
+    --shadow-card: #{$shadow-card};
+    --radius-card: #{$radius-card};
+    --radius-pill: #{$radius-pill};
+    --container-width: #{$container-width};
+    --container-narrow: #{$container-narrow};
+    --toolbar-offset: 0px;
+    --header-shell-height: 5.75rem;
+}

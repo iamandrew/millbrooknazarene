@@ -63,39 +63,30 @@ Homepage structure
 ------------------
 The homepage currently follows this sequence:
 1. Hero
-2. Vision / story
-3. One church / three shared rhythms
-4. Featured teaching
-5. Next steps
-6. Life at Millbrook
-7. Plan a visit
-8. Closing call to action
+2. What to Expect
+3. About Millbrook
+4. Life at Millbrook
+5. Plan Your Visit
 
 Homepage editable areas
 -----------------------
 Fallback content exists in code, but these areas can all be overridden in Concrete:
 
 - `Home Hero Content`
-- `Home Hero Media`
 - `Home Vision Intro`
 - `Home Vision Content`
 - `Home Community Heading`
+- `Home Community Intro`
 - `Home Community Cards`
-- `Home Sermons`
-- `Home Connect`
-- `Home Next Steps`
 - `Home Ministries Heading`
 - `Home Ministries Cards`
 - `Home Visit Card`
 - `Home Contact Card`
 - `Home Quick Links Card`
-- `Home CTA`
 
 Shared/global editable areas:
 - `Top Bar Left`
 - `Top Bar Right`
-- `Header Navigation`
-- `Header Navigation Mobile`
 - `Header Actions`
 - `Footer - Column 1`
 - `Footer - Column 2`
@@ -114,6 +105,32 @@ Getting started
 2. Edit the header and footer global areas for navigation, logo, and footer content.
 3. Edit the homepage areas listed above to replace fallback copy with final Millbrook content.
 4. Adjust `css/main.css` if you want to refine colour balance, spacing, or component styling further.
+
+Content seeding
+---------------
+For structured, deployable content we use Concrete CLI seed scripts rather than database deploys.
+
+Available seed commands from the project root:
+- `npm run seed:help`
+- `npm run seed:inspect`
+- `npm run seed:demo-sitemap`
+- `npm run seed:new-here`
+- `npm run seed:all`
+
+What they do:
+- `seed:inspect` prints the current sitemap, page types, and templates
+- `seed:demo-sitemap` creates/updates the demo sitemap and seeds empty pages
+- `seed:new-here` rebuilds the `New Here` page body with Concrete content blocks
+- `seed:all` runs the main content seeds in sequence
+
+Deploy workflow
+---------------
+1. Deploy code via git
+2. Run any needed seed command on the target environment
+3. Review the updated pages in Concrete
+
+Use seeds for repeatable starter/structured content only.
+Use the CMS itself for ongoing editorial/live content changes.
 
 Local development
 -----------------

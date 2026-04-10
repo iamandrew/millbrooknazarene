@@ -10,7 +10,6 @@ $pageDescription = isset($c) && method_exists($c, 'getCollectionDescription') ? 
 <main id="main-content" class="site-main">
     <section class="full-page-hero">
         <div class="container full-page-hero__inner">
-            <p class="full-page-hero__eyebrow">Millbrook Church</p>
             <h1><?php echo h($pageTitle); ?></h1>
             <?php if ($pageDescription !== '') { ?>
                 <p class="full-page-hero__description"><?php echo h($pageDescription); ?></p>

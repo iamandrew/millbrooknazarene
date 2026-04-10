@@ -1,0 +1,16 @@
+{
+  "name": "millbrookchurch",
+  "private": true,
+  "scripts": {
+    "build:css": "sass --style=expanded --no-source-map application/themes/millbrook/scss/main.scss application/themes/millbrook/css/main.css",
+    "watch:css": "sass --watch --style=expanded --no-source-map application/themes/millbrook/scss/main.scss:application/themes/millbrook/css/main.css",
+    "seed:help": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- help",
+    "seed:inspect": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- inspect",
+    "seed:demo-sitemap": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- demo-sitemap",
+    "seed:new-here": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- new-here",
+    "seed:all": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- all"
+  },
+  "devDependencies": {
+    "sass": "^1.77.8"
+  }
+}

@@ -1,39 +1,40 @@
 document.addEventListener('DOMContentLoaded', function () {
     var header = document.querySelector('.site-header');
-    var toggle = document.querySelector('.mobile-nav-toggle');
-    var mobileNav = document.getElementById('mobileNav');
-    var mobileLinks = mobileNav ? mobileNav.querySelectorAll('a') : [];
+    var toggle = document.querySelector('.menu-toggle');
+    var siteMenu = document.getElementById('siteMenu');
+    var closeButtons = siteMenu ? siteMenu.querySelectorAll('[data-menu-close]') : [];
+    var menuLinks = siteMenu ? siteMenu.querySelectorAll('a') : [];
 
-    var closeMobileNav = function () {
-        if (!toggle || !mobileNav) {
+    var closeMenu = function () {
+        if (!toggle || !siteMenu) {
             return;
         }
 
         toggle.setAttribute('aria-expanded', 'false');
-        mobileNav.classList.remove('open');
-        document.body.classList.remove('nav-open');
+        siteMenu.classList.remove('open');
+        siteMenu.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('menu-open');
     };
 
-    if (toggle && mobileNav) {
+    if (toggle && siteMenu) {
         toggle.addEventListener('click', function () {
-            var isOpen = mobileNav.classList.toggle('open');
+            var isOpen = siteMenu.classList.toggle('open');
             toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-            document.body.classList.toggle('nav-open', isOpen);
+            siteMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+            document.body.classList.toggle('menu-open', isOpen);
         });
 
-        mobileLinks.forEach(function (link) {
-            link.addEventListener('click', closeMobileNav);
+        closeButtons.forEach(function (button) {
+            button.addEventListener('click', closeMenu);
+        });
+
+        menuLinks.forEach(function (link) {
+            link.addEventListener('click', closeMenu);
         });
 
         document.addEventListener('keydown', function (event) {
             if (event.key === 'Escape') {
-                closeMobileNav();
-            }
-        });
-
-        window.addEventListener('resize', function () {
-            if (window.innerWidth >= 992) {
-                closeMobileNav();
+                closeMenu();
             }
         });
     }
