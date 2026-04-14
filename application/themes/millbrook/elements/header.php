@@ -14,7 +14,7 @@ $isHomePage = isset($c) && method_exists($c, 'isHomePage') && $c->isHomePage();
 $transparentHeader = $isHomePage || $collectionPath === '/' || $collectionPath === '';
 $heroBlendHeader = !$isHomePage;
 $wheelHeaderLogo = $heroBlendHeader || $isHomePage;
-$brandLogo = $wheelHeaderLogo ? 'logo-wheel.png' : 'logo.png';
+$brandLogo = $wheelHeaderLogo ? 'logo-wheel.svg' : 'logo-no-sub.svg';
 
 $currentPageId = isset($c) && method_exists($c, 'getCollectionID') ? (int) $c->getCollectionID() : 0;
 $trailIds = [];

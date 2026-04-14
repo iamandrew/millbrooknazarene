@@ -22,7 +22,7 @@ $renderArea = static function (string $areaName, $c, callable $fallback): void {
         <div class="container home-hero__layout">
             <div class="home-hero__brand">
                 <img
-                    src="<?php echo $themePath; ?>/images/logo-no-sub.png"
+                    src="<?php echo $themePath; ?>/images/logo-no-sub.svg"
                     alt="Millbrook Church of the Nazarene"
                     class="home-hero__logo"
                 >

@@ -33,9 +33,6 @@ $breakpoint-nav: 1100px;
 $breakpoint-tablet: 768px;
 $breakpoint-mobile: 760px;
 
-$hero-blend-logo-filter: brightness(0) saturate(100%) invert(96%) sepia(12%) saturate(125%)
-    hue-rotate(336deg) brightness(104%) contrast(95%);
-
 :root {
     --brand-primary: #{$color-brand-primary};
     --brand-primary-dark: #{$color-brand-primary-dark};

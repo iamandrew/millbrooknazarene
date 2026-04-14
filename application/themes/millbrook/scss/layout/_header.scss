@@ -44,7 +44,7 @@ body.menu-open {
 
 .brand-logo {
     width: clamp(180px, 20vw, 310px);
-    transition: filter 0.2s ease, opacity 0.2s ease;
+    transition: opacity 0.2s ease;
 
     @include respond-max($breakpoint-mobile) {
         width: min(62vw, 240px);
@@ -133,6 +133,12 @@ body.menu-open {
     .menu-toggle__icon::after {
         transform: translateY(-50%) rotate(-45deg);
     }
+
+    .menu-toggle {
+        border-color: rgba(255, 255, 255, 0.2);
+        background: transparent;
+        box-shadow: none;
+    }
 }
 
 .site-menu {
@@ -170,7 +176,7 @@ body.menu-open {
 
 .site-menu__shell {
     min-height: 100%;
-    padding-top: clamp(1.5rem, 4vh, 2.5rem);
+    padding-top: clamp(1rem, 2.6vh, 1.5rem);
     padding-bottom: 2.5rem;
 }
 
@@ -178,7 +184,7 @@ body.menu-open {
     display: grid;
     min-height: 100%;
     align-content: space-between;
-    gap: 3rem;
+    gap: 2rem;
 }
 
 .site-menu__primary {
@@ -252,7 +258,14 @@ body.menu-open {
 
 .site-menu__group--links {
     .site-menu__feature-link {
-        margin-top: 0.15rem;
+        margin-top: 0.1rem;
+        font-size: clamp(1.35rem, 2.2vw, 2.15rem);
+        line-height: 1.02;
+        letter-spacing: -0.03em;
+    }
+
+    .site-menu__feature-item + .site-menu__feature-item {
+        margin-top: 0.35rem;
     }
 }
 
@@ -260,7 +273,7 @@ body.menu-open {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.5rem 2rem;
-    padding-top: 2rem;
+    padding-top: 1.4rem;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
 
     @include respond-max($breakpoint-mobile) {
@@ -314,7 +327,6 @@ body.menu-open {
 
     .brand-logo--hero-blend {
         width: clamp(52px, 5vw, 68px);
-        filter: $hero-blend-logo-filter !important;
     }
 
     .header-actions .button--primary {
@@ -354,7 +366,6 @@ body.menu-open {
 
     .brand-logo--wheel {
         width: clamp(52px, 5vw, 68px);
-        filter: $hero-blend-logo-filter !important;
     }
 
     &.scrolled {
@@ -363,10 +374,6 @@ body.menu-open {
             backdrop-filter: blur(16px);
         }
     }
-}
-
-.site-header:not(.transparent) .brand-logo {
-    filter: brightness(0) saturate(100%) opacity(0.92);
 }
 
 @include respond-max($breakpoint-mobile) {
