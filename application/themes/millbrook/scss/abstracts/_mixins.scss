@@ -35,6 +35,7 @@
 
 @mixin hero-shell($padding-top, $padding-bottom, $background: $color-brand-primary-dark) {
     position: relative;
+    isolation: isolate;
     overflow: hidden;
     padding: $padding-top 0 $padding-bottom;
     background: $background;
@@ -45,6 +46,7 @@
         content: '';
         position: absolute;
         inset: 0;
+        z-index: 0;
         background: none;
         pointer-events: none;
     }
@@ -54,6 +56,7 @@
         position: absolute;
         inset: auto 0 0;
         height: 1px;
+        z-index: 0;
         background: transparent;
     }
 }
@@ -66,6 +69,65 @@
     border-radius: $radius-card-large;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
     box-shadow: $shadow-hero;
+}
+
+@mixin hero-visual-frame(
+    $width: 72rem,
+    $desktop-overlap: -12rem,
+    $nav-overlap: -10rem,
+    $mobile-overlap: -7rem
+) {
+    position: relative;
+    z-index: 2;
+    width: min(100%, $width);
+    margin: 0 auto $desktop-overlap;
+    padding: 0;
+
+    @include respond-max($breakpoint-nav) {
+        margin-bottom: $nav-overlap;
+    }
+
+    @include respond-max($breakpoint-mobile) {
+        margin-bottom: $mobile-overlap;
+    }
+}
+
+@mixin hero-image-card-base($desktop-height: 29rem, $mobile-height: 18rem) {
+    position: relative;
+    min-height: $desktop-height;
+    border: 1px solid rgba(245, 244, 241, 0.16);
+    border-radius: 1.85rem;
+    box-shadow: 0 32px 80px rgba(18, 25, 33, 0.28);
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 18% 18%, rgba(134, 110, 175, 0.42), transparent 28%),
+            radial-gradient(circle at 76% 20%, rgba(236, 94, 97, 0.36), transparent 24%),
+            radial-gradient(circle at 70% 78%, rgba(41, 143, 194, 0.34), transparent 30%),
+            linear-gradient(180deg, rgba(245, 244, 241, 0.08), rgba(245, 244, 241, 0.02)),
+            linear-gradient(135deg, rgba(41, 143, 194, 0.62), rgba(134, 110, 175, 0.42) 56%, rgba(236, 94, 97, 0.3) 100%);
+        z-index: 1;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background-image: var(--hero-image);
+        background-position: center;
+        background-size: cover;
+        filter: grayscale(1) contrast(1.2) brightness(0.84);
+    }
+
+    @include respond-max($breakpoint-mobile) {
+        min-height: $mobile-height;
+        border-radius: 1.5rem;
+    }
 }
 
 @mixin prose-defaults {

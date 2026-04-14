@@ -15,7 +15,7 @@ The theme currently includes:
 Brand System
 ------------
 Typography:
-- Headings and titles use `Syne`
+- Headings and titles use `Sora`
 - Body copy uses `Figtree`
 
 Primary brand colours:
@@ -52,6 +52,7 @@ Key theme files:
 - `elements/header.php` — header, utility bar, navigation, mobile toggle
 - `elements/footer.php` — footer content and lower navigation/contact blocks
 - `elements/hero.php` — default inner-page hero
+- `elements/page_hero_data.php` — shared inner-page hero title, description, and image logic
 - `default.php` — default page wrapper
 - `view.php` — standard view wrapper
 - `page_templates/home_full.php` — full-width homepage template variant
@@ -113,15 +114,31 @@ For structured, deployable content we use Concrete CLI seed scripts rather than 
 Available seed commands from the project root:
 - `npm run seed:help`
 - `npm run seed:inspect`
+- `npm run seed:hero-attributes`
 - `npm run seed:demo-sitemap`
 - `npm run seed:new-here`
 - `npm run seed:all`
 
 What they do:
 - `seed:inspect` prints the current sitemap, page types, and templates
+- `seed:hero-attributes` creates the page attributes used by the inner-page hero system
 - `seed:demo-sitemap` creates/updates the demo sitemap and seeds empty pages
 - `seed:new-here` rebuilds the `New Here` page body with Concrete content blocks
 - `seed:all` runs the main content seeds in sequence
+
+Inner-page hero images
+----------------------
+Standard content pages now support a shared hero image system:
+
+- `hero_image` — page image attribute for the hero background
+- `disable_hero_image` — page boolean attribute to force a plain hero with no image
+
+If `hero_image` is not set and `disable_hero_image` is not checked, the theme falls back to the default image at `images/hero.png`.
+
+The demo sitemap seed intentionally excludes temporary/special pages such as:
+- `Jobs`
+- `Kingdom Kids`
+- `Shipwrecked`
 
 Deploy workflow
 ---------------

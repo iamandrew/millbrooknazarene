@@ -4,7 +4,7 @@
 .home-hero {
     position: relative;
     overflow: visible;
-    padding: calc(5.75rem + var(--toolbar-offset)) 0 0;
+    padding: calc(var(--header-shell-height) + var(--toolbar-offset)) 0 0;
     background: var(--brand-primary-dark);
     color: var(--surface);
 
@@ -97,9 +97,6 @@
         animation: rise-in 0.9s ease 0.1s both;
     }
 
-    @include respond-max($breakpoint-mobile) {
-        padding: calc(6.6rem + var(--toolbar-offset)) 0 0;
-    }
 }
 
 .home-intro {
@@ -159,60 +156,6 @@
 
     @include respond-max($breakpoint-mobile) {
         padding: 10rem 0 3rem;
-    }
-}
-
-.hero-visual {
-    position: relative;
-    z-index: 2;
-    width: min(100%, 62rem);
-    margin: 0 auto -12rem;
-    padding: 0;
-
-    @include respond-max($breakpoint-nav) {
-        margin-bottom: -10rem;
-    }
-
-    @include respond-max($breakpoint-mobile) {
-        margin-bottom: -7rem;
-    }
-}
-
-.hero-image-card {
-    position: relative;
-    min-height: 29rem;
-    border: 1px solid rgba(245, 244, 241, 0.16);
-    border-radius: 1.85rem;
-    box-shadow: 0 32px 80px rgba(18, 25, 33, 0.28);
-    overflow: hidden;
-
-    &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background:
-            radial-gradient(circle at 18% 18%, rgba(134, 110, 175, 0.42), transparent 28%),
-            radial-gradient(circle at 76% 20%, rgba(236, 94, 97, 0.36), transparent 24%),
-            radial-gradient(circle at 70% 78%, rgba(41, 143, 194, 0.34), transparent 30%),
-            linear-gradient(180deg, rgba(245, 244, 241, 0.08), rgba(245, 244, 241, 0.02)),
-            linear-gradient(135deg, rgba(41, 143, 194, 0.62), rgba(134, 110, 175, 0.42) 56%, rgba(236, 94, 97, 0.3) 100%);
-        z-index: 1;
-    }
-
-    &::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        background-image: var(--hero-image);
-        background-position: center;
-        background-size: cover;
-        filter: grayscale(1) contrast(1.2) brightness(0.84);
-    }
-
-    @include respond-max($breakpoint-mobile) {
-        min-height: 18rem;
-        border-radius: 1.5rem;
     }
 }
 

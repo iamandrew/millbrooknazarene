@@ -465,57 +465,6 @@ HTML,
 </ul>
 HTML,
     ],
-    [
-        'name' => 'Shipwrecked',
-        'handle' => 'shipwrecked',
-        'description' => 'A seasonal event page for children, families, and community outreach.',
-        'content' => <<<'HTML'
-<h2>Shipwrecked</h2>
-<p>Shipwrecked is a themed church event designed to welcome children and families into a joyful, imaginative environment where faith can be explored in accessible and memorable ways.</p>
-
-<h3>What The Page Could Include</h3>
-<ul>
-  <li>Dates, times, and registration details</li>
-  <li>An overview of activities and age ranges</li>
-  <li>Volunteer information and parent FAQs</li>
-  <li>Photos or highlights from previous years</li>
-</ul>
-HTML,
-    ],
-    [
-        'name' => 'Kingdom Kids',
-        'handle' => 'kingdom-kids',
-        'description' => 'A dedicated children’s ministry page with a clear family-friendly focus.',
-        'content' => <<<'HTML'
-<h2>Kingdom Kids</h2>
-<p>Kingdom Kids is a space where children can learn about Jesus, build friendships, and enjoy church as a place of belonging. This page can introduce the ministry, explain what happens, and help families feel confident about getting involved.</p>
-
-<h3>Highlights</h3>
-<ul>
-  <li>Engaging Bible teaching for children</li>
-  <li>A warm, safe, and encouraging environment</li>
-  <li>Support for families who are new to church</li>
-  <li>Fun activities that help faith feel real and memorable</li>
-</ul>
-HTML,
-    ],
-    [
-        'name' => 'Jobs',
-        'handle' => 'jobs',
-        'description' => 'Opportunities to serve the church through employed roles and vacancies.',
-        'content' => <<<'HTML'
-<h2>Jobs</h2>
-<p>From time to time, vacancies may open within the life of the church. This page can be used to share current opportunities, application information, and a brief sense of the culture and calling of the role.</p>
-
-<h3>What To Include</h3>
-<ul>
-  <li>Role description and key responsibilities</li>
-  <li>Hours, contract details, and closing date</li>
-  <li>Application pack and contact information</li>
-  <li>A short summary of the vision behind the role</li>
-</ul>
-HTML,
-    ],
 ];
 
 $processBranch = static function (Page $parent, array $branch) use (&$processBranch, $findOrCreatePage, $seedMainArea): void {

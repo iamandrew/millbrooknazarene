@@ -29,7 +29,9 @@ foreach ($area->getAreaBlocksArray($page) as $block) {
 
 $blocks = [
     <<<'HTML'
-<p>We know visiting a church for the first time can feel a little uncertain, so we hope this page helps you feel more prepared and at ease.</p>
+<div class="content-intro">
+  <p>We know visiting a church for the first time can feel a little uncertain, so we hope this page helps you feel more prepared and at ease.</p>
+</div>
 HTML,
     <<<'HTML'
 <div class="info-strip">
@@ -49,9 +51,11 @@ HTML,
 </div>
 HTML,
     <<<'HTML'
+<section class="content-section">
 <h2>What Sundays Are Like</h2>
 <p>Our Sunday service includes worship, prayer, Bible teaching, and time together as a church family. We are a welcoming, multi-generational church, and whether you’ve been part of church for years or are simply exploring, you will be very welcome here.</p>
 <p>You do not need to know all the words, understand everything, or dress a certain way before coming. We want Millbrook to feel like a place where people can come honestly, meet with God, and get to know others.</p>
+</section>
 HTML,
     <<<'HTML'
 <div class="card-grid">
@@ -74,6 +78,7 @@ HTML,
 </div>
 HTML,
     <<<'HTML'
+<section class="content-section content-section--family">
 <h2>Children &amp; Families</h2>
 <p>Children and families are an important part of church life at Millbrook. We want children to feel welcome, safe, and included.</p>
 <p>We offer creche and children’s ministry during our Sunday gatherings, and the people who serve in those areas are safely recruited and checked.</p>
@@ -83,14 +88,18 @@ HTML,
   <li>Safely recruited and checked volunteers</li>
   <li>A family-friendly and multi-generational atmosphere</li>
 </ul>
+</section>
 HTML,
     <<<'HTML'
+<section class="content-section content-section--about">
 <h2>A Bit About Us</h2>
 <p>Millbrook is a Church of the Nazarene congregation in Larne. We are a Christ-centred church seeking to worship God, grow in faith, and serve our local community.</p>
 <p>We want to be a church where people of all ages can encounter Jesus, build genuine relationships, and find a place to belong.</p>
 <p><a href="/about/who-we-are">Learn more about our church</a></p>
+</section>
 HTML,
     <<<'HTML'
+<section class="faq-section">
 <h2>Questions You Might Have</h2>
 <div class="faq-accordion">
   <details class="faq-accordion__item">
@@ -124,6 +133,7 @@ HTML,
     </div>
   </details>
 </div>
+</section>
 HTML,
     <<<'HTML'
 <div class="action-panel">

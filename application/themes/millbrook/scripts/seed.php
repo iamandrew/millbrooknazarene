@@ -2,6 +2,7 @@
 
 $seedMap = [
     'inspect' => __DIR__ . '/inspect_site.php',
+    'hero-attributes' => __DIR__ . '/ensure_page_hero_attributes.php',
     'demo-sitemap' => __DIR__ . '/build_demo_sitemap.php',
     'new-here' => __DIR__ . '/build_new_here_page.php',
 ];
@@ -22,7 +23,7 @@ if ($seed === null || in_array($seed, ['-h', '--help', 'help'], true)) {
 }
 
 if ($seed === 'all') {
-    foreach (['demo-sitemap', 'new-here'] as $key) {
+    foreach (['hero-attributes', 'demo-sitemap', 'new-here'] as $key) {
         $output->writeln(sprintf('<info>Running seed: %s</info>', $key));
         $rc = require $seedMap[$key];
         if (is_numeric($rc) && (int) $rc !== 0) {

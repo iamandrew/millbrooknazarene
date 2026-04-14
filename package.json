@@ -6,6 +6,7 @@
     "watch:css": "sass --watch --style=expanded --no-source-map application/themes/millbrook/scss/main.scss:application/themes/millbrook/css/main.css",
     "seed:help": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- help",
     "seed:inspect": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- inspect",
+    "seed:hero-attributes": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- hero-attributes",
     "seed:demo-sitemap": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- demo-sitemap",
     "seed:new-here": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- new-here",
     "seed:all": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- all"
