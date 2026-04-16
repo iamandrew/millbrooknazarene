@@ -301,7 +301,7 @@ body.menu-open {
     }
 }
 
-.site-header--hero-blend {
+.site-header--hero {
     top: calc(var(--toolbar-offset) - 1px);
     margin-top: 0;
 
@@ -325,10 +325,6 @@ body.menu-open {
         }
     }
 
-    .brand-logo--hero-blend {
-        width: clamp(52px, 5vw, 68px);
-    }
-
     .header-actions .button--primary {
         background: rgba(255, 255, 255, 0.14);
         border-color: rgba(255, 255, 255, 0.16);
@@ -340,33 +336,9 @@ body.menu-open {
     }
 }
 
-.site-header.transparent {
+.site-header--overlay {
     position: absolute;
     inset: var(--toolbar-offset) 0 auto;
-
-    .header-shell {
-        background: transparent;
-        border-color: rgba(255, 255, 255, 0.14);
-        backdrop-filter: none;
-    }
-
-    .menu-toggle {
-        color: var(--surface);
-
-        &:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-    }
-
-    .header-actions .button--primary {
-        background: transparent;
-        border-color: rgba(255, 255, 255, 0.28);
-        color: var(--surface);
-    }
-
-    .brand-logo--wheel {
-        width: clamp(52px, 5vw, 68px);
-    }
 
     &.scrolled {
         .header-shell {
@@ -379,11 +351,5 @@ body.menu-open {
 @include respond-max($breakpoint-mobile) {
     :root {
         --header-shell-height: 4.9rem;
-    }
-}
-
-.site-header--home {
-    .header-shell {
-        border-bottom: 0;
     }
 }

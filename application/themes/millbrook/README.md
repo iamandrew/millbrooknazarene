@@ -3,7 +3,7 @@ Millbrook Theme
 
 Overview
 --------
-This is the current Concrete CMS theme for Millbrook Church. The homepage structure takes its cue from https://anchortacoma.org/, while the branding, typography, and colour system have been adapted to Millbrook's own identity.
+This is the current Concrete CMS theme for Millbrook Church. It uses a custom Millbrook visual system built around layered image heroes, a structured visitor-first homepage, and editable Concrete CMS content areas.
 
 The theme currently includes:
 - a transparent, sticky header on the homepage hero
@@ -37,9 +37,9 @@ CSS tokens
 The main theme variables live in `css/main.css`.
 
 Current key tokens:
-- `--brand-primary: #298fc2`
+- `--brand-primary: #866eaf`
 - `--brand-primary-dark: #35485e`
-- `--brand-secondary: #866eaf`
+- `--brand-secondary: #298fc2`
 - `--brand-coral: #ec5e61`
 - `--brand-highlight: #c5d32d`
 - `--brand-ink: #2f3438`

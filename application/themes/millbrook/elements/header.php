@@ -11,9 +11,9 @@ if (isset($c) && method_exists($c, 'getCollectionPath')) {
 }
 
 $isHomePage = isset($c) && method_exists($c, 'isHomePage') && $c->isHomePage();
-$transparentHeader = $isHomePage || $collectionPath === '/' || $collectionPath === '';
-$heroBlendHeader = !$isHomePage;
-$wheelHeaderLogo = $heroBlendHeader || $isHomePage;
+$overlayHeader = $isHomePage || $collectionPath === '/' || $collectionPath === '';
+$heroHeader = true;
+$wheelHeaderLogo = $heroHeader;
 $brandLogo = $wheelHeaderLogo ? 'logo-wheel.svg' : 'logo-no-sub.svg';
 
 $currentPageId = isset($c) && method_exists($c, 'getCollectionID') ? (int) $c->getCollectionID() : 0;
@@ -84,7 +84,7 @@ $navigationLinks = array_values(array_filter($navigationItems, static fn(array $
 <a class="skip-link" href="#main-content">Skip to content</a>
 
 <div class="<?php echo $c->getPageWrapperClass(); ?>">
-    <header class="site-header<?php echo $transparentHeader ? ' transparent' : ''; ?><?php echo $isHomePage ? ' site-header--home' : ''; ?><?php echo $heroBlendHeader ? ' site-header--hero-blend' : ''; ?>">
+    <header class="site-header<?php echo $heroHeader ? ' site-header--hero' : ''; ?><?php echo $overlayHeader ? ' site-header--overlay' : ''; ?>">
 <!--
         <div class="site-utility">
             <div class="container site-utility__layout">
@@ -132,7 +132,7 @@ $navigationLinks = array_values(array_filter($navigationItems, static fn(array $
                     <img
                         src="<?php echo $view->getThemePath(); ?>/images/<?php echo h($brandLogo); ?>"
                         alt="Millbrook Church of the Nazarene"
-                        class="brand-logo<?php echo $wheelHeaderLogo ? ' brand-logo--wheel' : ''; ?><?php echo $heroBlendHeader ? ' brand-logo--hero-blend' : ''; ?>"
+                        class="brand-logo<?php echo $wheelHeaderLogo ? ' brand-logo--wheel' : ''; ?>"
                     >
                 </a>
 

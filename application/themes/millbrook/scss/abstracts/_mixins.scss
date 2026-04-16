@@ -130,6 +130,63 @@
     }
 }
 
+@mixin layered-hero-composition(
+    $brand-stage: clamp(13rem, 18vw, 16rem),
+    $media-offset: clamp(3rem, 5vw, 6rem),
+    $brand-padding-top: clamp(0.8rem, 2vw, 1.35rem),
+    $brand-gap: 0.75rem,
+    $mobile-brand-stage: 10rem,
+    $mobile-media-offset: 5.5rem,
+    $mobile-brand-padding-top: 0.45rem,
+    $mobile-brand-gap: 0.55rem
+) {
+    --hero-media-offset: #{$media-offset};
+    --hero-brand-stage: #{$brand-stage};
+
+    &__layout {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+
+    &__brand,
+    &__media {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    &__brand {
+        position: relative;
+        z-index: 3;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: $brand-gap;
+        min-height: var(--hero-brand-stage);
+        padding-top: $brand-padding-top;
+        text-align: center;
+    }
+
+    &__media {
+        position: relative;
+        min-height: 0;
+        margin-top: var(--hero-media-offset);
+    }
+
+    @include respond-max($breakpoint-mobile) {
+        --hero-media-offset: #{$mobile-media-offset};
+        --hero-brand-stage: #{$mobile-brand-stage};
+
+        &__brand {
+            gap: $mobile-brand-gap;
+            padding-top: $mobile-brand-padding-top;
+        }
+    }
+}
+
 @mixin prose-defaults {
     :where(p, li) {
         font-size: 1.09rem;
