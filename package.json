@@ -9,9 +9,13 @@
     "seed:hero-attributes": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- hero-attributes",
     "seed:demo-sitemap": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- demo-sitemap",
     "seed:new-here": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- new-here",
+    "seed:visitor-blueprint": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- visitor-blueprint",
     "seed:all": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- all"
   },
   "devDependencies": {
     "sass": "^1.77.8"
+  },
+  "dependencies": {
+    "plyr": "^3.8.4"
   }
 }

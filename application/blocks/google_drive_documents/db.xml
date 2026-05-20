@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<schema version="0.3">
+    <table name="btGoogleDriveDocuments">
+        <field name="bID" type="I">
+            <unsigned />
+            <key />
+        </field>
+        <field name="title" type="C" size="255" />
+        <field name="intro" type="X2" />
+        <field name="folderUrl" type="C" size="255" />
+        <field name="buttonLabel" type="C" size="255" />
+        <field name="showButton" type="I" size="1">
+            <default value="1" />
+        </field>
+        <field name="viewMode" type="C" size="20">
+            <default value="list" />
+        </field>
+        <field name="embedHeight" type="I">
+            <default value="640" />
+        </field>
+    </table>
+</schema>

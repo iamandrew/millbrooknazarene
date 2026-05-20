@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema version="0.3">
+    <table name="btWhatsOnBlock">
+        <field name="bID" type="I">
+            <unsigned />
+            <key />
+        </field>
+        <field name="title" type="C" size="255" />
+        <field name="intro" type="X2" />
+        <field name="layout" type="C" size="32">
+            <default value="cards" />
+        </field>
+        <field name="itemsJson" type="X2" />
+        <field name="primaryButtonLabel" type="C" size="255" />
+        <field name="primaryButtonUrl" type="C" size="255" />
+        <field name="secondaryButtonLabel" type="C" size="255" />
+        <field name="secondaryButtonUrl" type="C" size="255" />
+    </table>
+</schema>

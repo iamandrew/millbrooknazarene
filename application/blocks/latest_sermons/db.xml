@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema version="0.3">
+    <table name="btLatestSermons">
+        <field name="bID" type="I">
+            <unsigned />
+            <key />
+        </field>
+        <field name="title" type="C" size="255" />
+        <field name="intro" type="X2" />
+        <field name="sourceType" type="C" size="32">
+            <default value="concrete_uploads" />
+        </field>
+        <field name="fileSetID" type="I">
+            <unsigned />
+            <default value="0" />
+        </field>
+        <field name="displayLimit" type="I">
+            <unsigned />
+            <default value="6" />
+        </field>
+        <field name="showDescriptions" type="I">
+            <unsigned />
+            <default value="1" />
+        </field>
+        <field name="showPlayer" type="I">
+            <unsigned />
+            <default value="1" />
+        </field>
+        <field name="showArchiveButton" type="I">
+            <unsigned />
+            <default value="1" />
+        </field>
+        <field name="archiveButtonLabel" type="C" size="255" />
+        <field name="archiveButtonUrl" type="C" size="255" />
+    </table>
+</schema>

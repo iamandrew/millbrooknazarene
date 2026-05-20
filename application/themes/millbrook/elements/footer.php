@@ -1,5 +1,8 @@
 <?php
 defined('C5_EXECUTE') or die("Access Denied.");
+
+$navigationData = require dirname(__FILE__) . '/navigation_builder.php';
+$footerLinks = $navigationData['footer_links'] ?? [];
 ?>
 
 </div>
@@ -51,10 +54,21 @@ defined('C5_EXECUTE') or die("Access Denied.");
                     ?>
                     <h4>Quick Links</h4>
                     <ul class="footer-links">
-                        <li><a href="/#home-vision">Vision</a></li>
-                        <li><a href="/resources/sermons">Teachings</a></li>
-                        <li><a href="/#home-next-steps">Visit</a></li>
-                        <li><a href="/giving">Giving</a></li>
+                        <?php if ($footerLinks !== []) { ?>
+                            <?php foreach ($footerLinks as $link) { ?>
+                                <li>
+                                    <a href="<?php echo h($link['url']); ?>"<?php echo $link['target'] === '_blank' ? ' target="_blank" rel="noopener noreferrer"' : ''; ?>>
+                                        <?php echo h($link['name']); ?>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <li><a href="/visit-us">Visit Us?</a></li>
+                            <li><a href="/community/whats-on">What’s On</a></li>
+                            <li><a href="/resources/sermons">Latest Sermons</a></li>
+                            <li><a href="/contact">Contact</a></li>
+                            <li><a href="/giving">Giving</a></li>
+                        <?php } ?>
                     </ul>
                     <?php
                 }
@@ -92,6 +106,7 @@ defined('C5_EXECUTE') or die("Access Denied.");
 </footer>
 
 <?php Loader::element('footer_required'); ?>
+<script src="<?php echo $view->getThemePath(); ?>/vendor/plyr/plyr.polyfilled.min.js"></script>
 <script src="<?php echo $view->getThemePath(); ?>/js/main.js"></script>
 
 </body>

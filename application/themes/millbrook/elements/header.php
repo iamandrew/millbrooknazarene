@@ -1,9 +1,7 @@
 <?php
 defined('C5_EXECUTE') or die("Access Denied.");
 
-use Concrete\Core\Navigation\Item\PageItem;
 use Concrete\Core\Page\Page;
-use Concrete\Core\Permission\Checker;
 
 $collectionPath = '';
 if (isset($c) && method_exists($c, 'getCollectionPath')) {
@@ -28,48 +26,9 @@ while ($trailPage instanceof Page && !$trailPage->isError() && $trailPage->getCo
     $trailPage = Page::getByID($parentId, 'ACTIVE');
 }
 
-$buildNavigationItems = static function (Page $parentPage, int $depth = 1) use (&$buildNavigationItems, $currentPageId, $trailIds): array {
-    $items = [];
-
-    foreach ($parentPage->getCollectionChildren('ACTIVE') as $page) {
-        if (!$page instanceof Page || $page->isError()) {
-            continue;
-        }
-
-        $permissionChecker = new Checker($page);
-        if (!$permissionChecker->canViewPage() || (bool) $page->getAttribute('exclude_nav')) {
-            continue;
-        }
-
-        $pageItem = new PageItem($page, $page->getCollectionID() === $currentPageId);
-        $children = [];
-
-        if (!(bool) $page->getAttribute('exclude_subpages_from_nav')) {
-            $children = $buildNavigationItems($page, $depth + 1);
-        }
-
-        $items[] = [
-            'id' => (int) $page->getCollectionID(),
-            'name' => $pageItem->getName(),
-            'url' => $pageItem->getURL(),
-            'target' => $page->isExternalLink() && $page->openCollectionPointerExternalLinkInNewWindow() ? '_blank' : '_self',
-            'is_current' => (int) $page->getCollectionID() === $currentPageId,
-            'in_path' => in_array((int) $page->getCollectionID(), $trailIds, true),
-            'children' => $children,
-            'depth' => $depth,
-        ];
-    }
-
-    return $items;
-};
-
-$homePage = isset($c) ? Page::getByID($c->getSiteHomePageID(), 'ACTIVE') : null;
-$navigationItems = $homePage instanceof Page && !$homePage->isError()
-    ? $buildNavigationItems($homePage)
-    : [];
-
-$navigationGroups = array_values(array_filter($navigationItems, static fn(array $item): bool => $item['children'] !== []));
-$navigationLinks = array_values(array_filter($navigationItems, static fn(array $item): bool => $item['children'] === []));
+$navigationData = require dirname(__FILE__) . '/navigation_builder.php';
+$navigationGroups = $navigationData['groups'] ?? [];
+$navigationLinks = $navigationData['quick_links'] ?? [];
 ?>
 <!doctype html>
 <html lang="<?php echo Localization::activeLanguage(); ?>">
@@ -77,6 +36,7 @@ $navigationLinks = array_values(array_filter($navigationItems, static fn(array $
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php Loader::element('header_required'); ?>
+    <link rel="stylesheet" href="<?php echo $view->getThemePath(); ?>/vendor/plyr/plyr.css">
     <link rel="stylesheet" href="<?php echo $view->getThemePath(); ?>/css/main.css">
 </head>
 <body>
@@ -142,7 +102,7 @@ $navigationLinks = array_values(array_filter($navigationItems, static fn(array $
                     if ($headerActions->getTotalBlocksInArea($c) > 0) {
                         $headerActions->display($c);
                     } else {
-                        echo '<a href="/#home-next-steps" class="button button--primary">Visit Us</a>';
+                        echo '<a href="/visit-us" class="button button--primary">Visit Us?</a>';
                     }
                     ?>
                 </div>
@@ -158,13 +118,13 @@ $navigationLinks = array_values(array_filter($navigationItems, static fn(array $
                     <div class="site-menu__primary">
                         <?php foreach ($navigationGroups as $group) { ?>
                             <section class="site-menu__group">
-                                <p class="site-menu__eyebrow"><?php echo h($group['name']); ?></p>
+                                <p class="site-menu__eyebrow"><?php echo h($group['eyebrow']); ?></p>
                                 <a
-                                    href="<?php echo h($group['url']); ?>"
-                                    target="<?php echo h($group['target']); ?>"
-                                    class="site-menu__heading<?php echo $group['is_current'] || $group['in_path'] ? ' is-active' : ''; ?>"
+                                    href="<?php echo h($group['heading']['url']); ?>"
+                                    target="<?php echo h($group['heading']['target']); ?>"
+                                    class="site-menu__heading<?php echo $group['heading']['is_current'] || $group['heading']['in_path'] ? ' is-active' : ''; ?>"
                                 >
-                                    <?php echo h($group['name']); ?>
+                                    <?php echo h($group['heading']['name']); ?>
                                 </a>
 
                                 <ul class="site-menu__list">

@@ -5,6 +5,15 @@ Overview
 --------
 This is the current Concrete CMS theme for Millbrook Church. It uses a custom Millbrook visual system built around layered image heroes, a structured visitor-first homepage, and editable Concrete CMS content areas.
 
+Content principle
+-----------------
+All visible site copy should be written for visitors, not administrators.
+
+That means:
+- public-facing pages should explain what Millbrook is like, what happens next, and how someone can engage
+- visible content should avoid editor instructions, CMS workflow notes, or internal publishing language
+- administrative guidance belongs in project docs, editor notes, or block configuration help text, not in page copy
+
 The theme currently includes:
 - a transparent, sticky header on the homepage hero
 - a full-height image-led hero with a blended brand-gradient overlay

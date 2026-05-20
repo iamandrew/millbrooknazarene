@@ -3,16 +3,66 @@
 use Concrete\Core\Area\Area;
 use Concrete\Core\Block\BlockType\BlockType;
 use Concrete\Core\Page\Page;
+use Concrete\Core\Page\Template as PageTemplate;
+use Concrete\Core\Page\Type\Type as PageType;
 
-$page = Page::getByPath('/im-new', 'ACTIVE');
+$page = Page::getByPath('/visit-us', 'ACTIVE');
+$legacyPage = null;
+
 if (!$page || $page->isError()) {
-    $output->writeln('<error>Could not find /im-new.</error>');
-    return 1;
+    $legacyPage = Page::getByPath('/im-new', 'ACTIVE');
+}
+
+if ((!$page || $page->isError()) && (!$legacyPage || $legacyPage->isError())) {
+    $site = \Core::make('site')->getSite();
+    $root = Page::getByID((int) $site->getSiteHomePageID(), 'ACTIVE');
+    $pageType = PageType::getByHandle('page');
+    $fullTemplate = PageTemplate::getByHandle('full');
+
+    if (!$root || $root->isError() || !$pageType || !$fullTemplate) {
+        $output->writeln('<error>Could not resolve the site home page, page type, or full template.</error>');
+        return 1;
+    }
+
+    $page = $root->add(
+        $pageType,
+        [
+            'cName' => 'Visit Us?',
+            'cHandle' => 'visit-us',
+        ],
+        $fullTemplate
+    );
+
+    $output->writeln('<info>Created /visit-us.</info>');
+} elseif ((!$page || $page->isError()) && $legacyPage && !$legacyPage->isError()) {
+    $site = \Core::make('site')->getSite();
+    $root = Page::getByID((int) $site->getSiteHomePageID(), 'ACTIVE');
+    $pageType = PageType::getByHandle('page');
+    $fullTemplate = PageTemplate::getByHandle('full');
+
+    if (!$root || $root->isError() || !$pageType || !$fullTemplate) {
+        $output->writeln('<error>Could not resolve the site home page, page type, or full template.</error>');
+        return 1;
+    }
+
+    $page = $root->add(
+        $pageType,
+        [
+            'cName' => 'Visit Us?',
+            'cHandle' => 'visit-us',
+            'cDescription' => (string) $legacyPage->getCollectionDescription(),
+        ],
+        $fullTemplate
+    );
+
+    $legacyPage->moveToTrash();
+    $output->writeln('<info>Created /visit-us and moved /im-new to trash.</info>');
 }
 
 $page->update([
-    'cName' => 'New Here',
-    'cDescription' => "Thinking of visiting Millbrook? We'd love to welcome you. Here's a little more about who we are, what a Sunday looks like, and what you can expect when you visit.",
+    'cName' => 'Visit Us?',
+    'cHandle' => 'visit-us',
+    'cDescription' => "Thinking about coming to Millbrook? You’d be very welcome. Here’s what happens on a Sunday, what to expect, and how we can help you feel at home.",
 ]);
 
 $area = Area::getOrCreate($page, 'Main');
@@ -30,7 +80,7 @@ foreach ($area->getAreaBlocksArray($page) as $block) {
 $blocks = [
     <<<'HTML'
 <div class="content-intro">
-  <p>We know visiting a church for the first time can feel a little uncertain, so we hope this page helps you feel more prepared and at ease.</p>
+  <p>We know visiting a church can feel like a big step, especially if you are not sure what to expect. Whether you are new to Larne, new to church, returning after a while, or just quietly curious, we would love to help you feel at home.</p>
 </div>
 HTML,
     <<<'HTML'
@@ -44,8 +94,8 @@ HTML,
     <p class="info-strip__value">Millbrook Community Centre, Larne</p>
   </div>
   <div class="info-strip__item">
-    <span class="info-strip__label">Need to ask something before you come?</span>
-    <p>Get in touch and we’ll be happy to help.</p>
+    <span class="info-strip__label">Before the service</span>
+    <p>Most people arrive a few minutes early to settle in, say hello, and find a seat.</p>
     <p><a href="/contact">Contact Us</a></p>
   </div>
 </div>
@@ -53,8 +103,8 @@ HTML,
     <<<'HTML'
 <section class="content-section">
 <h2>What Sundays Are Like</h2>
-<p>Our Sunday service includes worship, prayer, Bible teaching, and time together as a church family. We are a welcoming, multi-generational church, and whether you’ve been part of church for years or are simply exploring, you will be very welcome here.</p>
-<p>You do not need to know all the words, understand everything, or dress a certain way before coming. We want Millbrook to feel like a place where people can come honestly, meet with God, and get to know others.</p>
+<p>Our Sunday service usually includes singing, prayer, Bible reading, and a short talk. Sometimes we share communion together. We are a welcoming, multi-generational church, and whether church feels familiar to you or completely new, you will be very welcome here.</p>
+<p>You will not be asked to say anything out loud or do anything you are uncomfortable with. Tea and coffee usually follow the service, and we want Millbrook to feel like a place where people can come honestly, meet with God, and get to know others at their own pace.</p>
 </section>
 HTML,
     <<<'HTML'
@@ -65,7 +115,7 @@ HTML,
   </div>
   <div class="card-grid__item">
     <h3>A welcoming atmosphere</h3>
-    <p>We are a contemporary, family-friendly church made up of people of different ages and backgrounds.</p>
+    <p>We are a family-friendly church made up of people of different ages and backgrounds.</p>
   </div>
   <div class="card-grid__item">
     <h3>Worship and teaching</h3>
@@ -81,7 +131,7 @@ HTML,
 <section class="content-section content-section--family">
 <h2>Children &amp; Families</h2>
 <p>Children and families are an important part of church life at Millbrook. We want children to feel welcome, safe, and included.</p>
-<p>We offer creche and children’s ministry during our Sunday gatherings, and the people who serve in those areas are safely recruited and checked.</p>
+<p>We offer creche and children’s ministry during our Sunday gatherings, and the people who serve in those areas are safely recruited and checked. We know church with children can be noisy, wriggly, and unpredictable, and that is okay.</p>
 <ul class="highlight-list">
   <li>Children are welcome and included in church life</li>
   <li>Creche and children’s provision on Sundays</li>
@@ -93,7 +143,7 @@ HTML,
     <<<'HTML'
 <section class="content-section content-section--about">
 <h2>A Bit About Us</h2>
-<p>Millbrook is a Church of the Nazarene congregation in Larne. We are a Christ-centred church seeking to worship God, grow in faith, and serve our local community.</p>
+<p>Millbrook is part of the Church of the Nazarene, a global Christian family shaped by grace, holiness, compassion, and serving local communities well. We are a Christ-centred church in Larne seeking to worship God, grow in faith, and love our neighbours.</p>
 <p>We want to be a church where people of all ages can encounter Jesus, build genuine relationships, and find a place to belong.</p>
 <p><a href="/about/who-we-are">Learn more about our church</a></p>
 </section>
@@ -105,7 +155,7 @@ HTML,
   <details class="faq-accordion__item">
     <summary class="faq-accordion__summary">What time does the service start?</summary>
     <div class="faq-accordion__answer">
-      <p>Our Sunday service starts at 11:00am.</p>
+      <p>Our Sunday service starts at 11:00am, and most people arrive a few minutes beforehand.</p>
     </div>
   </details>
   <details class="faq-accordion__item">
@@ -129,7 +179,19 @@ HTML,
   <details class="faq-accordion__item">
     <summary class="faq-accordion__summary">Do I need to bring anything?</summary>
     <div class="faq-accordion__answer">
-      <p>No. Just come as you are.</p>
+      <p>No. Just come as you are. We will help you find your way around when you arrive.</p>
+    </div>
+  </details>
+  <details class="faq-accordion__item">
+    <summary class="faq-accordion__summary">Will I have to give money?</summary>
+    <div class="faq-accordion__answer">
+      <p>No. Giving is part of worship for those who call Millbrook home, but visitors should feel no pressure to give.</p>
+    </div>
+  </details>
+  <details class="faq-accordion__item">
+    <summary class="faq-accordion__summary">Could someone meet me when I arrive?</summary>
+    <div class="faq-accordion__answer">
+      <p>Yes. If it would help, get in touch before Sunday and we will do our best to make your arrival easier.</p>
     </div>
   </details>
 </div>
@@ -138,10 +200,10 @@ HTML,
     <<<'HTML'
 <div class="action-panel">
   <h2>We’d Love to Welcome You</h2>
-  <p>If you’re thinking of visiting, we’d love to see you on a Sunday. And if you’d like to ask anything before you come, please get in touch.</p>
+  <p>If you are thinking of visiting, we would love to see you on a Sunday. And if you would like to ask anything before you come, please get in touch.</p>
   <div class="action-panel__buttons">
     <a class="button button--primary" href="/contact">Contact Us</a>
-    <a class="button button--secondary" href="/contact">Find Us</a>
+    <a class="button button--secondary" href="mailto:info@millbrooknazarene.co.uk">Email the Church</a>
   </div>
 </div>
 HTML,
@@ -151,4 +213,6 @@ foreach ($blocks as $content) {
     $page->addBlock($contentBlockType, $area, ['content' => $content]);
 }
 
-$output->writeln('<info>Updated the New Here page with block-based content.</info>');
+$output->writeln('<info>Updated the Visit Us page with block-based content.</info>');
+
+return 0;

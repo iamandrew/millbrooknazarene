@@ -10,6 +10,7 @@ Thumbs.db
 .env
 .env.*
 application/config/database.php
+tmp/
 
 # Concrete CMS generated config / proxies
 application/config/generated_overrides/
