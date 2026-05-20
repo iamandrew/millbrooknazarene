@@ -19,6 +19,7 @@ application/config/doctrine/proxies/
 # Concrete CMS runtime content, uploads, cache, thumbnails, temp files
 application/files/
 updates/
+tmp/
 
 # Dependency directories
 vendor/

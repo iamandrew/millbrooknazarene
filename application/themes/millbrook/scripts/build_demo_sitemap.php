@@ -45,7 +45,7 @@ $findOrCreatePage = static function (Page $parent, array $definition) use ($page
         if ($page->getCollectionName() !== $definition['name']) {
             $update['cName'] = $definition['name'];
         }
-        if (!$page->getCollectionDescription() && !empty($definition['description'])) {
+        if (($definition['description'] ?? '') !== '' && $page->getCollectionDescription() !== $definition['description']) {
             $update['cDescription'] = $definition['description'];
         }
         if ($page->getPageTemplateID() !== $fullTemplate->getPageTemplateID()) {
@@ -80,13 +80,12 @@ $findOrCreatePage = static function (Page $parent, array $definition) use ($page
 
 $seedMainArea = static function (Page $page, string $html) use ($contentBlockType, $output): void {
     $area = new Area('Main');
-    if ($area->getTotalBlocksInArea($page) > 0) {
-        $output->writeln(sprintf('Skipped content (already populated): %s', $page->getCollectionPath()));
-        return;
+    foreach ($area->getAreaBlocksArray($page) as $block) {
+        $block->deleteBlock();
     }
 
     $page->addBlock($contentBlockType, $area, ['content' => $html]);
-    $output->writeln(sprintf('Seeded content: %s', $page->getCollectionPath()));
+    $output->writeln(sprintf('Synced content: %s', $page->getCollectionPath()));
 };
 
 $tree = [
