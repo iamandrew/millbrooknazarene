@@ -1,5 +1,6 @@
 <?php
 
+use Concrete\Core\Attribute\Key\CollectionKey;
 use Concrete\Core\Area\Area;
 use Concrete\Core\Block\BlockType\BlockType;
 use Concrete\Core\Page\Page;
@@ -11,16 +12,23 @@ if (!$page instanceof Page || $page->isError()) {
     return 1;
 }
 
-$desiredDescription = 'Listen back to recent sermons and Bible teaching from Millbrook.';
+$desiredDescription = 'Catch up on Sunday sermons and Bible teaching from Millbrook. Whether you missed a gathering or want to revisit a message during the week, you can listen here and find more on Spotify.';
 $legacyDescriptions = [
     '',
     'Recent teaching and sermon series from Millbrook Church.',
+    'Listen back to recent sermons and Bible teaching from Millbrook.',
 ];
 
 if (in_array(trim((string) $page->getCollectionDescription()), $legacyDescriptions, true)) {
     $page->update([
         'cDescription' => $desiredDescription,
     ]);
+    $page = Page::getByID($page->getCollectionID(), 'ACTIVE');
+}
+
+$disableHeroImageKey = CollectionKey::getByHandle('disable_hero_image');
+if ($disableHeroImageKey) {
+    $page->setAttribute($disableHeroImageKey, false);
     $page = Page::getByID($page->getCollectionID(), 'ACTIVE');
 }
 
@@ -35,24 +43,24 @@ if (!$blockType) {
     return 1;
 }
 
+$blockType->refresh();
+
 $area = Area::getOrCreate($page, 'Main');
 $existingBlocks = $area->getAreaBlocksArray($page);
-$contentBlockType = BlockType::getByHandle('content');
-
-if (!$contentBlockType) {
-    $output->writeln('<error>Content block type is not available.</error>');
-    return 1;
-}
+$defaultSpotifyFeedUrl = 'https://anchor.fm/s/113054664/podcast/rss';
+$defaultSpotifyShowUrl = 'https://open.spotify.com/show/033njtKzXFC2vPB33mR1UV';
 
 $sermonsBlockData = [
     'title' => '',
     'intro' => '',
-    'sourceType' => 'concrete_uploads',
-    'displayLimit' => 12,
+    'sourceType' => 'spotify',
+    'spotifyFeedUrl' => $defaultSpotifyFeedUrl,
+    'displayLimit' => 8,
+    'showDescriptions' => 1,
     'showPlayer' => 1,
-    'showArchiveButton' => 0,
-    'archiveButtonLabel' => 'Latest Sermons',
-    'archiveButtonUrl' => '/resources/sermons',
+    'showArchiveButton' => 1,
+    'archiveButtonLabel' => 'Listen on Spotify',
+    'archiveButtonUrl' => $defaultSpotifyShowUrl,
 ];
 
 foreach ($existingBlocks as $block) {
@@ -61,15 +69,31 @@ foreach ($existingBlocks as $block) {
     }
 
     $controller = $block->getController();
+    $sourceType = in_array((string) ($controller->sourceType ?? ''), ['concrete_uploads', 'spotify'], true) ? (string) $controller->sourceType : 'spotify';
+    $spotifyFeedUrl = trim((string) ($controller->spotifyFeedUrl ?? '')) ?: $defaultSpotifyFeedUrl;
+    if ($sourceType === 'concrete_uploads' && $spotifyFeedUrl !== '') {
+        $sourceType = 'spotify';
+    }
+    $archiveButtonLabel = trim((string) ($controller->archiveButtonLabel ?? ''));
+    if ($archiveButtonLabel === '' || $archiveButtonLabel === 'Latest Sermons') {
+        $archiveButtonLabel = 'Listen on Spotify';
+    }
+    $archiveButtonUrl = trim((string) ($controller->archiveButtonUrl ?? ''));
+    if ($archiveButtonUrl === '' || $archiveButtonUrl === '/resources/sermons') {
+        $archiveButtonUrl = $defaultSpotifyShowUrl;
+    }
+
     $sermonsBlockData = [
         'title' => trim((string) ($controller->title ?? '')),
         'intro' => trim((string) ($controller->intro ?? '')),
-        'sourceType' => in_array((string) ($controller->sourceType ?? ''), ['concrete_uploads', 'spotify'], true) ? (string) $controller->sourceType : 'concrete_uploads',
-        'displayLimit' => max(1, min((int) ($controller->displayLimit ?? 12), 24)),
+        'sourceType' => $sourceType,
+        'spotifyFeedUrl' => $spotifyFeedUrl,
+        'displayLimit' => max(1, min((int) ($controller->displayLimit ?? 8), 8)),
+        'showDescriptions' => isset($controller->showDescriptions) ? (!empty($controller->showDescriptions) ? 1 : 0) : 1,
         'showPlayer' => !empty($controller->showPlayer) ? 1 : 0,
-        'showArchiveButton' => !empty($controller->showArchiveButton) ? 1 : 0,
-        'archiveButtonLabel' => trim((string) ($controller->archiveButtonLabel ?? '')) ?: 'Latest Sermons',
-        'archiveButtonUrl' => trim((string) ($controller->archiveButtonUrl ?? '')) ?: '/resources/sermons',
+        'showArchiveButton' => 1,
+        'archiveButtonLabel' => $archiveButtonLabel,
+        'archiveButtonUrl' => $archiveButtonUrl,
     ];
     break;
 }
@@ -78,16 +102,8 @@ foreach ($existingBlocks as $block) {
     $block->deleteBlock();
 }
 
-$page->addBlock($contentBlockType, $area, [
-    'content' => <<<'HTML'
-<div class="content-intro">
-  <p>Listen back to recent sermons and Bible teaching from Millbrook.</p>
-</div>
-HTML,
-]);
-
 $page->addBlock($blockType, $area, $sermonsBlockData);
 
-$output->writeln('<info>Rebuilt /resources/sermons with a concise intro and latest sermons block.</info>');
+$output->writeln('<info>Rebuilt /resources/sermons with a cleaner latest sermons block.</info>');
 
 return 0;

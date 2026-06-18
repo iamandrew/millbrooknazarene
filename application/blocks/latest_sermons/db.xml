@@ -10,6 +10,7 @@
         <field name="sourceType" type="C" size="32">
             <default value="concrete_uploads" />
         </field>
+        <field name="spotifyFeedUrl" type="X2" />
         <field name="fileSetID" type="I">
             <unsigned />
             <default value="0" />

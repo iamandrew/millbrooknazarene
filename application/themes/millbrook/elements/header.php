@@ -118,7 +118,6 @@ $navigationLinks = $navigationData['quick_links'] ?? [];
                     <div class="site-menu__primary">
                         <?php foreach ($navigationGroups as $group) { ?>
                             <section class="site-menu__group">
-                                <p class="site-menu__eyebrow"><?php echo h($group['eyebrow']); ?></p>
                                 <a
                                     href="<?php echo h($group['heading']['url']); ?>"
                                     target="<?php echo h($group['heading']['target']); ?>"
@@ -152,7 +151,7 @@ $navigationLinks = $navigationData['quick_links'] ?? [];
                                             <a
                                                 href="<?php echo h($link['url']); ?>"
                                                 target="<?php echo h($link['target']); ?>"
-                                                class="site-menu__feature-link<?php echo $link['is_current'] || $link['in_path'] ? ' is-active' : ''; ?>"
+                                                class="site-menu__feature-link"
                                             >
                                                 <?php echo h($link['name']); ?>
                                             </a>

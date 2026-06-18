@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         playerNodes.forEach(function (node) {
             var player = new Plyr(node, {
-                controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'download'],
+                controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'settings'],
                 settings: ['speed'],
                 speed: { selected: 1, options: [0.75, 1, 1.25, 1.5] },
                 iconUrl: '/application/themes/millbrook/vendor/plyr/plyr.svg'
@@ -104,17 +104,21 @@ document.addEventListener('DOMContentLoaded', function () {
             var player = playerId ? sermonPlayers[playerId] : null;
             var featuredContainer = document.querySelector('[data-featured-sermon]');
             var streamUrl = link.getAttribute('data-sermon-stream');
-            var downloadUrl = link.getAttribute('data-sermon-download');
             var title = link.getAttribute('data-sermon-title') || '';
             var meta = link.getAttribute('data-sermon-meta') || '';
+            var description = link.getAttribute('data-sermon-description') || '';
+            var descriptionHtml = link.getAttribute('data-sermon-description-html') || '';
+            var imageUrl = link.getAttribute('data-sermon-image') || '';
             var sermonId = link.getAttribute('data-sermon-id') || '';
             var titleTargetId = link.getAttribute('data-sermon-title-target');
             var metaTargetId = link.getAttribute('data-sermon-meta-target');
-            var downloadTargetId = link.getAttribute('data-sermon-download-target');
+            var descriptionTargetId = link.getAttribute('data-sermon-description-target');
+            var imageTargetId = link.getAttribute('data-sermon-image-target');
             var eyebrowTargetId = link.getAttribute('data-sermon-eyebrow-target');
             var titleTarget = titleTargetId ? document.getElementById(titleTargetId) : null;
             var metaTarget = metaTargetId ? document.getElementById(metaTargetId) : null;
-            var downloadTarget = downloadTargetId ? document.getElementById(downloadTargetId) : null;
+            var descriptionTarget = descriptionTargetId ? document.getElementById(descriptionTargetId) : null;
+            var imageTarget = imageTargetId ? document.getElementById(imageTargetId) : null;
             var eyebrowTarget = eyebrowTargetId ? document.getElementById(eyebrowTargetId) : null;
 
             if (!playerNode || !streamUrl) {
@@ -131,20 +135,40 @@ document.addEventListener('DOMContentLoaded', function () {
                 metaTarget.textContent = meta;
             }
 
-            if (downloadTarget && downloadUrl) {
-                downloadTarget.setAttribute('href', downloadUrl);
+            if (descriptionTarget) {
+                if (descriptionHtml) {
+                    descriptionTarget.innerHTML = descriptionHtml;
+                } else {
+                    descriptionTarget.textContent = description;
+                }
+                descriptionTarget.hidden = descriptionHtml === '' && description === '';
+            }
+
+            if (imageTarget) {
+                var imageNode = imageTarget.querySelector('[data-sermon-image-img]');
+                if (imageNode && imageUrl) {
+                    imageNode.setAttribute('src', imageUrl);
+                    imageNode.setAttribute('alt', 'Artwork for ' + title);
+                    imageTarget.hidden = false;
+                } else if (imageNode) {
+                    imageNode.removeAttribute('src');
+                    imageNode.setAttribute('alt', '');
+                    imageTarget.hidden = true;
+                }
             }
 
             if (eyebrowTarget) {
-                eyebrowTarget.textContent = 'Selected sermon';
+                eyebrowTarget.textContent = 'Now playing';
             }
 
             if (featuredContainer) {
                 featuredContainer.setAttribute('data-sermon-id', sermonId);
                 featuredContainer.setAttribute('data-sermon-title', title);
                 featuredContainer.setAttribute('data-sermon-meta', meta);
+                featuredContainer.setAttribute('data-sermon-description', description);
+                featuredContainer.setAttribute('data-sermon-description-html', descriptionHtml);
                 featuredContainer.setAttribute('data-sermon-stream', streamUrl);
-                featuredContainer.setAttribute('data-sermon-download', downloadUrl || '');
+                featuredContainer.setAttribute('data-sermon-image', imageUrl);
             }
 
             document.querySelectorAll('[data-sermon-item]').forEach(function (item) {
