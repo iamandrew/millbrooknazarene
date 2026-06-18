@@ -6,6 +6,7 @@
  * @var string $spotifyFeedUrl
  * @var string $defaultSpotifyShowUrl
  * @var string $defaultSpotifyFeedUrl
+ * @var string $defaultApplePodcastUrl
  * @var int $displayLimit
  * @var bool $showDescriptions
  * @var bool $showPlayer
@@ -81,6 +82,21 @@
     <?= $form->text('archiveButtonUrl', $archiveButtonUrl, ['placeholder' => $defaultSpotifyShowUrl ?? 'https://open.spotify.com/show/...']) ?>
     <small class="form-text text-muted">
         <?= t('For Spotify podcasts, use the public Spotify show link here.') ?>
+    </small>
+</div>
+
+<hr>
+
+<div class="form-group">
+    <?= $form->label('applePodcastButtonLabel', t('Apple Podcasts button label')) ?>
+    <?= $form->text('applePodcastButtonLabel', $applePodcastButtonLabel) ?>
+</div>
+
+<div class="form-group">
+    <?= $form->label('applePodcastButtonUrl', t('Apple Podcasts URL')) ?>
+    <?= $form->text('applePodcastButtonUrl', $applePodcastButtonUrl, ['placeholder' => $defaultApplePodcastUrl ?? 'https://podcasts.apple.com/...']) ?>
+    <small class="form-text text-muted">
+        <?= t('Leave this blank to hide the Apple Podcasts button.') ?>
     </small>
 </div>
 

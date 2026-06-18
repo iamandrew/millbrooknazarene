@@ -12,11 +12,13 @@ if (!$page instanceof Page || $page->isError()) {
     return 1;
 }
 
-$desiredDescription = 'Catch up on Sunday sermons and Bible teaching from Millbrook. Whether you missed a gathering or want to revisit a message during the week, you can listen here and find more on Spotify.';
+$desiredDescription = 'Catch up on Sunday sermons and Bible teaching from Millbrook. Whether you missed a gathering or want to revisit a message during the week, you can listen here or continue on Spotify or Apple Podcasts.';
 $legacyDescriptions = [
     '',
     'Recent teaching and sermon series from Millbrook Church.',
     'Listen back to recent sermons and Bible teaching from Millbrook.',
+    'Catch up on Sunday sermons and Bible teaching from Millbrook. Whether you missed a gathering or want to revisit a message during the week, you can listen here and find more on Spotify.',
+    'Catch up on Sunday sermons and Bible teaching from Millbrook. Whether you missed a gathering or want to revisit a message during the week, you can listen here or open the full podcast on Spotify or Apple Podcasts.',
 ];
 
 if (in_array(trim((string) $page->getCollectionDescription()), $legacyDescriptions, true)) {
@@ -49,6 +51,7 @@ $area = Area::getOrCreate($page, 'Main');
 $existingBlocks = $area->getAreaBlocksArray($page);
 $defaultSpotifyFeedUrl = 'https://anchor.fm/s/113054664/podcast/rss';
 $defaultSpotifyShowUrl = 'https://open.spotify.com/show/033njtKzXFC2vPB33mR1UV';
+$defaultApplePodcastUrl = 'https://podcasts.apple.com/gb/podcast/millbrook-church-of-the-nazarene/id1896866584';
 
 $sermonsBlockData = [
     'title' => '',
@@ -61,6 +64,8 @@ $sermonsBlockData = [
     'showArchiveButton' => 1,
     'archiveButtonLabel' => 'Listen on Spotify',
     'archiveButtonUrl' => $defaultSpotifyShowUrl,
+    'applePodcastButtonLabel' => 'Apple Podcasts',
+    'applePodcastButtonUrl' => $defaultApplePodcastUrl,
 ];
 
 foreach ($existingBlocks as $block) {
@@ -82,6 +87,14 @@ foreach ($existingBlocks as $block) {
     if ($archiveButtonUrl === '' || $archiveButtonUrl === '/resources/sermons') {
         $archiveButtonUrl = $defaultSpotifyShowUrl;
     }
+    $applePodcastButtonLabel = trim((string) ($controller->applePodcastButtonLabel ?? ''));
+    if ($applePodcastButtonLabel === '') {
+        $applePodcastButtonLabel = 'Apple Podcasts';
+    }
+    $applePodcastButtonUrl = trim((string) ($controller->applePodcastButtonUrl ?? ''));
+    if ($applePodcastButtonUrl === '') {
+        $applePodcastButtonUrl = $defaultApplePodcastUrl;
+    }
 
     $sermonsBlockData = [
         'title' => trim((string) ($controller->title ?? '')),
@@ -94,6 +107,8 @@ foreach ($existingBlocks as $block) {
         'showArchiveButton' => 1,
         'archiveButtonLabel' => $archiveButtonLabel,
         'archiveButtonUrl' => $archiveButtonUrl,
+        'applePodcastButtonLabel' => $applePodcastButtonLabel,
+        'applePodcastButtonUrl' => $applePodcastButtonUrl,
     ];
     break;
 }

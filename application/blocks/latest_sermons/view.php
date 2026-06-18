@@ -11,6 +11,9 @@
  * @var bool $showArchiveButton
  * @var string $archiveButtonLabel
  * @var string $archiveButtonUrl
+ * @var bool $showApplePodcastButton
+ * @var string $applePodcastButtonLabel
+ * @var string $applePodcastButtonUrl
  */
 $featuredSermon = $sermons[0] ?? null;
 $archiveSermons = $sermons;
@@ -70,6 +73,10 @@ $archiveLinkClass = 'sermons-block__archive-link';
 if ($isSpotifyUrl($archiveButtonUrl)) {
     $archiveLinkClass .= ' sermons-block__archive-link--spotify';
 }
+
+$applePodcastLinkClass = 'sermons-block__archive-link sermons-block__archive-link--apple';
+$spotifyButtonDisplayLabel = preg_replace('/^\s*Listen\s+on\s+/i', '', $archiveButtonLabel) ?: $archiveButtonLabel;
+$applePodcastButtonDisplayLabel = preg_replace('/^\s*Listen\s+on\s+/i', '', $applePodcastButtonLabel) ?: $applePodcastButtonLabel;
 ?>
 <section class="sermons-block">
     <?php if ($title !== '' || $intro !== '') { ?>
@@ -91,16 +98,32 @@ if ($isSpotifyUrl($archiveButtonUrl)) {
                 </p>
             </div>
 
-            <?php if ($showArchiveButton && $archiveButtonUrl !== '') { ?>
-                <a target="_blank" rel="noopener noreferrer" class="<?= h($archiveLinkClass) ?>" href="<?= h($archiveButtonUrl) ?>">
-                    <?php if ($isSpotifyUrl($archiveButtonUrl)) { ?>
-                        <span class="sermons-block__spotify-prefix"><?= t('Listen on') ?></span>
-                        <span class="sermons-block__spotify-logo" aria-hidden="true"></span>
-                        <span class="sermons-block__sr-only">Spotify</span>
-                    <?php } else { ?>
-                        <?= h($archiveButtonLabel) ?>
+            <?php if (($showArchiveButton && $archiveButtonUrl !== '') || $showApplePodcastButton) { ?>
+                <div class="sermons-block__toolbar-actions">
+                    <?php if ($showApplePodcastButton && $applePodcastButtonUrl !== '') { ?>
+                        <a target="_blank" rel="noopener noreferrer" class="<?= h($applePodcastLinkClass) ?>" href="<?= h($applePodcastButtonUrl) ?>">
+                            <span class="sermons-block__apple-icon" aria-hidden="true"></span>
+                            <span class="sermons-block__apple-copy">
+                                <span class="sermons-block__apple-prefix"><?= t('Listen on') ?></span>
+                                <span class="sermons-block__apple-label"><?= h($applePodcastButtonDisplayLabel) ?></span>
+                            </span>
+                        </a>
                     <?php } ?>
-                </a>
+
+                    <?php if ($showArchiveButton && $archiveButtonUrl !== '') { ?>
+                        <a target="_blank" rel="noopener noreferrer" class="<?= h($archiveLinkClass) ?>" href="<?= h($archiveButtonUrl) ?>">
+                            <?php if ($isSpotifyUrl($archiveButtonUrl)) { ?>
+                                <span class="sermons-block__spotify-icon" aria-hidden="true"></span>
+                                <span class="sermons-block__spotify-copy">
+                                    <span class="sermons-block__spotify-prefix"><?= t('Listen on') ?></span>
+                                    <span class="sermons-block__spotify-label"><?= h($spotifyButtonDisplayLabel) ?></span>
+                                </span>
+                            <?php } else { ?>
+                                <?= h($archiveButtonLabel) ?>
+                            <?php } ?>
+                        </a>
+                    <?php } ?>
+                </div>
             <?php } ?>
         </div>
 
@@ -266,15 +289,28 @@ if ($isSpotifyUrl($archiveButtonUrl)) {
                         <?php } ?>
                     </div>
 
-                    <?php if ($sourceType === 'spotify' && $showArchiveButton && $archiveButtonUrl !== '') { ?>
+                    <?php if (
+                        $sourceType === 'spotify'
+                        && (
+                            ($showArchiveButton && $archiveButtonUrl !== '')
+                            || ($showApplePodcastButton && $applePodcastButtonUrl !== '')
+                        )
+                    ) { ?>
                         <div class="sermons-block__archive-note">
                             <p>
                                 <strong><?= t('Want to keep listening?') ?></strong>
-                                <?= t('More sermons are available on Spotify than we show here.') ?>
+                                <?= t('More sermons are available on the podcast platforms linked here.') ?>
                             </p>
-                            <a href="<?= h($archiveButtonUrl) ?>" target="_blank" rel="noopener noreferrer">
-                                <?= t('Open Spotify') ?>
-                            </a>
+                            <?php if ($showArchiveButton && $archiveButtonUrl !== '') { ?>
+                                <a href="<?= h($archiveButtonUrl) ?>" target="_blank" rel="noopener noreferrer">
+                                    <?= t('Open Spotify') ?>
+                                </a>
+                            <?php } ?>
+                            <?php if ($showApplePodcastButton && $applePodcastButtonUrl !== '') { ?>
+                                <a href="<?= h($applePodcastButtonUrl) ?>" target="_blank" rel="noopener noreferrer">
+                                    <?= t('Open Apple Podcasts') ?>
+                                </a>
+                            <?php } ?>
                         </div>
                     <?php } ?>
                 </div>

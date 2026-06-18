@@ -33,5 +33,7 @@
         </field>
         <field name="archiveButtonLabel" type="C" size="255" />
         <field name="archiveButtonUrl" type="C" size="255" />
+        <field name="applePodcastButtonLabel" type="C" size="255" />
+        <field name="applePodcastButtonUrl" type="C" size="255" />
     </table>
 </schema>

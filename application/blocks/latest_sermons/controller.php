@@ -17,6 +17,7 @@ class Controller extends BlockController
 {
     protected const DEFAULT_SPOTIFY_SHOW_URL = 'https://open.spotify.com/show/033njtKzXFC2vPB33mR1UV';
     protected const DEFAULT_SPOTIFY_FEED_URL = 'https://anchor.fm/s/113054664/podcast/rss';
+    protected const DEFAULT_APPLE_PODCAST_URL = 'https://podcasts.apple.com/gb/podcast/millbrook-church-of-the-nazarene/id1896866584';
 
     protected $btTable = 'btLatestSermons';
     protected $btInterfaceWidth = 720;
@@ -71,6 +72,8 @@ class Controller extends BlockController
         if ($sourceType === 'spotify' && $archiveButtonUrl === '') {
             $archiveButtonUrl = self::DEFAULT_SPOTIFY_SHOW_URL;
         }
+        $applePodcastButtonLabel = trim((string) $this->applePodcastButtonLabel) ?: t('Apple Podcasts');
+        $applePodcastButtonUrl = trim((string) $this->applePodcastButtonUrl);
         $sermons = $this->getSermons($sourceType, $displayLimit, $spotifyFeedUrl);
         $entity = $this->getSermonEntity();
 
@@ -84,6 +87,9 @@ class Controller extends BlockController
         $this->set('showArchiveButton', $showArchiveButton && $archiveButtonUrl !== '');
         $this->set('archiveButtonLabel', $archiveButtonLabel);
         $this->set('archiveButtonUrl', $archiveButtonUrl);
+        $this->set('showApplePodcastButton', $applePodcastButtonUrl !== '');
+        $this->set('applePodcastButtonLabel', $applePodcastButtonLabel);
+        $this->set('applePodcastButtonUrl', $applePodcastButtonUrl);
         $this->set('entity', $entity);
         $this->set('sermons', $sermons);
         $this->set('emptyMessage', $this->feedErrorMessage ?: $this->getEmptyMessage($entity, $sourceType, $spotifyFeedUrl));
@@ -101,6 +107,8 @@ class Controller extends BlockController
         $args['showArchiveButton'] = !empty($args['showArchiveButton']) ? 1 : 0;
         $args['archiveButtonLabel'] = trim((string) ($args['archiveButtonLabel'] ?? ''));
         $args['archiveButtonUrl'] = trim((string) ($args['archiveButtonUrl'] ?? ''));
+        $args['applePodcastButtonLabel'] = trim((string) ($args['applePodcastButtonLabel'] ?? ''));
+        $args['applePodcastButtonUrl'] = trim((string) ($args['applePodcastButtonUrl'] ?? ''));
 
         parent::save($args);
     }
@@ -119,12 +127,15 @@ class Controller extends BlockController
         $this->set('spotifyFeedUrl', $spotifyFeedUrl);
         $this->set('defaultSpotifyShowUrl', self::DEFAULT_SPOTIFY_SHOW_URL);
         $this->set('defaultSpotifyFeedUrl', self::DEFAULT_SPOTIFY_FEED_URL);
+        $this->set('defaultApplePodcastUrl', self::DEFAULT_APPLE_PODCAST_URL);
         $this->set('displayLimit', $this->getValidDisplayLimit((int) ($this->displayLimit ?: 6)));
         $this->set('showDescriptions', isset($this->showDescriptions) ? (bool) $this->showDescriptions : true);
         $this->set('showPlayer', isset($this->showPlayer) ? (bool) $this->showPlayer : true);
         $this->set('showArchiveButton', isset($this->showArchiveButton) ? (bool) $this->showArchiveButton : true);
         $this->set('archiveButtonLabel', $this->archiveButtonLabel ?: ($sourceType === 'spotify' ? t('Listen on Spotify') : t('Latest Sermons')));
         $this->set('archiveButtonUrl', $this->archiveButtonUrl ?: ($sourceType === 'spotify' ? self::DEFAULT_SPOTIFY_SHOW_URL : '/resources/sermons'));
+        $this->set('applePodcastButtonLabel', $this->applePodcastButtonLabel ?: t('Apple Podcasts'));
+        $this->set('applePodcastButtonUrl', $this->applePodcastButtonUrl ?: self::DEFAULT_APPLE_PODCAST_URL);
     }
 
     protected function getValidSourceType(string $sourceType): string

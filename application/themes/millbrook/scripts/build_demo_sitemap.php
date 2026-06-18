@@ -318,9 +318,9 @@ HTML,
             [
                 'name' => 'Sermons',
                 'handle' => 'sermons',
-                'description' => 'Catch up on Sunday sermons and Bible teaching from Millbrook. Whether you missed a gathering or want to revisit a message during the week, you can listen here and find more on Spotify.',
+                'description' => 'Catch up on Sunday sermons and Bible teaching from Millbrook. Whether you missed a gathering or want to revisit a message during the week, you can listen here or continue on Spotify or Apple Podcasts.',
                 'content' => <<<'HTML'
-<p>Catch up on Sunday sermons and Bible teaching from Millbrook. Whether you missed a gathering or want to revisit a message during the week, you can listen here and find more on Spotify.</p>
+<p>Catch up on Sunday sermons and Bible teaching from Millbrook. Whether you missed a gathering or want to revisit a message during the week, you can listen here or continue on Spotify or Apple Podcasts.</p>
 HTML,
             ],
             [
