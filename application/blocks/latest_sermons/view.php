@@ -297,20 +297,24 @@ $applePodcastButtonDisplayLabel = preg_replace('/^\s*Listen\s+on\s+/i', '', $app
                         )
                     ) { ?>
                         <div class="sermons-block__archive-note">
-                            <p>
-                                <strong><?= t('Want to keep listening?') ?></strong>
-                                <?= t('More sermons are available on the podcast platforms linked here.') ?>
-                            </p>
-                            <?php if ($showArchiveButton && $archiveButtonUrl !== '') { ?>
-                                <a href="<?= h($archiveButtonUrl) ?>" target="_blank" rel="noopener noreferrer">
-                                    <?= t('Open Spotify') ?>
-                                </a>
-                            <?php } ?>
-                            <?php if ($showApplePodcastButton && $applePodcastButtonUrl !== '') { ?>
-                                <a href="<?= h($applePodcastButtonUrl) ?>" target="_blank" rel="noopener noreferrer">
-                                    <?= t('Open Apple Podcasts') ?>
-                                </a>
-                            <?php } ?>
+                            <div class="sermons-block__archive-note-copy">
+                                <p class="sermons-block__archive-note-title"><?= t('Want to keep listening?') ?></p>
+                                <p class="sermons-block__archive-note-text"><?= t('Find more sermons in your podcast app.') ?></p>
+                            </div>
+                            <div class="sermons-block__archive-note-actions">
+                                <?php if ($showApplePodcastButton && $applePodcastButtonUrl !== '') { ?>
+                                    <a class="sermons-block__archive-note-link sermons-block__archive-note-link--apple" href="<?= h($applePodcastButtonUrl) ?>" target="_blank" rel="noopener noreferrer">
+                                        <span class="sermons-block__apple-icon" aria-hidden="true"></span>
+                                        <span><?= t('Apple Podcasts') ?></span>
+                                    </a>
+                                <?php } ?>
+                                <?php if ($showArchiveButton && $archiveButtonUrl !== '') { ?>
+                                    <a class="sermons-block__archive-note-link sermons-block__archive-note-link--spotify" href="<?= h($archiveButtonUrl) ?>" target="_blank" rel="noopener noreferrer">
+                                        <span class="sermons-block__spotify-icon" aria-hidden="true"></span>
+                                        <span><?= t('Spotify') ?></span>
+                                    </a>
+                                <?php } ?>
+                            </div>
                         </div>
                     <?php } ?>
                 </div>

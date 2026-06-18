@@ -29,36 +29,21 @@
         <div class="whats-on-block__items">
             <?php foreach ($items as $item) { ?>
                 <article class="whats-on-block__item">
-                    <?php if ($layout === 'compact') { ?>
-                        <div class="whats-on-block__item-main">
-                            <?php if ($item['eyebrow'] !== '') { ?>
-                                <p class="whats-on-block__eyebrow"><?= h($item['eyebrow']) ?></p>
-                            <?php } ?>
-                            <div class="whats-on-block__item-copy">
-                                <?php if ($item['title'] !== '') { ?>
-                                    <h3 class="whats-on-block__item-title"><?= h($item['title']) ?></h3>
-                                <?php } ?>
-                                <?php if ($item['summary'] !== '') { ?>
-                                    <p class="whats-on-block__summary"><?= h($item['summary']) ?></p>
-                                <?php } ?>
-                            </div>
-                        </div>
-                        <?php if ($item['linkLabel'] !== '' && $item['linkUrl'] !== '') { ?>
-                            <a class="text-link whats-on-block__item-link" href="<?= h($item['linkUrl']) ?>"><?= h($item['linkLabel']) ?></a>
-                        <?php } ?>
-                    <?php } else { ?>
+                    <div class="whats-on-block__item-main">
                         <?php if ($item['eyebrow'] !== '') { ?>
                             <p class="whats-on-block__eyebrow"><?= h($item['eyebrow']) ?></p>
                         <?php } ?>
-                        <?php if ($item['title'] !== '') { ?>
-                            <h3 class="whats-on-block__item-title"><?= h($item['title']) ?></h3>
-                        <?php } ?>
-                        <?php if ($item['summary'] !== '') { ?>
-                            <p class="whats-on-block__summary"><?= h($item['summary']) ?></p>
-                        <?php } ?>
-                        <?php if ($item['linkLabel'] !== '' && $item['linkUrl'] !== '') { ?>
-                            <a class="text-link" href="<?= h($item['linkUrl']) ?>"><?= h($item['linkLabel']) ?></a>
-                        <?php } ?>
+                        <div class="whats-on-block__item-copy">
+                            <?php if ($item['title'] !== '') { ?>
+                                <h3 class="whats-on-block__item-title"><?= h($item['title']) ?></h3>
+                            <?php } ?>
+                            <?php if ($item['summary'] !== '') { ?>
+                                <p class="whats-on-block__summary"><?= h($item['summary']) ?></p>
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <?php if ($item['linkLabel'] !== '' && $item['linkUrl'] !== '') { ?>
+                        <a class="text-link whats-on-block__item-link" href="<?= h($item['linkUrl']) ?>"><?= h($item['linkLabel']) ?></a>
                     <?php } ?>
                 </article>
             <?php } ?>

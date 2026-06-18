@@ -413,36 +413,107 @@
 }
 
 .sermons-block__archive-note {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem 0.75rem;
-  align-items: baseline;
-  margin: 1.1rem 0 0;
-  padding: 0.2rem 0 0.2rem 0.85rem;
-  border-left: 3px solid #1ed760;
-  font-size: 0.98rem;
-  line-height: 1.6;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem 1.25rem;
+  align-items: center;
+  margin: clamp(1.2rem, 3vw, 1.8rem) 0 0;
+  padding: 1rem 1.1rem 1rem 1.25rem;
+  overflow: hidden;
+  border: 1px solid rgba($color-brand-primary-dark, 0.1);
+  border-radius: 1rem;
+  background:
+    linear-gradient(135deg, rgba($color-surface-card, 0.98), rgba($color-surface-mist, 0.52)),
+    $color-surface-card;
   color: $color-text-muted;
 
-  p {
-    margin: 0;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0.24rem;
+    background: linear-gradient(180deg, #1ed760, rgba($color-brand-secondary, 0.76));
+    pointer-events: none;
+  }
+}
+
+.sermons-block__archive-note-copy {
+  display: grid;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.sermons-block__archive-note-title {
+  margin: 0;
+  color: $color-brand-primary-dark;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.sermons-block__archive-note-text {
+  margin: 0;
+  color: $color-text-muted;
+  font-size: 0.96rem;
+  line-height: 1.55;
+}
+
+.sermons-block__archive-note-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.sermons-block__archive-note-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.65rem;
+  width: fit-content;
+  padding: 0.56rem 0.74rem;
+  border: 1px solid rgba($color-brand-primary-dark, 0.13);
+  border-radius: 0.85rem;
+  background: rgba($color-surface-card, 0.82);
+  color: $color-brand-primary-dark;
+  font-size: 0.94rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    color: $color-brand-primary-dark;
+    background: $color-surface-card;
+    text-decoration: none;
+    transform: translateY(-1px);
   }
 
-  strong {
-    color: $color-brand-primary-dark;
-    font-weight: 700;
+  .sermons-block__apple-icon,
+  .sermons-block__spotify-icon {
+    width: 1.35rem;
+    height: 1.35rem;
   }
+}
 
-  a {
-    color: $color-brand-primary-dark;
-    font-weight: 700;
-    text-decoration-color: rgba($color-brand-primary-dark, 0.24);
-    text-underline-offset: 0.18em;
+.sermons-block__archive-note-link--apple {
+  border-color: rgba(122, 67, 200, 0.24);
+  color: #5f37a7;
 
-    &:hover {
-      color: $color-brand-secondary;
-      text-decoration-color: rgba($color-brand-secondary, 0.45);
-    }
+  &:hover {
+    color: #5f37a7;
+    border-color: rgba(122, 67, 200, 0.38);
+  }
+}
+
+.sermons-block__archive-note-link--spotify {
+  border-color: rgba(18, 115, 59, 0.24);
+  color: #12733b;
+
+  &:hover {
+    color: #12733b;
+    border-color: rgba(18, 115, 59, 0.4);
   }
 }
 
@@ -485,10 +556,28 @@
   .sermons-block__archive-actions {
     flex-wrap: wrap;
   }
+
+  .sermons-block__archive-note {
+    grid-template-columns: 1fr;
+  }
+
+  .sermons-block__archive-note-actions {
+    justify-content: flex-start;
+  }
 }
 
 @media (max-width: 480px) {
   .sermons-block__feature-title {
     font-size: 2rem;
+  }
+
+  .sermons-block__archive-note-actions {
+    display: grid;
+    width: 100%;
+  }
+
+  .sermons-block__archive-note-link {
+    width: 100%;
+    justify-content: flex-start;
   }
 }
