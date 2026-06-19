@@ -6,11 +6,10 @@
 .full-page-hero {
     @include hero-shell(clamp(3.5rem, 7vw, 5.5rem), clamp(2rem, 4vw, 3rem));
     @include hero-shell-chrome;
-    @include layered-hero-composition;
     overflow: visible;
     position: relative;
     z-index: 2;
-    padding: calc(var(--header-shell-height) + var(--toolbar-offset) - 3.75rem) 0 0;
+    padding: calc(var(--header-shell-height) + var(--toolbar-offset)) 0 0;
     background: var(--brand-primary-dark);
     color: var(--surface);
 
@@ -19,36 +18,88 @@
         z-index: 1;
     }
 
+    &__layout {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        gap: 2rem;
+    }
+
+    &__brand {
+        position: relative;
+        z-index: 3;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.85rem;
+        padding-top: clamp(1.65rem, 4vw, 3.2rem);
+        margin-bottom: clamp(-14.5rem, -18vw, -11.5rem);
+        text-align: center;
+    }
+
     &__title {
         width: min(100%, 12ch);
         margin: 0;
-        font-size: clamp(3.2rem, 7.8vw, 6.4rem);
-        line-height: 0.96;
-        letter-spacing: -0.05em;
         color: var(--surface);
+        font-size: clamp(3.3rem, 7vw, 6rem);
+        line-height: 0.96;
+        letter-spacing: 0;
+        text-wrap: balance;
     }
 
     &__description {
         width: min(100%, 42rem);
         margin: 0;
-        font-size: clamp(1.05rem, 1.8vw, 1.3rem);
-        line-height: 1.7;
-        color: rgba(245, 244, 241, 0.84);
+        color: rgba($color-surface, 0.9);
+        font-size: clamp(1.02rem, 1.65vw, 1.24rem);
+        font-weight: 600;
+        line-height: 1.55;
+        text-wrap: balance;
     }
 
-    .section-eyebrow {
-        color: rgba(245, 244, 241, 0.72);
+    &__media {
+        position: relative;
+        min-height: 0;
+        animation: rise-in 0.9s ease 0.1s both;
+    }
+
+    .hero-image-card {
+        border-color: rgba($color-surface, 0.14);
+        box-shadow: 0 28px 72px rgba($color-brand-ink, 0.24);
+
+        &::before {
+            z-index: 1;
+            background:
+                linear-gradient(180deg, rgba($color-brand-primary-dark, 0.16), rgba($color-brand-primary-dark, 0.3)),
+                linear-gradient(90deg, rgba($color-brand-secondary, 0.34), rgba($color-brand-primary, 0.22) 58%, rgba($color-brand-coral, 0.24));
+        }
+
+        &::after {
+            filter: saturate(0.72) contrast(1.04) brightness(0.82);
+        }
     }
 
     @include respond-max($breakpoint-mobile) {
-        padding: calc(var(--header-shell-height) + var(--toolbar-offset) - 1.35rem) 0 0;
+        &__brand {
+            gap: 0.65rem;
+            padding-top: 1.2rem;
+            margin-bottom: -8.5rem;
+        }
 
         &__title {
-            width: min(100%, 8ch);
+            width: min(100%, 9ch);
+            font-size: 2.8rem;
         }
 
         &__description {
-            width: min(100%, 26rem);
+            width: min(100%, 24rem);
+            font-size: 0.95rem;
+        }
+
+        .hero-image-card {
+            min-height: 20rem;
+            border-radius: 1.35rem;
         }
     }
 }
@@ -254,7 +305,7 @@ td {
         padding: 1rem;
         border: 1px solid rgba(134, 110, 175, 0.07);
         border-radius: 1.5rem;
-        background: rgba(238, 243, 245, 0.72);
+        background: var(--surface-mist);
 
         @include respond-max($breakpoint-tablet) {
             grid-template-columns: 1fr;
@@ -273,7 +324,7 @@ td {
     }
 
     .info-strip__item {
-        background: rgba(255, 253, 249, 0.9);
+        background: rgba($color-surface, 0.9);
         border-color: rgba(134, 110, 175, 0.07);
     }
 
@@ -402,7 +453,7 @@ td {
             border: 1px solid rgba(134, 110, 175, 0.08);
             border-radius: 1rem;
             background: var(--surface-card);
-            box-shadow: 0 10px 22px rgba(35, 43, 49, 0.03);
+            box-shadow: 0 10px 22px rgba($color-brand-ink, 0.03);
             line-height: 1.65;
         }
 
@@ -413,7 +464,7 @@ td {
             height: 0.56rem;
             border-radius: 999px;
             background: linear-gradient(180deg, var(--brand-primary), var(--brand-secondary));
-            box-shadow: 0 0 0 0.22rem rgba(255, 255, 255, 0.88);
+            box-shadow: 0 0 0 0.22rem rgba($color-surface, 0.88);
         }
 
         @include respond-max($breakpoint-mobile) {
@@ -437,7 +488,7 @@ td {
     .faq-accordion__item {
         border: 1px solid rgba(134, 110, 175, 0.06);
         border-radius: 1.1rem;
-        background: rgba(255, 253, 249, 0.84);
+        background: rgba($color-surface, 0.84);
         box-shadow: none;
         overflow: clip;
     }

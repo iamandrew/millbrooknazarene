@@ -12,13 +12,13 @@ body.menu-open {
     transition: background-color 0.24s ease, box-shadow 0.24s ease;
 
     &.scrolled {
-        box-shadow: 0 18px 40px rgba(18, 28, 35, 0.16);
+        box-shadow: 0 18px 40px rgba($color-brand-ink, 0.16);
     }
 }
 
 .header-shell {
     border-bottom: 1px solid var(--border-soft);
-    background: rgba(255, 255, 255, 0.96);
+    background: rgba($color-surface, 0.96);
     backdrop-filter: blur(16px);
 }
 
@@ -85,7 +85,7 @@ body.menu-open {
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 
     &:hover {
-        background: rgba(41, 143, 194, 0.08);
+        background: rgba($color-brand-secondary, 0.08);
     }
 
     &:focus {
@@ -93,7 +93,7 @@ body.menu-open {
     }
 
     &:focus-visible {
-        outline: 2px solid rgba(245, 244, 241, 0.68);
+        outline: 2px solid rgba($color-surface, 0.68);
         outline-offset: 3px;
     }
 }
@@ -144,8 +144,8 @@ body.menu-open {
     }
 
     .menu-toggle {
-        border-color: rgba(255, 255, 255, 0.12);
-        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba($color-surface, 0.12);
+        background: rgba($color-surface, 0.03);
         box-shadow: none;
     }
 
@@ -157,7 +157,7 @@ body.menu-open {
         background: transparent;
 
         &:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba($color-surface, 0.08);
         }
     }
 
@@ -203,7 +203,7 @@ body.menu-open {
     width: 100%;
     min-height: 100%;
     background: $color-brand-primary-dark;
-    color: rgba(255, 255, 255, 0.92);
+    color: rgba($color-surface, 0.92);
     overflow-y: auto;
 }
 
@@ -245,7 +245,7 @@ body.menu-open {
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba($color-surface, 0.5);
 }
 
 .site-menu__heading,
@@ -261,12 +261,12 @@ body.menu-open {
     text-decoration: none;
 
     &:hover {
-        color: #c9bbeb;
+        color: var(--brand-highlight);
     }
 }
 
 .site-menu__heading.is-active {
-    color: #c9bbeb;
+    color: var(--brand-highlight);
 }
 
 .site-menu__list,
@@ -286,7 +286,7 @@ body.menu-open {
     font-size: 1rem;
     font-weight: 550;
     line-height: 1.4;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba($color-surface, 0.8);
     text-decoration: none;
 
     &:hover {
@@ -306,10 +306,10 @@ body.menu-open {
         font-weight: 400;
         line-height: 1.02;
         letter-spacing: -0.03em;
-        color: rgba(255, 255, 255, 0.92);
+        color: rgba($color-surface, 0.92);
 
         &:hover {
-            color: #c9bbeb;
+            color: var(--brand-highlight);
         }
     }
 
@@ -323,7 +323,7 @@ body.menu-open {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.5rem 2rem;
     padding-top: 1.25rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    border-top: 1px solid rgba($color-surface, 0.07);
 
     @include respond-max($breakpoint-mobile) {
         grid-template-columns: 1fr;
@@ -335,14 +335,14 @@ body.menu-open {
     .site-menu__eyebrow {
         margin-bottom: 0.55rem;
         font-size: 0.68rem;
-        color: rgba(255, 255, 255, 0.5);
+        color: rgba($color-surface, 0.5);
     }
 
     p {
         margin: 0;
         font-size: 0.95rem;
         line-height: 1.58;
-        color: rgba(255, 255, 255, 0.66);
+        color: rgba($color-surface, 0.66);
     }
 
     p + p {
@@ -350,15 +350,15 @@ body.menu-open {
     }
 
     a {
-        color: rgba(255, 255, 255, 0.86);
+        color: rgba($color-surface, 0.86);
         font-weight: 550;
         text-decoration: underline;
-        text-decoration-color: rgba(201, 187, 235, 0.52);
+        text-decoration-color: rgba($color-brand-highlight, 0.52);
         text-decoration-thickness: 1.5px;
         text-underline-offset: 0.18em;
 
         &:hover {
-            color: #c9bbeb;
+            color: var(--brand-highlight);
             text-decoration-color: currentColor;
         }
     }
@@ -384,23 +384,23 @@ body.menu-open {
         color: var(--surface);
 
         &:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba($color-surface, 0.1);
         }
 
         &[aria-expanded='true'] {
-            border-color: rgba(255, 255, 255, 0.14);
-            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba($color-surface, 0.14);
+            background: rgba($color-surface, 0.03);
             box-shadow: none;
         }
     }
 
     .header-actions .button--primary {
-        background: rgba(255, 255, 255, 0.14);
-        border-color: rgba(255, 255, 255, 0.16);
+        background: rgba($color-surface, 0.14);
+        border-color: rgba($color-surface, 0.16);
         color: var(--surface);
 
         &:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba($color-surface, 0.2);
         }
     }
 }
@@ -411,7 +411,7 @@ body.menu-open {
 
     &.scrolled {
         .header-shell {
-            background: rgba(53, 72, 94, 0.95);
+            background: rgba($color-brand-primary-dark, 0.95);
             backdrop-filter: blur(16px);
         }
     }

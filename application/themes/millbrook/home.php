@@ -16,9 +16,7 @@ $renderArea = static function (string $areaName, $c, callable $fallback): void {
 ?>
 
 <main id="main-content" class="home-page">
-    <section
-        class="home-hero"
-    >
+    <section class="home-hero" aria-labelledby="home-hero-title">
         <div class="container home-hero__layout">
             <div class="home-hero__brand">
                 <img
@@ -26,8 +24,13 @@ $renderArea = static function (string $areaName, $c, callable $fallback): void {
                     alt="Millbrook Church of the Nazarene"
                     class="home-hero__logo"
                 >
-                <h1 class="home-hero__tagline" id="home-hero-title">In the heart of the community, with the community at its heart.</h1>
-                <a class="home-hero__button button button--ghost" href="/visit-us">Visit Us?</a>
+                <h1 class="home-hero__title" id="home-hero-title">Millbrook Church, Larne</h1>
+                <p class="home-hero__statement">In the heart of the community, with the community at its heart.</p>
+                <p class="home-hero__sunday">Sundays at <strong>11:00am</strong> &middot; Millbrook Community Centre</p>
+                <div class="home-hero__actions">
+                    <a class="home-hero__button button button--light" href="/visit-us">Visit Us?</a>
+                    <a class="home-hero__link" href="/contact">Ask a question</a>
+                </div>
             </div>
             <div class="home-hero__media" id="home-gatherings">
                 <div class="hero-visual">
@@ -41,150 +44,102 @@ $renderArea = static function (string $areaName, $c, callable $fallback): void {
         </div>
     </section>
 
-    <section class="home-intro" id="home-intro" aria-labelledby="home-hero-title">
-        <div class="container">
-            <div class="home-intro__content">
-                <?php $renderArea('Home Hero Content', $c, static function (): void { ?>
-                    <p class="section-eyebrow">Millbrook Church, Larne</p>
-                    <p class="hero-lead">
+    <section class="home-sunday" id="home-sundays">
+        <div class="container home-sunday__layout">
+            <div class="home-sunday__copy">
+                <?php $renderArea('Home Community Heading', $c, static function (): void { ?>
+                    <p class="section-eyebrow">Join us this Sunday</p>
+                    <h2 id="home-sunday-title">Sunday worship at 11:00am.</h2>
+                <?php }); ?>
+
+                <?php $renderArea('Home Community Intro', $c, static function (): void { ?>
+                    <p class="home-sunday__lead">
                         A local church in Larne where people of all ages gather to worship, pray, learn from
                         the Bible, and support one another.
                     </p>
-                    <div class="hero-actions">
-                        <a class="button button--primary" href="/visit-us">Visit Us?</a>
-                        <a class="button button--ghost" href="/visit-us">Join Us This Sunday</a>
-                    </div>
-                <?php }); ?>
-            </div>
-        </div>
-    </section>
-
-    <section class="home-one-church" id="home-sundays">
-        <div class="container home-story__layout">
-            <div class="home-story__intro">
-                <?php $renderArea('Home Community Heading', $c, static function (): void { ?>
-                    <p class="section-eyebrow">Join us this Sunday</p>
-                    <h2>Sundays at 11:00am in Larne.</h2>
-                <?php }); ?>
-            </div>
-
-            <div class="home-story__copy">
-                <?php $renderArea('Home Community Intro', $c, static function (): void { ?>
                     <p>
                         We meet every Sunday at Millbrook Community Centre, Larne. Our gathering usually
                         includes worship, prayer, Bible teaching, and time together afterwards. If you are
                         visiting for the first time, we would love to help you feel at ease.
                     </p>
-                <?php }); ?>
-            </div>
-
-            <?php $renderArea('Home Community Cards', $c, static function (): void { ?>
-                <div class="home-sunday-panel">
-                    <div class="home-sunday-panel__summary">
-                        <div class="home-sunday-panel__heading">
-                            <p class="feature-card__eyebrow">Your first Sunday</p>
-                            <h3>Simple, welcoming, and easy to step into.</h3>
-                        </div>
-                        <p class="home-sunday-panel__lead">
-                            You do not need to know the words, dress a certain way, or have church all figured out.
-                            Come as you are, and we will be glad to welcome you.
-                        </p>
-                        <div class="home-sunday-panel__actions">
-                            <a class="button button--primary" href="/visit-us">What to Expect</a>
-                            <a class="button button--ghost" href="/contact">Ask a Question</a>
-                        </div>
-                    </div>
-
-                    <div class="one-church-grid">
-                        <article class="community-card community-card--feature community-card--lead">
-                            <p class="feature-card__eyebrow">Sunday service</p>
-                            <h3>11:00am every Sunday</h3>
-                            <p>Most people arrive a few minutes early to settle in, say hello, and find a seat.</p>
-                        </article>
-                        <article class="community-card community-card--lead community-card--location">
-                            <p class="feature-card__eyebrow">Location</p>
-                            <h3>Millbrook Community Centre, Larne</h3>
-                            <p>If you need directions or have access questions, we are happy to help before you come.</p>
-                        </article>
-                        <article class="community-card">
-                            <p class="feature-card__eyebrow">What happens</p>
-                            <h3>Worship, prayer, Bible teaching</h3>
-                            <p>A straightforward Sunday gathering centred on Jesus, Scripture, and time together.</p>
-                        </article>
-                        <article class="community-card">
-                            <p class="feature-card__eyebrow">Children welcome</p>
-                            <h3>Families can relax</h3>
-                            <p>Children are a valued part of church life, and tea and coffee usually follow the service.</p>
-                        </article>
-                    </div>
-                </div>
-            <?php }); ?>
-        </div>
-    </section>
-
-    <section class="home-story home-story--new" id="home-new">
-        <div class="container home-story__layout">
-            <div class="home-story__intro">
-                <?php $renderArea('Home Vision Intro', $c, static function (): void { ?>
-                    <p class="section-eyebrow">New to Millbrook?</p>
-                    <h2>You do not need to have it all figured out before you come.</h2>
-                <?php }); ?>
-            </div>
-
-            <div class="home-story__copy">
-                <?php $renderArea('Home Vision Content', $c, static function (): void { ?>
-                    <p>
-                        We know visiting a church can feel like a big step, especially if you are not sure what
-                        to expect. Whether you are new to Larne, exploring faith, returning to church, or simply
-                        curious, we want to help you feel informed, comfortable, and welcome at your own pace.
+                    <p class="home-sunday__welcome">
+                        You do not need to know the words, dress a certain way, or have church all figured out.
+                        Come as you are, and we will be glad to welcome you.
                     </p>
-                    <a class="text-link" href="/visit-us">Plan Your Visit</a>
+                    <p class="home-sunday__new">
+                        <strong>New to Millbrook?</strong>
+                        Whether you are new to Larne, exploring faith, returning to church, or simply curious,
+                        you are welcome to come at your own pace.
+                    </p>
+                    <div class="home-sunday__actions">
+                        <a class="button button--primary" href="/visit-us">Plan Your Visit</a>
+                        <a class="text-link" href="/contact">Ask a question before you come</a>
+                    </div>
+                <?php }); ?>
+            </div>
+
+            <div class="home-sunday__details">
+                <?php $renderArea('Home Community Cards', $c, static function (): void { ?>
+                    <div class="home-sunday__detail">
+                        <span>When</span>
+                        <strong>11:00am every Sunday</strong>
+                        <p>Most people arrive a few minutes early to settle in, say hello, and find a seat.</p>
+                    </div>
+                    <div class="home-sunday__detail">
+                        <span>Where</span>
+                        <strong>Millbrook Community Centre, Larne</strong>
+                        <p>If you need directions or have access questions, we are happy to help before you come.</p>
+                    </div>
+                    <div class="home-sunday__detail">
+                        <span>What happens</span>
+                        <strong>Worship, prayer, Bible teaching</strong>
+                        <p>A straightforward Sunday gathering centred on Jesus, Scripture, and time together.</p>
+                    </div>
+                    <div class="home-sunday__detail">
+                        <span>Families</span>
+                        <strong>Children are welcome</strong>
+                        <p>Children are a valued part of church life, and tea and coffee usually follow the service.</p>
+                    </div>
                 <?php }); ?>
             </div>
         </div>
     </section>
 
     <section class="home-life" id="home-community">
-        <div class="container">
-            <div class="section-heading section-heading--center">
+        <div class="container home-life__layout">
+            <div class="home-life__copy">
                 <?php $renderArea('Home Ministries Heading', $c, static function (): void { ?>
-                    <p class="section-eyebrow">Church Life</p>
-                    <h2>More than a Sunday service.</h2>
-                    <p>Millbrook exists to be a faithful, loving presence in our community through worship, prayer, care, and everyday church life.</p>
+                    <p class="section-eyebrow">Church life</p>
+                    <h2 id="home-life-title">Church life through the week.</h2>
+                    <p>Alongside Sunday worship, people connect through homegroups, prayer, children’s activities, shared meals, and everyday care.</p>
+                    <a class="text-link" href="/community">See church life</a>
                 <?php }); ?>
             </div>
 
-            <?php $renderArea('Home Ministries Cards', $c, static function (): void { ?>
-                <div class="life-grid">
-                    <article class="life-card life-card--kids">
-                        <div class="life-card__media"></div>
-                        <div class="life-card__body">
-                            <p class="feature-card__eyebrow">Worship &amp; Prayer</p>
-                            <h3>Sunday worship and prayer shape the life of our church.</h3>
-                            <p>We gather to worship God, listen to Scripture, and pray together in ordinary life.</p>
-                            <a class="text-link" href="/visit-us">Plan Your Visit</a>
-                        </div>
-                    </article>
-                    <article class="life-card life-card--groups">
-                        <div class="life-card__media"></div>
-                        <div class="life-card__body">
-                            <p class="feature-card__eyebrow">Children &amp; Families</p>
-                            <h3>Children and families are a valued part of church life at Millbrook.</h3>
-                            <p>We want children to feel welcome, safe, included, and supported when they arrive.</p>
-                            <a class="text-link" href="/community/children">Explore children &amp; families</a>
-                        </div>
-                    </article>
-                    <article class="life-card life-card--serve">
-                        <div class="life-card__media"></div>
-                        <div class="life-card__body">
-                            <p class="feature-card__eyebrow">Community life</p>
-                            <h3>There is more to church than Sunday morning.</h3>
-                            <p>Homegroups, shared meals, ministry gatherings, and everyday support all help people belong.</p>
-                            <a class="text-link" href="/community">See church life</a>
-                        </div>
-                    </article>
-                </div>
-            <?php }); ?>
+            <div class="home-life__rhythms">
+                <?php $renderArea('Home Ministries Cards', $c, static function (): void { ?>
+                    <a class="home-life__rhythm" href="/visit-us">
+                        <span>Worship &amp; prayer</span>
+                        <strong>Gathering to worship God and pray together.</strong>
+                        <p>Sunday worship, prayer, Scripture, and time together shape the ordinary life of the church.</p>
+                    </a>
+                    <a class="home-life__rhythm" href="/community/children">
+                        <span>Children &amp; families</span>
+                        <strong>Helping children feel welcome, safe, and included.</strong>
+                        <p>We want families to feel supported when they arrive and able to take part at their own pace.</p>
+                    </a>
+                    <a class="home-life__rhythm" href="/community/homegroups">
+                        <span>Homegroups</span>
+                        <strong>Smaller spaces for friendship, prayer, and opening the Bible.</strong>
+                        <p>Homegroups help people build relationships and keep growing in faith beyond Sunday morning.</p>
+                    </a>
+                    <a class="home-life__rhythm" href="/community/whats-on">
+                        <span>Shared life</span>
+                        <strong>Meals, ministry gatherings, and everyday support.</strong>
+                        <p>Church life includes simple ways to belong, serve, and encourage one another through the week.</p>
+                    </a>
+                <?php }); ?>
+            </div>
         </div>
     </section>
 
@@ -193,58 +148,53 @@ $renderArea = static function (string $areaName, $c, callable $fallback): void {
             <div class="visit-card">
                 <?php $renderArea('Home Visit Card', $c, static function (): void { ?>
                     <p class="section-eyebrow">What’s On</p>
-                    <h2>A few simple ways to connect this month.</h2>
+                    <h2 id="home-whats-on-title">Ways to connect.</h2>
                     <p class="visit-card__lead">
-                        Alongside Sunday worship, there are regular gatherings, groups, and recent teaching
-                        that help people pray, connect, and grow together.
+                        Regular rhythms across the week help people pray, connect, and grow together.
                     </p>
 
                     <div class="visit-details">
                         <div class="visit-details__item">
                             <span class="visit-details__label">Sunday</span>
                             <strong>Worship at 11:00am</strong>
+                            <p>Join us each Sunday for worship, prayer, Bible teaching, and time together afterwards.</p>
                         </div>
                         <div class="visit-details__item">
                             <span class="visit-details__label">Midweek</span>
-                            <strong>Homegroups, prayer, and ministry gatherings through the week</strong>
+                            <strong>Homegroups, prayer, and shared life</strong>
+                            <p>Smaller gatherings through the week help people build friendships and keep growing in faith.</p>
+                        </div>
+                        <div class="visit-details__item">
+                            <span class="visit-details__label">Families</span>
+                            <strong>Children and families are welcome</strong>
+                            <p>Children are a valued part of church life, with support for families and age-appropriate opportunities to belong.</p>
                         </div>
                         <div class="visit-details__item">
                             <span class="visit-details__label">Recent teaching</span>
-                            <strong>Catch up on recent sermons and Bible teaching from Millbrook</strong>
+                            <strong>Catch up on sermons and Bible teaching</strong>
+                            <p>Listen back to recent messages from Millbrook before you visit or during the week.</p>
                         </div>
                     </div>
 
                     <div class="visit-card__actions">
                         <a class="button button--primary" href="/community/whats-on">See What’s On</a>
-                        <a class="button button--secondary" href="/resources/sermons">Latest Sermons</a>
+                        <a class="text-link" href="/resources/sermons">Listen to latest sermons</a>
                     </div>
                 <?php }); ?>
             </div>
 
-            <div class="visit-sidebar">
+            <aside class="visit-side-card">
                 <?php $renderArea('Home Contact Card', $c, static function (): void { ?>
-                    <div class="visit-side-card">
-                        <p class="feature-card__eyebrow">Got a question?</p>
-                        <h3>Easy next steps for a first visit.</h3>
-                        <p>
-                            If you are wondering about Sundays, children, accessibility, or simply what to
-                            expect when you arrive, please get in touch.
-                        </p>
-                        <ul class="visit-side-list">
-                            <li><strong>Visit Us?</strong><span>Everything you need for a first visit</span></li>
-                            <li><strong>Contact</strong><span>Ask a question before you come</span></li>
-                            <li><strong>Find us</strong><span>Millbrook Community Centre, Larne</span></li>
-                            <li><strong>Recent teaching</strong><span>Catch up with the latest sermons and messages</span></li>
-                        </ul>
-
-                        <div class="quick-links-list quick-links-list--compact">
-                            <a href="/visit-us">Visit Us?</a>
-                            <a href="/contact">Contact Us</a>
-                            <a href="/resources/sermons">Latest Sermons</a>
-                        </div>
-                    </div>
+                    <p class="section-eyebrow">Got a question?</p>
+                    <h2>We would be glad to help.</h2>
+                    <p>
+                        If you are wondering about Sundays, children, accessibility, or what to expect when you arrive,
+                        please get in touch.
+                    </p>
+                    <p class="visit-side-card__detail">Millbrook Community Centre, Larne</p>
+                    <a class="button button--secondary" href="/contact">Contact Us</a>
                 <?php }); ?>
-            </div>
+            </aside>
         </div>
     </section>
 </main>

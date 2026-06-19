@@ -1,12 +1,13 @@
+@use '../abstracts/variables' as *;
 @use '../abstracts/mixins' as *;
 
 .drive-documents-block {
     margin: 3rem 0;
     padding: clamp(1.5rem, 3vw, 2rem);
-    border: 1px solid rgba(53, 72, 94, 0.1);
+    border: 1px solid rgba($color-brand-primary-dark, 0.1);
     border-radius: 1.75rem;
-    background: rgba(244, 240, 248, 0.68);
-    box-shadow: 0 20px 42px rgba(38, 53, 68, 0.08);
+    background: var(--surface-soft);
+    box-shadow: 0 20px 42px rgba($color-brand-ink, 0.08);
 }
 
 .drive-documents-block__header {
@@ -78,15 +79,15 @@
     gap: 1rem;
     min-width: 0;
     padding: 1rem 1.1rem;
-    border: 1px solid rgba(53, 72, 94, 0.12);
+    border: 1px solid rgba($color-brand-primary-dark, 0.12);
     border-radius: 1.2rem;
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba($color-surface, 0.92);
     transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 
     &:hover {
         transform: translateY(-1px);
-        border-color: rgba(41, 143, 194, 0.22);
-        box-shadow: 0 10px 20px rgba(38, 53, 68, 0.06);
+        border-color: rgba($color-brand-secondary, 0.22);
+        box-shadow: 0 10px 20px rgba($color-brand-ink, 0.06);
     }
 }
 
@@ -164,7 +165,7 @@
 .drive-documents-block__empty {
     padding: 1.25rem 1.4rem;
     border-radius: 1rem;
-    background: rgba(255, 255, 255, 0.82);
+    background: rgba($color-surface, 0.82);
     color: var(--brand-ink-soft);
 }
 

@@ -16,7 +16,7 @@ $heroImageStyle = $pageHeroImageUrl !== '' ? sprintf('--hero-image: url(\'%s\');
             <?php $hero->display($c); ?>
         <?php } else { ?>
             <div class="page-hero__brand">
-                <h1 class="page-hero__title"><?php echo h($pageTitle); ?></h1>
+                <h1 class="page-hero__title" id="page-hero-title"><?php echo h($pageTitle); ?></h1>
                 <p class="page-hero__description">
                     <?php
                     echo h(

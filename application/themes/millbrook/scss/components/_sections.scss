@@ -1,3 +1,5 @@
+@use '../abstracts/variables' as *;
+
 .section-eyebrow {
     margin-bottom: 0.9rem;
     font-size: 0.76rem;
@@ -8,7 +10,7 @@
 }
 
 .section-eyebrow--light {
-    color: rgba(255, 255, 255, 0.82);
+    color: rgba($color-surface, 0.82);
 }
 
 .section-heading {

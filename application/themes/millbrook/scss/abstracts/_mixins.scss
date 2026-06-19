@@ -65,9 +65,9 @@
     position: relative;
     overflow: hidden;
     padding: 2.25rem;
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba($color-surface, 0.16);
     border-radius: $radius-card-large;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+    background: linear-gradient(180deg, rgba($color-surface, 0.1), rgba($color-surface, 0.04));
     box-shadow: $shadow-hero;
 }
 
@@ -95,9 +95,9 @@
 @mixin hero-image-card-base($desktop-height: 29rem, $mobile-height: 18rem) {
     position: relative;
     min-height: $desktop-height;
-    border: 1px solid rgba(245, 244, 241, 0.16);
+    border: 1px solid rgba($color-surface, 0.16);
     border-radius: 1.85rem;
-    box-shadow: 0 32px 80px rgba(18, 25, 33, 0.28);
+    box-shadow: 0 32px 80px rgba($color-brand-ink, 0.28);
     overflow: hidden;
 
     &::before {
@@ -105,11 +105,11 @@
         position: absolute;
         inset: 0;
         background:
-            radial-gradient(circle at 18% 18%, rgba(134, 110, 175, 0.42), transparent 28%),
-            radial-gradient(circle at 76% 20%, rgba(236, 94, 97, 0.36), transparent 24%),
-            radial-gradient(circle at 70% 78%, rgba(41, 143, 194, 0.34), transparent 30%),
-            linear-gradient(180deg, rgba(245, 244, 241, 0.08), rgba(245, 244, 241, 0.02)),
-            linear-gradient(135deg, rgba(41, 143, 194, 0.62), rgba(134, 110, 175, 0.42) 56%, rgba(236, 94, 97, 0.3) 100%);
+            radial-gradient(circle at 18% 18%, rgba($color-brand-primary, 0.42), transparent 28%),
+            radial-gradient(circle at 76% 20%, rgba($color-brand-coral, 0.36), transparent 24%),
+            radial-gradient(circle at 70% 78%, rgba($color-brand-secondary, 0.34), transparent 30%),
+            linear-gradient(180deg, rgba($color-surface, 0.08), rgba($color-surface, 0.02)),
+            linear-gradient(135deg, rgba($color-brand-secondary, 0.62), rgba($color-brand-primary, 0.42) 56%, rgba($color-brand-coral, 0.3) 100%);
         z-index: 1;
     }
 
@@ -203,12 +203,12 @@
         margin-top: clamp(2rem, 4vw, 3rem);
         margin-bottom: 1rem;
         padding-bottom: 0.6rem;
-        border-bottom: 1px solid rgba(53, 72, 94, 0.12);
+        border-bottom: 1px solid rgba($color-brand-primary-dark, 0.12);
         font-size: clamp(2rem, 3.5vw, 3rem);
         line-height: 1.05;
         letter-spacing: -0.035em;
         color: var(--brand-secondary);
-        box-shadow: inset 0 -3px 0 rgba(53, 72, 94, 0.12);
+        box-shadow: inset 0 -3px 0 rgba($color-brand-primary-dark, 0.12);
     }
 
     :where(h3) {
@@ -236,7 +236,7 @@
 
     :where(h2):first-child {
         padding-bottom: 0.45rem;
-        border-bottom: 1px solid rgba(53, 72, 94, 0.12);
+        border-bottom: 1px solid rgba($color-brand-primary-dark, 0.12);
     }
 
     p + h2,
@@ -273,7 +273,7 @@
     :where(a) {
         color: var(--brand-primary-dark);
         text-decoration: underline;
-        text-decoration-color: rgba(134, 110, 175, 0.35);
+        text-decoration-color: rgba($color-brand-primary, 0.35);
         text-decoration-thickness: 0.08em;
         text-underline-offset: 0.18em;
     }
@@ -314,7 +314,7 @@
         font-family: $font-family-heading;
         font-size: 2.1rem;
         line-height: 1;
-        color: rgba(134, 110, 175, 0.45);
+        color: rgba($color-brand-primary, 0.45);
     }
 
     :where(hr) {
@@ -322,7 +322,7 @@
         height: 1px;
         margin: 2.25rem 0;
         border: 0;
-        background: linear-gradient(90deg, rgba(41, 143, 194, 0), rgba(41, 143, 194, 0.22), rgba(134, 110, 175, 0.18), rgba(41, 143, 194, 0));
+        background: linear-gradient(90deg, rgba($color-brand-secondary, 0), rgba($color-brand-secondary, 0.22), rgba($color-brand-primary, 0.18), rgba($color-brand-secondary, 0));
     }
 
     table {
@@ -334,7 +334,7 @@
     th,
     td {
         padding: 0.9rem 0.95rem;
-        border-bottom: 1px solid rgba(47, 52, 56, 0.12);
+        border-bottom: 1px solid rgba($color-brand-ink, 0.12);
         text-align: left;
     }
 }

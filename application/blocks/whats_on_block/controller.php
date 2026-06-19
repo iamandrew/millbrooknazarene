@@ -91,10 +91,17 @@ class Controller extends BlockController
 
     protected function getItems(): array
     {
+        $layout = $this->getValidLayout((string) $this->layout);
+        $legacyJson = trim((string) ($this->itemsJson ?? ''));
+
+        if ($layout === 'compact' && $legacyJson !== '') {
+            return array_slice($this->getLegacyItems(), 0, 4);
+        }
+
         $items = $this->getItemsFromExpress();
         if ($items !== []) {
-            if ($this->getValidLayout((string) $this->layout) === 'compact') {
-                return array_slice($items, 0, 3);
+            if ($layout === 'compact') {
+                return array_slice($items, 0, 4);
             }
 
             return $items;
@@ -221,11 +228,11 @@ class Controller extends BlockController
                 'linkUrl' => '/community/children',
             ],
             [
-                'eyebrow' => 'Looking ahead',
-                'title' => 'Seasonal events and church-wide gatherings',
-                'summary' => 'Special services, shared meals, and occasional events help mark the year together as a church family.',
-                'linkLabel' => 'Get in touch',
-                'linkUrl' => '/contact',
+                'eyebrow' => 'Recent teaching',
+                'title' => 'Catch up on sermons and Bible teaching',
+                'summary' => 'Listen back to recent messages from Millbrook before you visit or during the week.',
+                'linkLabel' => 'Listen to latest sermons',
+                'linkUrl' => '/resources/sermons',
             ],
         ];
     }

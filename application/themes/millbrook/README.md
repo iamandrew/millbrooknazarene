@@ -73,18 +73,14 @@ Homepage structure
 ------------------
 The homepage currently follows this sequence:
 1. Hero
-2. What to Expect
-3. About Millbrook
-4. Life at Millbrook
-5. Plan Your Visit
+2. Sunday worship
+3. Church life through the week
+4. Ways to connect
 
 Homepage editable areas
 -----------------------
 Fallback content exists in code, but these areas can all be overridden in Concrete:
 
-- `Home Hero Content`
-- `Home Vision Intro`
-- `Home Vision Content`
 - `Home Community Heading`
 - `Home Community Intro`
 - `Home Community Cards`
@@ -92,7 +88,6 @@ Fallback content exists in code, but these areas can all be overridden in Concre
 - `Home Ministries Cards`
 - `Home Visit Card`
 - `Home Contact Card`
-- `Home Quick Links Card`
 
 Shared/global editable areas:
 - `Top Bar Left`

@@ -1,3 +1,4 @@
+@use '../abstracts/variables' as *;
 @use '../abstracts/mixins' as *;
 
 .button,
@@ -17,9 +18,9 @@
 
 .button--ghost,
 .btn-outline {
-    border-color: rgba(255, 255, 255, 0.34);
+    border-color: rgba($color-surface, 0.34);
     color: var(--surface);
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba($color-surface, 0.08);
 }
 
 .button--light {
@@ -28,13 +29,13 @@
 }
 
 .button--ghost-light {
-    border-color: rgba(255, 255, 255, 0.34);
+    border-color: rgba($color-surface, 0.34);
     color: var(--surface);
     background: transparent;
 }
 
 .button--secondary {
-    border-color: rgba(41, 143, 194, 0.22);
+    border-color: rgba($color-brand-secondary, 0.22);
     background: var(--brand-highlight);
     color: var(--brand-ink);
 }

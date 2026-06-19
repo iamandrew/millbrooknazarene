@@ -29,9 +29,9 @@
         min-height: 2.1rem;
         margin: 0 0 1rem;
         padding: 0 0.8rem;
-        border: 1px solid rgba(53, 72, 94, 0.14);
+        border: 1px solid rgba($color-brand-primary-dark, 0.14);
         border-radius: var(--radius-pill);
-        background: rgba(238, 243, 245, 0.78);
+        background: rgba($color-brand-secondary, 0.08);
         font-size: 0.78rem;
         font-weight: 800;
         letter-spacing: 0;
@@ -62,13 +62,13 @@
         gap: 0.75rem;
 
         .button--ghost-light {
-            border-color: rgba(53, 72, 94, 0.22);
-            background: rgba(255, 253, 249, 0.48);
+            border-color: rgba($color-brand-primary-dark, 0.22);
+            background: rgba($color-surface, 0.48);
             color: var(--brand-primary-dark);
 
             &:hover {
-                border-color: rgba(41, 143, 194, 0.34);
-                background: rgba(219, 238, 247, 0.7);
+                border-color: rgba($color-brand-secondary, 0.34);
+                background: rgba($color-brand-secondary, 0.14);
             }
         }
     }
@@ -79,7 +79,7 @@
         border: 1px solid rgba(53, 72, 94, 0.12);
         border-left: 3px solid var(--brand-highlight);
         border-radius: 8px;
-        background: #fff;
+        background: var(--surface-card);
         box-shadow: var(--shadow-card);
         color: var(--text-main);
     }
@@ -145,13 +145,13 @@
         padding: 0.72rem 0.9rem;
         border: 1px solid rgba(53, 72, 94, 0.1);
         border-radius: 8px;
-        background: rgba(238, 243, 245, 0.54);
+        background: rgba($color-brand-secondary, 0.06);
         text-decoration: none;
         transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 
         &:hover {
             border-color: rgba(41, 143, 194, 0.28);
-            background: rgba(219, 238, 247, 0.72);
+            background: rgba($color-brand-secondary, 0.14);
             transform: translateY(-1px);
         }
 
