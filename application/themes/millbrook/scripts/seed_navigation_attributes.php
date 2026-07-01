@@ -92,7 +92,7 @@ $pageMap = [
     '/visit-us' => ['nav_show_in_quick_links' => true, 'nav_quick_link_order' => 1, 'nav_show_in_footer' => true, 'nav_footer_order' => 1, 'nav_label' => 'Visit Us?'],
     '/community/whats-on' => ['nav_show_in_quick_links' => true, 'nav_quick_link_order' => 2, 'nav_show_in_footer' => true, 'nav_footer_order' => 2, 'nav_label' => "What's On"],
     '/contact' => ['nav_show_in_quick_links' => true, 'nav_quick_link_order' => 4, 'nav_show_in_footer' => true, 'nav_footer_order' => 4, 'nav_label' => 'Contact'],
-    '/giving' => ['nav_show_in_footer' => true, 'nav_footer_order' => 5, 'nav_label' => 'Giving'],
+    '/giving' => ['nav_show_in_menu' => true, 'nav_show_in_footer' => true, 'nav_footer_order' => 5, 'nav_label' => 'Giving'],
 ];
 
 foreach ($pageMap as $path => $attributes) {

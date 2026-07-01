@@ -12,13 +12,52 @@ $seedMap = [
     'sermons-block' => __DIR__ . '/add_sermons_block.php',
     'whats-on-block' => __DIR__ . '/add_whats_on_block.php',
     'home-whats-on' => __DIR__ . '/add_home_whats_on_block.php',
+    'visit-us' => __DIR__ . '/add_visit_us_page.php',
+    'who-we-are' => __DIR__ . '/add_who_we_are_page.php',
+    'womens-ministry' => __DIR__ . '/add_womens_ministry_page.php',
+    'creche' => __DIR__ . '/add_creche_page.php',
+    'youth' => __DIR__ . '/add_youth_page.php',
+    'giving' => __DIR__ . '/add_giving_page.php',
     'whats-on-express' => __DIR__ . '/migrate_whats_on_to_express.php',
+];
+
+$seedGroups = [
+    'deploy' => [
+        'hero-attributes',
+        'navigation-attributes',
+    ],
+    'staging-content' => [
+        'home-whats-on',
+        'visit-us',
+        'who-we-are',
+        'womens-ministry',
+        'creche',
+        'youth',
+        'giving',
+    ],
 ];
 
 $seed = $args[0] ?? null;
 
+$runSeed = static function (string $key) use ($seedMap, $output): int {
+    if (!isset($seedMap[$key])) {
+        $output->writeln(sprintf('<error>Unknown seed "%s"</error>', $key));
+        return 1;
+    }
+
+    $output->writeln(sprintf('<info>Running seed: %s</info>', $key));
+    $rc = require $seedMap[$key];
+
+    return is_numeric($rc) ? (int) $rc : 0;
+};
+
 if ($seed === null || in_array($seed, ['-h', '--help', 'help'], true)) {
     $output->writeln('Millbrook content seed runner');
+    $output->writeln('');
+    $output->writeln('Seed groups:');
+    foreach ($seedGroups as $key => $members) {
+        $output->writeln(sprintf('  - %s (%s)', $key, implode(', ', $members)));
+    }
     $output->writeln('');
     $output->writeln('Available seeds:');
     foreach (array_keys($seedMap) as $key) {
@@ -30,12 +69,23 @@ if ($seed === null || in_array($seed, ['-h', '--help', 'help'], true)) {
     return 0;
 }
 
+if (isset($seedGroups[$seed])) {
+    foreach ($seedGroups[$seed] as $key) {
+        $rc = $runSeed($key);
+        if ($rc !== 0) {
+            return $rc;
+        }
+    }
+
+    $output->writeln(sprintf('<info>Completed seed group: %s</info>', $seed));
+    return 0;
+}
+
 if ($seed === 'all') {
-    foreach (['hero-attributes', 'navigation-attributes', 'demo-sitemap', 'visitor-blueprint', 'new-here', 'rename-labels', 'policies-documents', 'sermons-block', 'whats-on-block', 'home-whats-on', 'whats-on-express'] as $key) {
-        $output->writeln(sprintf('<info>Running seed: %s</info>', $key));
-        $rc = require $seedMap[$key];
-        if (is_numeric($rc) && (int) $rc !== 0) {
-            return (int) $rc;
+    foreach (['hero-attributes', 'navigation-attributes', 'demo-sitemap', 'visitor-blueprint', 'new-here', 'visit-us', 'rename-labels', 'policies-documents', 'sermons-block', 'whats-on-block', 'home-whats-on', 'whats-on-express'] as $key) {
+        $rc = $runSeed($key);
+        if ($rc !== 0) {
+            return $rc;
         }
     }
 
@@ -49,7 +99,4 @@ if (!isset($seedMap[$seed])) {
     return 1;
 }
 
-$output->writeln(sprintf('<info>Running seed: %s</info>', $seed));
-$result = require $seedMap[$seed];
-
-return is_numeric($result) ? (int) $result : 0;
+return $runSeed($seed);

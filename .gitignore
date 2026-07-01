@@ -9,8 +9,13 @@ Thumbs.db
 # Local environment / secrets
 .env
 .env.*
+scripts/deploy/deploy.env
 application/config/database.php
 tmp/
+staging-images/
+page-design-final/
+page-design-options/
+scripts/
 
 # Concrete CMS generated config / proxies
 application/config/generated_overrides/

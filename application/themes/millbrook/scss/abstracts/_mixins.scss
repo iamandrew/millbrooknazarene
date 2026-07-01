@@ -105,11 +105,18 @@
         position: absolute;
         inset: 0;
         background:
-            radial-gradient(circle at 18% 18%, rgba($color-brand-primary, 0.42), transparent 28%),
-            radial-gradient(circle at 76% 20%, rgba($color-brand-coral, 0.36), transparent 24%),
-            radial-gradient(circle at 70% 78%, rgba($color-brand-secondary, 0.34), transparent 30%),
-            linear-gradient(180deg, rgba($color-surface, 0.08), rgba($color-surface, 0.02)),
-            linear-gradient(135deg, rgba($color-brand-secondary, 0.62), rgba($color-brand-primary, 0.42) 56%, rgba($color-brand-coral, 0.3) 100%);
+            linear-gradient(
+                180deg,
+                rgba($color-brand-primary-dark, 0.24),
+                rgba($color-brand-primary-dark, 0.14) 42%,
+                rgba($color-brand-primary-dark, 0.34)
+            ),
+            linear-gradient(
+                90deg,
+                rgba($color-brand-secondary, 0.28),
+                rgba($color-brand-primary-dark, 0.1) 55%,
+                rgba($color-brand-coral, 0.1)
+            );
         z-index: 1;
     }
 
@@ -121,7 +128,7 @@
         background-image: var(--hero-image);
         background-position: center;
         background-size: cover;
-        filter: grayscale(1) contrast(1.2) brightness(0.84);
+        filter: saturate(0.72) contrast(1.04) brightness(0.8);
     }
 
     @include respond-max($breakpoint-mobile) {

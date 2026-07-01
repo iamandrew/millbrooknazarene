@@ -196,4 +196,228 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    document.querySelectorAll('[data-giving-widget]').forEach(function (widget) {
+        var form = widget.querySelector('[data-giving-form]');
+        var amountsContainer = widget.querySelector('[data-giving-amounts]');
+        var customAmount = widget.querySelector('[data-giving-custom-amount]');
+        var submitButton = widget.querySelector('[data-giving-submit]');
+        var status = widget.querySelector('[data-giving-status]');
+        var campaignName = widget.querySelector('[data-giving-campaign-name]');
+        var thanks = widget.querySelector('[data-giving-thanks]');
+        var campaignId = widget.getAttribute('data-campaign-id') || '';
+        var apiBase = (widget.getAttribute('data-api-base') || '').replace(/\/$/, '');
+        var websiteBase = (widget.getAttribute('data-website-base') || '').replace(/\/$/, '');
+        var checkoutPrefix = widget.getAttribute('data-checkout-prefix') || '/c/';
+        var returnPath = widget.getAttribute('data-return-path') || window.location.pathname;
+        var tag = (widget.getAttribute('data-tag') || '').slice(0, 36);
+        var donationLimit = null;
+        var selectedAmount = null;
+        var checkoutCampaignId = campaignId;
+
+        if (thanks && window.location.search.indexOf('thanks=1') !== -1) {
+            thanks.hidden = false;
+        }
+
+        var setStatus = function (message, type) {
+            if (!status) {
+                return;
+            }
+
+            status.textContent = message;
+            status.setAttribute('data-status', type || 'neutral');
+        };
+
+        var setInteractive = function (enabled) {
+            widget.querySelectorAll('button, input').forEach(function (field) {
+                field.disabled = !enabled;
+            });
+        };
+
+        var formatCurrency = function (amount) {
+            var formatter = new Intl.NumberFormat('en-GB', {
+                style: 'currency',
+                currency: 'GBP',
+                minimumFractionDigits: Number.isInteger(amount) ? 0 : 2,
+                maximumFractionDigits: 2
+            });
+
+            return formatter.format(amount);
+        };
+
+        var selectAmount = function (amount, activeButton) {
+            selectedAmount = amount;
+
+            if (customAmount && activeButton) {
+                customAmount.value = '';
+            }
+
+            if (!amountsContainer) {
+                return;
+            }
+
+            amountsContainer.querySelectorAll('[data-amount]').forEach(function (button) {
+                var isSelected = button === activeButton;
+                button.classList.toggle('is-selected', isSelected);
+                button.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+            });
+        };
+
+        var wireAmountButtons = function () {
+            if (!amountsContainer) {
+                return;
+            }
+
+            amountsContainer.querySelectorAll('[data-amount]').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var amount = parseFloat(button.getAttribute('data-amount'));
+
+                    if (!Number.isNaN(amount)) {
+                        selectAmount(amount, button);
+                    }
+                });
+            });
+        };
+
+        var renderAmounts = function (items) {
+            if (!amountsContainer || !items || !items.length) {
+                wireAmountButtons();
+                return;
+            }
+
+            amountsContainer.innerHTML = '';
+
+            items.forEach(function (item) {
+                var amount = parseFloat(item.amount);
+
+                if (Number.isNaN(amount)) {
+                    return;
+                }
+
+                var button = document.createElement('button');
+                button.className = 'giving-amount-option';
+                button.type = 'button';
+                button.setAttribute('data-amount', String(amount));
+                button.setAttribute('aria-pressed', 'false');
+                button.textContent = formatCurrency(amount);
+                amountsContainer.appendChild(button);
+            });
+
+            wireAmountButtons();
+
+            var defaultItem = items.find(function (item) {
+                return item.default;
+            }) || items[0];
+            var defaultAmount = defaultItem ? parseFloat(defaultItem.amount) : null;
+            var defaultButton = defaultAmount !== null ? amountsContainer.querySelector('[data-amount="' + defaultAmount + '"]') : null;
+
+            if (!Number.isNaN(defaultAmount) && defaultButton) {
+                selectAmount(defaultAmount, defaultButton);
+            }
+        };
+
+        var getReturnUrl = function () {
+            return new URL(returnPath, window.location.origin).toString();
+        };
+
+        var disableWithMessage = function (message) {
+            setInteractive(false);
+            setStatus(message, 'error');
+            widget.classList.add('is-unavailable');
+        };
+
+        if (!form || !amountsContainer || !submitButton) {
+            return;
+        }
+
+        setInteractive(false);
+        wireAmountButtons();
+
+        if (customAmount) {
+            customAmount.addEventListener('input', function () {
+                selectedAmount = null;
+
+                if (amountsContainer) {
+                    amountsContainer.querySelectorAll('[data-amount]').forEach(function (button) {
+                        button.classList.remove('is-selected');
+                        button.setAttribute('aria-pressed', 'false');
+                    });
+                }
+            });
+        }
+
+        if (!campaignId || !apiBase || !websiteBase || typeof fetch === 'undefined') {
+            disableWithMessage('The Give A Little test campaign is not configured yet.');
+            return;
+        }
+
+        fetch(apiBase + '/webdonations/campaigns/' + encodeURIComponent(campaignId), {
+            headers: {
+                Accept: 'application/json'
+            }
+        }).then(function (response) {
+            if (!response.ok) {
+                throw new Error('Campaign unavailable');
+            }
+
+            return response.json();
+        }).then(function (campaign) {
+            checkoutCampaignId = campaign.id || campaignId;
+            donationLimit = campaign.donationLimit ? parseFloat(campaign.donationLimit) : null;
+
+            if (campaignName && (campaign.charityName || campaign.heading)) {
+                campaignName.textContent = campaign.charityName || campaign.heading;
+            }
+
+            renderAmounts(campaign.items || []);
+
+            if (customAmount && campaign.showCustomAmount === false) {
+                customAmount.closest('.giving-custom-amount').hidden = true;
+            }
+
+            if (campaign.allowRecurring === false) {
+                widget.querySelectorAll('input[name="giving_frequency"][value="monthly"]').forEach(function (input) {
+                    input.closest('label').hidden = true;
+                    input.checked = false;
+                });
+            }
+
+            setInteractive(true);
+            setStatus('Ready to continue to Give A Little’s secure test checkout.', 'success');
+        }).catch(function () {
+            disableWithMessage('The Give A Little test campaign could not be found. Add the published test campaign ID to enable this form.');
+        });
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            var customValue = customAmount ? parseFloat(customAmount.value) : NaN;
+            var amount = !Number.isNaN(customValue) && customValue > 0 ? customValue : selectedAmount;
+
+            if (!amount || amount <= 0) {
+                setStatus('Please choose or enter an amount before continuing.', 'error');
+                return;
+            }
+
+            if (donationLimit && amount > donationLimit) {
+                setStatus('The maximum online gift for this campaign is ' + formatCurrency(donationLimit) + '.', 'error');
+                return;
+            }
+
+            var frequency = form.querySelector('input[name="giving_frequency"]:checked');
+            var isRecurring = frequency && frequency.value === 'monthly';
+            var checkoutPath = checkoutPrefix + encodeURIComponent(checkoutCampaignId) + '/initiate-donation';
+            var checkoutUrl = new URL(checkoutPath, websiteBase + '/');
+
+            checkoutUrl.searchParams.set('amount', amount.toFixed(2));
+            checkoutUrl.searchParams.set('recurring', isRecurring ? 'true' : 'false');
+            checkoutUrl.searchParams.set('returnUrl', getReturnUrl());
+
+            if (tag) {
+                checkoutUrl.searchParams.set('tag', tag);
+            }
+
+            window.location.href = checkoutUrl.toString();
+        });
+    });
 });
