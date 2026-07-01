@@ -16,23 +16,23 @@ $renderArea = static function (string $areaName, $c, callable $fallback): void {
 ?>
 
 <main id="main-content" class="home-page">
-    <section class="home-hero" aria-labelledby="home-hero-title">
-        <div class="container home-hero__layout">
-            <div class="home-hero__brand">
+    <section class="page-hero page-hero--has-image page-hero--home home-hero" aria-labelledby="home-hero-title">
+        <div class="container page-hero__layout">
+            <div class="page-hero__brand">
                 <img
                     src="<?php echo $themePath; ?>/images/logo-no-sub.svg"
                     alt="Millbrook Church of the Nazarene"
-                    class="home-hero__logo"
+                    class="page-hero__logo"
                 >
                 <h1 class="home-hero__title" id="home-hero-title">Millbrook Church, Larne</h1>
-                <p class="home-hero__statement">A warm, family-friendly, Christ-centred church in Larne, living out faith in practical care for others.</p>
-                <p class="home-hero__sunday">Sundays at <strong>11:00am</strong> &middot; Millbrook Community Centre</p>
-                <div class="home-hero__actions">
-                    <a class="home-hero__button button button--light" href="/visit-us">Visit Us?</a>
-                    <a class="home-hero__link" href="/community/whats-on">What’s On</a>
+                <p class="page-hero__description page-hero__description--home">A warm, family-friendly, Christ-centred church in Larne, living out faith in practical care for others.</p>
+                <p class="page-hero__meta page-hero__meta--home">Sundays at <strong>11:00am</strong> &middot; Millbrook Community Centre</p>
+                <div class="page-hero__actions page-hero__actions--home">
+                    <a class="page-hero__button button button--light" href="/visit-us">Visit Us?</a>
+                    <a class="page-hero__link" href="/community/whats-on">What’s On</a>
                 </div>
             </div>
-            <div class="home-hero__media" id="home-gatherings">
+            <div class="page-hero__media" id="home-gatherings">
                 <div class="hero-visual">
                     <div
                         class="hero-image-card"
