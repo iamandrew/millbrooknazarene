@@ -26,17 +26,20 @@ if (!$blockType) {
 $area = Area::getOrCreate($page, 'Home Visit Card');
 $existingBlocks = $area->getAreaBlocksArray($page);
 
-$defaultTitle = 'Ways to connect.';
+$defaultTitle = 'A few ways to begin.';
 $legacyTitles = [
     'A few simple ways to connect through the month.',
     'Ways to connect this month.',
+    'Ways to connect.',
 ];
-$defaultIntro = 'Community gatherings, family activities, and regular rhythms help people find a place to belong.';
+$defaultIntro = 'If you are wondering where to start, Sunday worship is always a good first step. These regular rhythms help people pray, connect, and grow together.';
 $legacyIntros = [
     'Alongside Sunday worship, there are regular gatherings, groups, and church rhythms that help people pray, connect, and grow together.',
+    'Regular rhythms across the week help people pray, connect, and grow together.',
+    'Community gatherings, family activities, and regular rhythms help people find a place to belong.',
 ];
-$defaultSecondaryButtonLabel = '';
-$defaultSecondaryButtonUrl = '';
+$defaultSecondaryButtonLabel = 'Listen to recent teaching';
+$defaultSecondaryButtonUrl = '/resources/sermons';
 $legacySecondaryLabels = [
     'Latest Sermons',
 ];
@@ -50,30 +53,30 @@ $blockData = [
     'layout' => 'compact',
     'itemsJson' => json_encode([
         [
-            'eyebrow' => 'Community',
-            'title' => 'Community Cafe and Cafe Fit',
-            'summary' => 'Spaces through the week for connection, wellbeing, friendship, and support.',
-            'linkLabel' => 'See What\'s On',
-            'linkUrl' => '/community/whats-on',
-        ],
-        [
-            'eyebrow' => 'Families',
-            'title' => 'Kids activities and family life',
-            'summary' => 'Sunday School, seasonal children\'s activities, and Kids Summer Club help families connect.',
-            'linkLabel' => 'Children & families',
-            'linkUrl' => '/community/children',
-        ],
-        [
             'eyebrow' => 'Sunday',
-            'title' => 'Sunday worship and First Breakfast',
-            'summary' => 'Join us each Sunday at 11:00am, with breakfast or brunch together on the first Sunday of the month.',
+            'title' => 'Worship at 11:00am',
+            'summary' => 'Join us each Sunday for worship, prayer, Bible teaching, and time together afterwards.',
             'linkLabel' => 'Plan your visit',
             'linkUrl' => '/visit-us',
         ],
         [
-            'eyebrow' => 'Seasonal',
-            'title' => 'Special services and community events',
-            'summary' => 'Carol services, Good Friday, cinema nights, Acoustic Cafe, and seasonal gatherings happen through the year.',
+            'eyebrow' => 'Prayer',
+            'title' => 'Prayer before church at 10:45am',
+            'summary' => 'You are welcome to join the short prayer time before the Sunday service.',
+            'linkLabel' => 'Plan your visit',
+            'linkUrl' => '/visit-us',
+        ],
+        [
+            'eyebrow' => 'Youth',
+            'title' => 'Sunday evenings for young people',
+            'summary' => 'A relaxed space for secondary school age young people, with snacks, games, teaching, trips, and time together.',
+            'linkLabel' => 'Youth',
+            'linkUrl' => '/community/cheesy-nachos',
+        ],
+        [
+            'eyebrow' => 'Community',
+            'title' => 'Community Cafe, Cafe Fit, and local events',
+            'summary' => 'Simple spaces through the week for connection, wellbeing, friendship, and support.',
             'linkLabel' => 'See What\'s On',
             'linkUrl' => '/community/whats-on',
         ],
@@ -94,6 +97,7 @@ foreach ($existingBlocks as $block) {
         $currentItemsJson = trim((string) ($controller->itemsJson ?? ''));
         $shouldRefreshItems = $currentItemsJson === ''
             || str_contains($currentItemsJson, 'Recent teaching')
+            || str_contains($currentItemsJson, 'Homegroups')
             || !str_contains($currentItemsJson, 'Community Cafe')
             || str_contains($currentItemsJson, 'Latest sermons');
         $blockData = [
@@ -103,8 +107,8 @@ foreach ($existingBlocks as $block) {
             'itemsJson' => $shouldRefreshItems ? $blockData['itemsJson'] : $currentItemsJson,
             'primaryButtonLabel' => trim((string) ($controller->primaryButtonLabel ?? $blockData['primaryButtonLabel'])),
             'primaryButtonUrl' => trim((string) ($controller->primaryButtonUrl ?? $blockData['primaryButtonUrl'])),
-            'secondaryButtonLabel' => in_array($currentSecondaryLabel, $legacySecondaryLabels, true) ? $defaultSecondaryButtonLabel : $currentSecondaryLabel,
-            'secondaryButtonUrl' => in_array($currentSecondaryUrl, $legacySecondaryUrls, true) ? $defaultSecondaryButtonUrl : $currentSecondaryUrl,
+            'secondaryButtonLabel' => $currentSecondaryLabel === '' || in_array($currentSecondaryLabel, $legacySecondaryLabels, true) ? $defaultSecondaryButtonLabel : $currentSecondaryLabel,
+            'secondaryButtonUrl' => $currentSecondaryUrl === '' || in_array($currentSecondaryUrl, $legacySecondaryUrls, true) ? $defaultSecondaryButtonUrl : $currentSecondaryUrl,
         ];
         break;
     }
