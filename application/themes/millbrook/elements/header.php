@@ -166,7 +166,7 @@ $navigationLinks = $navigationData['quick_links'] ?? [];
                         <div class="site-menu__meta">
                             <p class="site-menu__eyebrow">Gatherings</p>
                             <p>Sundays at 11:00am</p>
-                            <p>Home Group every Thursday, 7:30pm</p>
+                            <p>Homegroup on Wednesday evenings</p>
                         </div>
 
                         <div class="site-menu__meta">

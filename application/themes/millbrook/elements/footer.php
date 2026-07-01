@@ -38,7 +38,7 @@ $footerLinks = $navigationData['footer_links'] ?? [];
                     <h4>Gatherings</h4>
                     <ul class="footer-links">
                         <li><span>Sunday Worship</span><strong>11:00am</strong></li>
-                        <li><span>Home Group</span><strong>Every other Thursday, 7:30pm</strong></li>
+                        <li><span>Homegroup</span><strong>Wednesday evenings</strong></li>
                     </ul>
                     <?php
                 }

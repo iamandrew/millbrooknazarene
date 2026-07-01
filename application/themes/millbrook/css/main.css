@@ -2783,6 +2783,9 @@ td {
   display: grid;
   gap: clamp(2.5rem, 6vw, 5.25rem);
 }
+.page-content .content-guide--about {
+  gap: clamp(2.2rem, 5vw, 4.25rem);
+}
 .page-content .content-about-identity {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(18rem, 0.58fr);
@@ -2790,6 +2793,10 @@ td {
   align-items: end;
   padding-bottom: clamp(1.7rem, 5vw, 4rem);
   border-bottom: 1px solid rgba(53, 72, 94, 0.14);
+}
+.page-content .content-guide--about .content-about-identity {
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 .page-content .content-about-identity__statement {
   min-width: 0;
@@ -3017,6 +3024,600 @@ td {
   line-height: 1.68;
   color: var(--text-muted);
 }
+.page-content .content-guide--church-life {
+  gap: clamp(2.4rem, 5vw, 4.8rem);
+}
+.page-content .content-guide--church-life .content-guide__stack > :last-child {
+  border-bottom: 0;
+}
+.page-content .content-guide--church-life .content-guide-photo {
+  padding-top: 0;
+  border-top: 0;
+}
+.page-content .church-life-tiles {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+.page-content .church-life-tiles__header {
+  max-width: 52rem;
+}
+.page-content .church-life-tiles__header h2 {
+  max-width: 12ch;
+  margin: 0 0 1rem;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  color: var(--brand-secondary);
+  font-size: clamp(2.3rem, 4.6vw, 4rem);
+  line-height: 1.04;
+  letter-spacing: 0;
+}
+.page-content .church-life-tiles__header p:last-child {
+  margin-bottom: 0;
+}
+.page-content .church-life-tiles__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.4rem);
+}
+.page-content .church-life-tile {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-width: 0;
+  min-height: clamp(18rem, 28vw, 25rem);
+  overflow: hidden;
+  align-items: flex-end;
+  border: 1px solid rgba(53, 72, 94, 0.12);
+  border-radius: 8px;
+  background: var(--brand-primary-dark);
+  color: var(--surface);
+  text-decoration: none;
+}
+.page-content .church-life-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(47, 52, 56, 0.06), rgba(47, 52, 56, 0.18) 36%, rgba(47, 52, 56, 0.76)), linear-gradient(90deg, rgba(53, 72, 94, 0.48), rgba(41, 143, 194, 0.08));
+}
+.page-content .church-life-tile:hover, .page-content .church-life-tile:focus-visible {
+  color: var(--surface);
+  text-decoration: none;
+}
+.page-content .church-life-tile:hover img, .page-content .church-life-tile:focus-visible img {
+  transform: scale(1.04);
+}
+.page-content .church-life-tile:focus-visible {
+  outline: 3px solid var(--brand-highlight);
+  outline-offset: 0.25rem;
+}
+.page-content .church-life-tile img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.82) contrast(1.02) brightness(0.84);
+  transform: scale(1);
+  transition: transform 0.28s ease;
+}
+.page-content .church-life-tile .content-kicker {
+  margin-bottom: 0.65rem;
+  color: var(--brand-highlight);
+}
+.page-content .church-life-tile--wide {
+  grid-column: span 2;
+}
+.page-content .church-life-tile--care {
+  background: var(--brand-primary);
+}
+.page-content .church-life-tile--care::before {
+  background: linear-gradient(180deg, rgba(47, 52, 56, 0.08), rgba(47, 52, 56, 0.28) 34%, rgba(47, 52, 56, 0.82)), linear-gradient(120deg, rgba(134, 110, 175, 0.58), rgba(236, 94, 97, 0.18));
+}
+.page-content .church-life-tile__copy {
+  display: grid;
+  gap: 0.2rem;
+  width: 100%;
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+.page-content .church-life-tile__title {
+  display: block;
+  max-width: 13ch;
+  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: clamp(1.7rem, 3vw, 2.55rem);
+  font-weight: 650;
+  line-height: 1.04;
+  color: var(--surface);
+}
+.page-content .church-life-tile__summary {
+  display: block;
+  max-width: 34rem;
+  margin-top: 0.35rem;
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.55;
+  color: rgba(250, 248, 245, 0.88);
+}
+.page-content .content-guide--whats-on-grid {
+  gap: clamp(2.25rem, 5vw, 4.75rem);
+}
+.page-content .whats-on-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(18rem, 0.38fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: center;
+  padding-bottom: clamp(1.2rem, 3vw, 2rem);
+}
+.page-content .whats-on-intro h2,
+.page-content .whats-on-board__header h2,
+.page-content .whats-on-help h2 {
+  margin: 0 0 1rem;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  color: var(--brand-secondary);
+  font-size: clamp(2.55rem, 5vw, 4.15rem);
+  line-height: 1.04;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+.page-content .whats-on-intro h2 {
+  max-width: 13ch;
+}
+.page-content .whats-on-intro p:last-child,
+.page-content .whats-on-board__header p:last-child,
+.page-content .whats-on-help p:last-child {
+  margin-bottom: 0;
+}
+.page-content .whats-on-intro__note {
+  padding: 0.15rem 0 0.15rem 1.15rem;
+  border-left: 4px solid var(--brand-highlight);
+}
+.page-content .whats-on-intro__note strong {
+  display: block;
+  margin-bottom: 0.55rem;
+  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1.35rem;
+  line-height: 1.15;
+  color: var(--brand-primary-dark);
+}
+.page-content .whats-on-board {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.28fr) minmax(0, 1fr);
+  gap: clamp(1.4rem, 4vw, 3.25rem);
+  align-items: start;
+  padding-top: clamp(1.7rem, 4vw, 2.8rem);
+  border-top: 1px solid rgba(53, 72, 94, 0.14);
+}
+.page-content .whats-on-board__header {
+  display: grid;
+  gap: 0.8rem;
+  align-items: start;
+}
+.page-content .whats-on-board__header h2 {
+  max-width: 10.5ch;
+  margin-bottom: 0;
+  color: var(--brand-secondary);
+  font-size: clamp(1.8rem, 3vw, 2.55rem);
+}
+.page-content .whats-on-board__header p {
+  max-width: 19rem;
+}
+.page-content .whats-on-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.9rem, 2vw, 1.25rem);
+  align-items: stretch;
+}
+.page-content .whats-on-cards--seasonal {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.page-content .whats-on-card {
+  --whats-on-accent: var(--brand-secondary);
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 13.75rem;
+  overflow: hidden;
+  padding: clamp(1.05rem, 2.2vw, 1.35rem);
+  border: 1px solid rgba(53, 72, 94, 0.1);
+  border-left: 5px solid var(--whats-on-accent);
+  border-radius: 8px;
+  background: rgba(250, 248, 245, 0.96);
+  box-shadow: none;
+  color: var(--text-main);
+  text-decoration: none;
+}
+.page-content a.whats-on-card {
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+.page-content a.whats-on-card:hover, .page-content a.whats-on-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(53, 72, 94, 0.18);
+  background: #faf8f5;
+  color: var(--text-main);
+  text-decoration: none;
+}
+.page-content a.whats-on-card:focus-visible {
+  outline: 3px solid var(--brand-highlight);
+  outline-offset: 0.25rem;
+}
+.page-content .whats-on-card--lime {
+  --whats-on-accent: var(--brand-highlight);
+}
+.page-content .whats-on-card--purple {
+  --whats-on-accent: var(--brand-primary);
+}
+.page-content .whats-on-card--coral {
+  --whats-on-accent: var(--brand-coral);
+}
+.page-content .whats-on-card--dark {
+  --whats-on-accent: var(--brand-primary-dark);
+}
+.page-content .whats-on-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.65rem;
+  min-width: 0;
+}
+.page-content .whats-on-card__eyebrow {
+  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--whats-on-accent);
+}
+.page-content .whats-on-card h3 {
+  margin: 0;
+  color: var(--brand-primary-dark);
+  font-size: clamp(1.35rem, 2vw, 1.65rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+.page-content .whats-on-card p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.page-content .whats-on-card__meta {
+  display: block;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 0.86rem;
+  font-weight: 750;
+  line-height: 1.4;
+  color: var(--brand-primary-dark);
+}
+.page-content .whats-on-help {
+  display: grid;
+  grid-template-columns: minmax(0, 0.86fr) minmax(18rem, 0.58fr);
+  gap: clamp(1.35rem, 4vw, 3rem);
+  align-items: start;
+  padding: clamp(1.4rem, 4vw, 2.25rem);
+  border-radius: 8px;
+  background: var(--brand-primary-dark);
+  color: var(--surface);
+}
+.page-content .whats-on-help .content-kicker {
+  color: var(--brand-highlight);
+}
+.page-content .whats-on-help h2 {
+  max-width: 14ch;
+  color: var(--surface);
+  font-size: clamp(2rem, 4vw, 2.65rem);
+}
+.page-content .whats-on-help p {
+  color: rgba(250, 248, 245, 0.88);
+}
+.page-content .whats-on-help a {
+  color: var(--surface);
+  text-decoration-color: rgba(250, 248, 245, 0.45);
+}
+.page-content .whats-on-help a:hover {
+  color: var(--brand-highlight);
+  text-decoration-color: rgba(197, 211, 45, 0.7);
+}
+.page-content .whats-on-help__links {
+  display: grid;
+  gap: 0.95rem;
+}
+.page-content .whats-on-help__links p {
+  margin: 0;
+  padding-top: 0.95rem;
+  border-top: 1px solid rgba(250, 248, 245, 0.18);
+}
+.page-content .whats-on-help__links strong {
+  color: var(--surface);
+}
+.page-content .contact-page,
+.page-content .contact-form-heading,
+.page-content .contact-form-heading + .ccm-block-type-form {
+  width: min(100%, var(--container-width));
+  margin-inline: auto;
+}
+.page-content .contact-page {
+  display: grid;
+  gap: clamp(1.6rem, 4vw, 3rem);
+}
+.page-content .contact-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(18rem, 0.34fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: end;
+  padding-bottom: clamp(1rem, 3vw, 2rem);
+  border-bottom: 1px solid rgba(53, 72, 94, 0.14);
+}
+.page-content .contact-intro__copy {
+  min-width: 0;
+}
+.page-content .contact-intro__copy h2 {
+  max-width: 10ch;
+  margin: 0 0 1rem;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  color: var(--brand-secondary);
+  font-size: clamp(3rem, 6vw, 5.4rem);
+  line-height: 0.99;
+  letter-spacing: 0;
+}
+.page-content .contact-intro__copy p:last-child {
+  margin-bottom: 0;
+}
+.page-content .contact-intro__lede {
+  max-width: 42rem;
+  font-size: clamp(1.13rem, 2vw, 1.35rem);
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--brand-primary-dark);
+}
+.page-content .contact-intro__note {
+  padding: 0.2rem 0 0.2rem 1.15rem;
+  border-left: 4px solid var(--brand-highlight);
+}
+.page-content .contact-intro__note strong {
+  display: block;
+  margin-bottom: 0.65rem;
+  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  line-height: 1.15;
+  color: var(--brand-primary-dark);
+}
+.page-content .contact-intro__note p:last-child {
+  margin-bottom: 0;
+}
+.page-content .contact-info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.85rem, 2vw, 1.25rem);
+}
+.page-content .contact-info-card {
+  --contact-accent: var(--brand-secondary);
+  min-width: 0;
+  padding: clamp(1.05rem, 2.4vw, 1.45rem);
+  border: 1px solid rgba(53, 72, 94, 0.1);
+  border-top: 5px solid var(--contact-accent);
+  border-radius: 8px;
+  background: rgba(250, 248, 245, 0.96);
+}
+.page-content .contact-info-card h3 {
+  margin: 0 0 0.65rem;
+  color: var(--brand-primary-dark);
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+.page-content .contact-info-card p:last-child {
+  margin-bottom: 0;
+}
+.page-content .contact-info-card a {
+  overflow-wrap: anywhere;
+  font-weight: 750;
+}
+.page-content .contact-info-card--lime {
+  --contact-accent: var(--brand-highlight);
+}
+.page-content .contact-info-card--purple {
+  --contact-accent: var(--brand-primary);
+}
+.page-content .contact-info-card--coral {
+  --contact-accent: var(--brand-coral);
+}
+.page-content .contact-form-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(18rem, 0.38fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: end;
+  margin-top: clamp(2rem, 5vw, 4rem);
+  padding-top: clamp(1.6rem, 4vw, 3rem);
+  border-top: 1px solid rgba(53, 72, 94, 0.14);
+}
+.page-content .contact-form-heading h2 {
+  max-width: 15ch;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  color: var(--brand-secondary);
+  font-size: clamp(2.15rem, 4.5vw, 3.65rem);
+  line-height: 1.04;
+  letter-spacing: 0;
+}
+.page-content .contact-form-heading p:last-child {
+  margin-bottom: 0;
+}
+.page-content .contact-form-heading + .ccm-block-type-form {
+  margin-top: clamp(1rem, 3vw, 1.6rem);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid rgba(53, 72, 94, 0.12);
+  border-top: 5px solid var(--brand-secondary);
+  border-radius: 8px;
+  background: rgba(250, 248, 245, 0.96);
+}
+.page-content .contact-form-heading + .ccm-block-type-form .miniSurveyView {
+  display: grid;
+  gap: clamp(1.1rem, 2.5vw, 1.5rem);
+  margin: 0;
+}
+.page-content .contact-form-heading + .ccm-block-type-form .fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2.5vw, 1.35rem);
+}
+.page-content .contact-form-heading + .ccm-block-type-form .field {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+  margin: 0;
+}
+.page-content .contact-form-heading + .ccm-block-type-form .field-textarea,
+.page-content .contact-form-heading + .ccm-block-type-form .field-select:last-child {
+  grid-column: 1/-1;
+}
+.page-content .contact-form-heading + .ccm-block-type-form label {
+  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 0.96rem;
+  font-weight: 750;
+  line-height: 1.35;
+  color: var(--brand-primary-dark);
+}
+.page-content .contact-form-heading + .ccm-block-type-form input:not([type=submit]),
+.page-content .contact-form-heading + .ccm-block-type-form textarea,
+.page-content .contact-form-heading + .ccm-block-type-form select {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid rgba(53, 72, 94, 0.18);
+  border-radius: 8px;
+  background: #faf8f5;
+  color: var(--text-main);
+  font: inherit;
+}
+.page-content .contact-form-heading + .ccm-block-type-form textarea {
+  min-height: 11rem;
+  resize: vertical;
+}
+.page-content .contact-form-heading + .ccm-block-type-form input:not([type=submit]):focus,
+.page-content .contact-form-heading + .ccm-block-type-form textarea:focus,
+.page-content .contact-form-heading + .ccm-block-type-form select:focus {
+  border-color: var(--brand-secondary);
+  box-shadow: 0 0 0 3px rgba(41, 143, 194, 0.16);
+  outline: 0;
+}
+.page-content .contact-form-heading + .ccm-block-type-form .text-muted,
+.page-content .contact-form-heading + .ccm-block-type-form .small {
+  display: inline-block;
+  margin-left: 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+.page-content .contact-form-heading + .ccm-block-type-form .form-actions {
+  margin: 0;
+}
+.page-content .contact-form-heading + .ccm-block-type-form .btn-primary {
+  border: 0;
+  cursor: pointer;
+}
+.page-content .contact-form-heading + .ccm-block-type-form .alert {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  border-radius: 8px;
+}
+.page-content .contact-form-heading + .ccm-block-type-form .alert-success {
+  border-left: 4px solid var(--brand-highlight);
+  background: rgba(197, 211, 45, 0.12);
+}
+.page-content .contact-form-heading + .ccm-block-type-form .alert-danger {
+  border-left: 4px solid var(--brand-coral);
+  background: rgba(236, 94, 97, 0.1);
+}
+.page-content .contact-page--after-form {
+  margin-top: clamp(2rem, 5vw, 4rem);
+}
+.page-content .contact-directions {
+  display: grid;
+  grid-template-columns: minmax(0, 0.5fr) minmax(18rem, 0.5fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: stretch;
+  padding-top: clamp(1.6rem, 4vw, 3rem);
+  border-top: 1px solid rgba(53, 72, 94, 0.14);
+}
+.page-content .contact-directions__copy {
+  min-width: 0;
+}
+.page-content .contact-directions__copy h2 {
+  max-width: 12ch;
+  margin: 0 0 1rem;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  color: var(--brand-secondary);
+  font-size: clamp(2.1rem, 4vw, 3.3rem);
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+.page-content .contact-directions__copy p:last-child {
+  margin-bottom: 0;
+}
+.page-content .contact-map {
+  display: grid;
+  grid-template-rows: minmax(18rem, 1fr) auto;
+  min-height: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(53, 72, 94, 0.12);
+  border-top: 5px solid var(--brand-highlight);
+  border-radius: 8px;
+  background: rgba(41, 143, 194, 0.06);
+}
+.page-content .contact-map__frame {
+  position: relative;
+  min-height: 18rem;
+  background: rgba(53, 72, 94, 0.08);
+}
+.page-content .contact-map__frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.page-content .contact-map__caption {
+  padding: 1rem 1.1rem;
+  border-top: 1px solid rgba(53, 72, 94, 0.12);
+  background: rgba(250, 248, 245, 0.96);
+}
+.page-content .contact-map__caption p:last-child {
+  margin-bottom: 0;
+}
+.page-content .contact-map__caption strong {
+  color: var(--brand-primary-dark);
+}
+.page-content .contact-privacy {
+  display: grid;
+  grid-template-columns: minmax(0, 0.38fr) minmax(0, 0.62fr);
+  gap: clamp(1.25rem, 4vw, 3rem);
+  align-items: start;
+  padding: clamp(1.15rem, 3vw, 1.65rem) 0 0 clamp(1rem, 2vw, 1.35rem);
+  border-left: 4px solid var(--brand-highlight);
+}
+.page-content .contact-privacy h2 {
+  max-width: 12ch;
+  margin: 0;
+  color: var(--brand-primary-dark);
+  font-size: clamp(1.55rem, 3vw, 2.35rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+.page-content .contact-privacy p:last-child {
+  margin-bottom: 0;
+}
 .page-content .content-guide-cta {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(18rem, 0.7fr);
@@ -3091,7 +3692,7 @@ td {
 }
 .page-content .content-story-path__items {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
   overflow: hidden;
   border: 1px solid rgba(53, 72, 94, 0.14);
   border-radius: 1.65rem;
@@ -3188,6 +3789,11 @@ td {
   padding-block: clamp(1.5rem, 4vw, 2.5rem);
   border-top: 1px solid rgba(53, 72, 94, 0.14);
 }
+.page-content .content-guide--about .content-pastoral-team {
+  gap: clamp(1.25rem, 3vw, 2rem);
+  padding-block: 0;
+  border-top: 0;
+}
 .page-content .content-pastoral-team__intro {
   display: grid;
   grid-template-columns: minmax(0, 0.62fr) minmax(18rem, 0.38fr);
@@ -3207,6 +3813,15 @@ td {
 }
 .page-content .content-pastoral-team__intro p:last-child {
   margin-bottom: 0;
+}
+.page-content .content-guide--about .content-pastoral-team__intro {
+  grid-template-columns: minmax(0, 48rem);
+  gap: 0.85rem;
+  align-items: start;
+}
+.page-content .content-guide--about .content-pastoral-team__intro h2 {
+  max-width: none;
+  font-size: clamp(2rem, 4vw, 3.4rem);
 }
 .page-content .content-pastoral-team__grid {
   display: grid;
@@ -3579,7 +4194,56 @@ td {
   border-top-color: var(--brand-coral);
 }
 .page-content .giving-principles {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
   padding-top: clamp(0.5rem, 2vw, 1rem);
+}
+.page-content .giving-principles__intro {
+  max-width: 50rem;
+}
+.page-content .giving-principles__intro h2 {
+  max-width: 14ch;
+  margin: 0 0 1rem;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  color: var(--brand-secondary);
+  font-size: clamp(2.15rem, 4.5vw, 3.65rem);
+  line-height: 1.04;
+  letter-spacing: 0;
+}
+.page-content .giving-principles__intro p:last-child {
+  margin-bottom: 0;
+}
+.page-content .giving-funds {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.9rem, 2vw, 1.25rem);
+}
+.page-content .giving-fund-card {
+  --giving-fund-accent: var(--brand-secondary);
+  min-width: 0;
+  padding: clamp(1.1rem, 2.5vw, 1.5rem);
+  border: 1px solid rgba(53, 72, 94, 0.1);
+  border-top: 5px solid var(--giving-fund-accent);
+  border-radius: 8px;
+  background: rgba(250, 248, 245, 0.96);
+}
+.page-content .giving-fund-card h3 {
+  margin: 0 0 0.7rem;
+  color: var(--brand-primary-dark);
+  font-size: clamp(1.25rem, 2.2vw, 1.65rem);
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+.page-content .giving-fund-card p:last-child {
+  margin-bottom: 0;
+}
+.page-content .giving-fund-card--lime {
+  --giving-fund-accent: var(--brand-highlight);
+}
+.page-content .giving-fund-card--purple {
+  --giving-fund-accent: var(--brand-primary);
 }
 .page-content .giving-details {
   display: grid;
@@ -3713,8 +4377,205 @@ td {
   overflow-wrap: anywhere;
   color: var(--brand-primary-dark);
 }
+.page-content .visit-simple {
+  width: min(100%, 54rem);
+  margin-inline: auto;
+  display: grid;
+  gap: clamp(1.7rem, 4vw, 2.8rem);
+}
+.page-content .visit-simple h2 {
+  margin: 0 0 0.85rem;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  color: var(--brand-secondary);
+  font-size: clamp(1.75rem, 3vw, 2.45rem);
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+.page-content .visit-simple p {
+  margin-bottom: 0.95rem;
+}
+.page-content .visit-simple p:last-child {
+  margin-bottom: 0;
+}
+.page-content .visit-simple__intro {
+  max-width: 46rem;
+}
+.page-content .visit-simple__lede {
+  max-width: 38rem;
+  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: clamp(1.12rem, 2vw, 1.35rem);
+  font-weight: 750;
+  line-height: 1.55;
+  color: var(--brand-primary-dark);
+}
+.page-content .visit-simple__details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+.page-content .visit-simple__detail {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+  padding: 1.15rem 1.1rem 1.2rem;
+  border-top: 4px solid var(--brand-secondary);
+  border-radius: 8px;
+  background: rgba(41, 143, 194, 0.07);
+}
+.page-content .visit-simple__detail:nth-child(2) {
+  border-top-color: var(--brand-highlight);
+  background: rgba(197, 211, 45, 0.1);
+}
+.page-content .visit-simple__detail:nth-child(3) {
+  border-top-color: var(--brand-primary);
+  background: rgba(134, 110, 175, 0.08);
+}
+.page-content .visit-simple__detail:nth-child(4) {
+  border-top-color: var(--brand-coral);
+  background: rgba(236, 94, 97, 0.07);
+}
+.page-content .visit-simple__detail span {
+  font-size: 0.76rem;
+  font-weight: 850;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brand-primary);
+}
+.page-content .visit-simple__detail strong {
+  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  line-height: 1.32;
+  letter-spacing: 0;
+  color: var(--brand-primary-dark);
+}
+.page-content .visit-simple__detail p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+.page-content .visit-simple__split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.58fr) minmax(17rem, 0.42fr);
+  gap: clamp(1.25rem, 4vw, 2.5rem);
+  align-items: start;
+}
+.page-content .visit-simple__section {
+  min-width: 0;
+}
+.page-content .visit-simple__section--soft {
+  padding: 1.25rem 1.2rem;
+  border-left: 4px solid var(--brand-highlight);
+  border-radius: 8px;
+  background: rgba(197, 211, 45, 0.1);
+}
+.page-content .visit-simple__section--soft h2 {
+  color: var(--brand-primary-dark);
+  font-size: clamp(1.45rem, 2.5vw, 1.9rem);
+}
+.page-content .visit-simple__section--note {
+  max-width: 46rem;
+  padding-left: 1.15rem;
+  border-left: 4px solid var(--brand-coral);
+}
+.page-content .visit-simple__section--note h2 {
+  color: var(--brand-primary-dark);
+  font-size: clamp(1.55rem, 2.8vw, 2.15rem);
+}
+.page-content .visit-simple__reassurance {
+  padding: clamp(1.25rem, 3vw, 1.8rem);
+  border-radius: 8px;
+  background: rgba(41, 143, 194, 0.08);
+}
+.page-content .visit-simple__reassurance h2 {
+  color: var(--brand-primary-dark);
+}
+.page-content .visit-simple__checklist {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 1.4rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.page-content .visit-simple__checklist li {
+  position: relative;
+  padding-left: 1.3rem;
+  font-size: 1.04rem;
+  line-height: 1.65;
+}
+.page-content .visit-simple__checklist li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--brand-highlight);
+}
+.page-content .visit-simple__cta {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(16rem, 0.65fr);
+  gap: clamp(1.2rem, 4vw, 2rem);
+  align-items: start;
+  padding: clamp(1.3rem, 3vw, 1.8rem);
+  border-radius: 8px;
+  background: var(--brand-primary-dark);
+  color: var(--surface);
+}
+.page-content .visit-simple__cta .content-kicker {
+  color: var(--brand-highlight);
+}
+.page-content .visit-simple__cta h2 {
+  color: var(--surface);
+}
+.page-content .visit-simple__cta p {
+  color: rgba(250, 248, 245, 0.88);
+}
+.page-content .visit-simple__cta a {
+  color: var(--surface);
+  text-decoration-color: rgba(250, 248, 245, 0.45);
+}
+.page-content .visit-simple__contact {
+  display: grid;
+  gap: 0.85rem;
+}
+.page-content .visit-simple__contact p {
+  margin: 0;
+  padding-left: 0.9rem;
+  border-left: 3px solid rgba(197, 211, 45, 0.7);
+}
+.page-content .visit-simple__contact strong {
+  color: var(--surface);
+}
 @media (max-width: 768px) {
   .page-content .content-pastoral-team__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .page-content .church-life-tiles__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .page-content .church-life-tile--wide {
+    grid-column: span 2;
+  }
+  .page-content .whats-on-intro,
+  .page-content .whats-on-board,
+  .page-content .whats-on-board__header,
+  .page-content .whats-on-help {
+    grid-template-columns: 1fr;
+  }
+  .page-content .whats-on-cards,
+  .page-content .whats-on-cards--seasonal {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .page-content .giving-funds {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .page-content .contact-info-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -3730,6 +4591,11 @@ td {
   .page-content .content-guide-photo,
   .page-content .content-guide-photo--reverse,
   .page-content .content-guide-cta,
+  .page-content .contact-intro,
+  .page-content .contact-form-heading,
+  .page-content .contact-form-heading + .ccm-block-type-form .fields,
+  .page-content .contact-directions,
+  .page-content .contact-privacy,
   .page-content .content-story-path__header,
   .page-content .content-team-panel,
   .page-content .content-pastoral-team__intro,
@@ -3798,6 +4664,9 @@ td {
   }
   .page-content .giving-panel {
     padding: 1.2rem;
+  }
+  .page-content .giving-funds {
+    grid-template-columns: 1fr;
   }
   .page-content .giving-panel__mode {
     width: fit-content;
@@ -3903,9 +4772,83 @@ td {
   .page-content .content-guide-photo--reverse .content-guide-photo__copy p {
     margin-left: auto;
   }
+  .page-content .content-guide--church-life .content-guide-photo--reverse .content-guide-photo__copy {
+    text-align: left;
+  }
+  .page-content .content-guide--church-life .content-guide-photo--reverse .content-guide-photo__copy h2,
+  .page-content .content-guide--church-life .content-guide-photo--reverse .content-guide-photo__copy p {
+    margin-left: 0;
+  }
   .page-content .content-guide-list__item {
     grid-template-columns: 1fr;
     gap: 0.35rem;
+  }
+  .page-content .church-life-tiles__grid {
+    grid-template-columns: 1fr;
+  }
+  .page-content .church-life-tile,
+  .page-content .church-life-tile--wide {
+    grid-column: auto;
+    min-height: 17rem;
+  }
+  .page-content .church-life-tile__title {
+    font-size: 1.75rem;
+  }
+  .page-content .content-guide--whats-on-grid {
+    gap: 2.25rem;
+  }
+  .page-content .whats-on-intro h2,
+  .page-content .whats-on-board__header h2 {
+    font-size: 2.45rem;
+  }
+  .page-content .whats-on-help h2 {
+    font-size: 2.15rem;
+  }
+  .page-content .whats-on-cards,
+  .page-content .whats-on-cards--seasonal {
+    grid-template-columns: 1fr;
+  }
+  .page-content .whats-on-card {
+    min-height: 13.5rem;
+  }
+  .page-content .whats-on-card h3 {
+    font-size: 1.6rem;
+  }
+  .page-content .contact-intro {
+    gap: 1.25rem;
+  }
+  .page-content .contact-intro__copy h2 {
+    font-size: 3rem;
+  }
+  .page-content .contact-info-grid {
+    grid-template-columns: 1fr;
+  }
+  .page-content .contact-form-heading {
+    gap: 0.9rem;
+  }
+  .page-content .contact-form-heading h2 {
+    font-size: 2.15rem;
+  }
+  .page-content .contact-form-heading + .ccm-block-type-form {
+    padding: 1.1rem;
+  }
+  .page-content .contact-directions {
+    gap: 1.25rem;
+  }
+  .page-content .contact-directions__copy h2 {
+    font-size: 2.15rem;
+  }
+  .page-content .contact-map,
+  .page-content .contact-map__frame {
+    min-height: 14rem;
+  }
+  .page-content .visit-simple__details,
+  .page-content .visit-simple__split,
+  .page-content .visit-simple__cta {
+    grid-template-columns: 1fr;
+  }
+  .page-content .visit-simple__checklist {
+    grid-template-columns: 1fr;
   }
   .page-content .content-story-path__items {
     grid-template-columns: 1fr;

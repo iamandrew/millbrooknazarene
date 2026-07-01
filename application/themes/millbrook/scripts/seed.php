@@ -10,10 +10,18 @@ $seedMap = [
     'rename-labels' => __DIR__ . '/rename_internal_labels.php',
     'policies-documents' => __DIR__ . '/add_policies_documents_block.php',
     'sermons-block' => __DIR__ . '/add_sermons_block.php',
-    'whats-on-block' => __DIR__ . '/add_whats_on_block.php',
+    'whats-on-block' => __DIR__ . '/add_whats_on_page.php',
+    'whats-on' => __DIR__ . '/add_whats_on_page.php',
     'home-whats-on' => __DIR__ . '/add_home_whats_on_block.php',
     'visit-us' => __DIR__ . '/add_visit_us_page.php',
+    'church-life' => __DIR__ . '/add_church_life_page.php',
+    'children-families' => __DIR__ . '/add_children_families_page.php',
+    'homegroups' => __DIR__ . '/add_homegroups_page.php',
+    'mens-ministry' => __DIR__ . '/add_mens_ministry_page.php',
+    'about' => __DIR__ . '/add_about_page.php',
+    'what-we-believe' => __DIR__ . '/add_what_we_believe_page.php',
     'who-we-are' => __DIR__ . '/add_who_we_are_page.php',
+    'contact' => __DIR__ . '/add_contact_page.php',
     'womens-ministry' => __DIR__ . '/add_womens_ministry_page.php',
     'creche' => __DIR__ . '/add_creche_page.php',
     'youth' => __DIR__ . '/add_youth_page.php',
@@ -28,8 +36,16 @@ $seedGroups = [
     ],
     'staging-content' => [
         'home-whats-on',
+        'whats-on',
         'visit-us',
+        'church-life',
+        'children-families',
+        'homegroups',
+        'mens-ministry',
+        'about',
+        'what-we-believe',
         'who-we-are',
+        'contact',
         'womens-ministry',
         'creche',
         'youth',
@@ -82,7 +98,7 @@ if (isset($seedGroups[$seed])) {
 }
 
 if ($seed === 'all') {
-    foreach (['hero-attributes', 'navigation-attributes', 'demo-sitemap', 'visitor-blueprint', 'new-here', 'visit-us', 'rename-labels', 'policies-documents', 'sermons-block', 'whats-on-block', 'home-whats-on', 'whats-on-express'] as $key) {
+    foreach (['hero-attributes', 'navigation-attributes', 'demo-sitemap', 'visitor-blueprint', 'new-here', 'visit-us', 'church-life', 'children-families', 'whats-on', 'homegroups', 'mens-ministry', 'about', 'what-we-believe', 'contact', 'rename-labels', 'policies-documents', 'sermons-block', 'home-whats-on', 'whats-on-express'] as $key) {
         $rc = $runSeed($key);
         if ($rc !== 0) {
             return $rc;

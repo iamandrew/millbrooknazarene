@@ -31,7 +31,7 @@ $legacyTitles = [
     'A few simple ways to connect through the month.',
     'Ways to connect this month.',
 ];
-$defaultIntro = 'Regular rhythms across the week help people pray, connect, and grow together.';
+$defaultIntro = 'Community gatherings, family activities, and regular rhythms help people find a place to belong.';
 $legacyIntros = [
     'Alongside Sunday worship, there are regular gatherings, groups, and church rhythms that help people pray, connect, and grow together.',
 ];
@@ -50,32 +50,32 @@ $blockData = [
     'layout' => 'compact',
     'itemsJson' => json_encode([
         [
-            'eyebrow' => 'Sunday',
-            'title' => 'Worship at 11:00am',
-            'summary' => 'Join us each Sunday for worship, prayer, Bible teaching, and time together afterwards.',
-            'linkLabel' => 'Plan your visit',
-            'linkUrl' => '/visit-us',
-        ],
-        [
-            'eyebrow' => 'Midweek',
-            'title' => 'Homegroups, prayer, and shared life',
-            'summary' => 'Smaller gatherings through the week help people build friendships, pray together, and keep growing in faith.',
-            'linkLabel' => 'Explore church life',
-            'linkUrl' => '/community',
+            'eyebrow' => 'Community',
+            'title' => 'Community Cafe and Cafe Fit',
+            'summary' => 'Spaces through the week for connection, wellbeing, friendship, and support.',
+            'linkLabel' => 'See What\'s On',
+            'linkUrl' => '/community/whats-on',
         ],
         [
             'eyebrow' => 'Families',
-            'title' => 'Children and families are welcome',
-            'summary' => 'Children are a valued part of church life, with support for families and age-appropriate opportunities to belong.',
+            'title' => 'Kids activities and family life',
+            'summary' => 'Sunday School, seasonal children\'s activities, and Kids Summer Club help families connect.',
             'linkLabel' => 'Children & families',
             'linkUrl' => '/community/children',
         ],
         [
-            'eyebrow' => 'Recent teaching',
-            'title' => 'Catch up on sermons and Bible teaching',
-            'summary' => 'Listen back to recent messages from Millbrook before you visit or during the week.',
-            'linkLabel' => 'Listen to latest sermons',
-            'linkUrl' => '/resources/sermons',
+            'eyebrow' => 'Sunday',
+            'title' => 'Sunday worship and First Breakfast',
+            'summary' => 'Join us each Sunday at 11:00am, with breakfast or brunch together on the first Sunday of the month.',
+            'linkLabel' => 'Plan your visit',
+            'linkUrl' => '/visit-us',
+        ],
+        [
+            'eyebrow' => 'Seasonal',
+            'title' => 'Special services and community events',
+            'summary' => 'Carol services, Good Friday, cinema nights, Acoustic Cafe, and seasonal gatherings happen through the year.',
+            'linkLabel' => 'See What\'s On',
+            'linkUrl' => '/community/whats-on',
         ],
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
     'primaryButtonLabel' => 'See What’s On',
@@ -93,7 +93,8 @@ foreach ($existingBlocks as $block) {
         $currentSecondaryUrl = trim((string) ($controller->secondaryButtonUrl ?? ''));
         $currentItemsJson = trim((string) ($controller->itemsJson ?? ''));
         $shouldRefreshItems = $currentItemsJson === ''
-            || !str_contains($currentItemsJson, 'Recent teaching')
+            || str_contains($currentItemsJson, 'Recent teaching')
+            || !str_contains($currentItemsJson, 'Community Cafe')
             || str_contains($currentItemsJson, 'Latest sermons');
         $blockData = [
             'title' => in_array($currentTitle, $legacyTitles, true) ? $defaultTitle : ($currentTitle ?: $blockData['title']),
