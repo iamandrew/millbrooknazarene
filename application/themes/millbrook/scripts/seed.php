@@ -26,6 +26,7 @@ $seedMap = [
     'creche' => __DIR__ . '/add_creche_page.php',
     'youth' => __DIR__ . '/add_youth_page.php',
     'giving' => __DIR__ . '/add_giving_page.php',
+    'kids-club-2026' => __DIR__ . '/add_kids_club_2026_page.php',
     'whats-on-express' => __DIR__ . '/migrate_whats_on_to_express.php',
 ];
 
@@ -50,6 +51,7 @@ $seedGroups = [
         'creche',
         'youth',
         'giving',
+        'kids-club-2026',
     ],
 ];
 
@@ -98,7 +100,7 @@ if (isset($seedGroups[$seed])) {
 }
 
 if ($seed === 'all') {
-    foreach (['hero-attributes', 'navigation-attributes', 'demo-sitemap', 'visitor-blueprint', 'new-here', 'visit-us', 'church-life', 'children-families', 'whats-on', 'homegroups', 'mens-ministry', 'about', 'what-we-believe', 'contact', 'rename-labels', 'policies-documents', 'sermons-block', 'home-whats-on', 'whats-on-express'] as $key) {
+    foreach (['hero-attributes', 'navigation-attributes', 'demo-sitemap', 'visitor-blueprint', 'new-here', 'visit-us', 'church-life', 'children-families', 'whats-on', 'homegroups', 'mens-ministry', 'about', 'what-we-believe', 'contact', 'giving', 'kids-club-2026', 'rename-labels', 'policies-documents', 'sermons-block', 'home-whats-on', 'whats-on-express'] as $key) {
         $rc = $runSeed($key);
         if ($rc !== 0) {
             return $rc;

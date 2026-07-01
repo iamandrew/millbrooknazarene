@@ -26,6 +26,7 @@
     "seed:creche": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- creche",
     "seed:youth": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- youth",
     "seed:giving": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- giving",
+    "seed:kids-club-2026": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- kids-club-2026",
     "seed:hero-attributes": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- hero-attributes",
     "seed:demo-sitemap": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- demo-sitemap",
     "seed:new-here": "php concrete/bin/concrete c5:exec application/themes/millbrook/scripts/seed.php -- new-here",

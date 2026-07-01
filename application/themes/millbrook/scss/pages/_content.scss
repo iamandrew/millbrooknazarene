@@ -1263,6 +1263,423 @@ td {
         }
     }
 
+    &--kids-club {
+        padding: 0;
+        background: #15a0b8;
+
+        .page-content__inner--builder {
+            width: 100%;
+            margin-inline: 0;
+        }
+    }
+
+    .kids-club-2026 {
+        width: 100%;
+        min-height: calc(100vh - var(--header-shell-height));
+        padding: clamp(2.25rem, 6vw, 5rem) 1rem clamp(3rem, 7vw, 6rem);
+        background-color: #15a0b8;
+        background-image: url('/application/themes/millbrook/images/big_picnic_bg.png');
+        background-position: center top;
+        background-repeat: repeat;
+        background-size: clamp(34rem, 76vw, 68rem) auto;
+    }
+
+    .kids-club-2026__shell {
+        display: grid;
+        width: min(100%, var(--container-width));
+        margin-inline: auto;
+        gap: clamp(2rem, 5vw, 4rem);
+    }
+
+    .kids-club-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(19rem, 0.42fr);
+        gap: clamp(1.5rem, 5vw, 4rem);
+        align-items: end;
+        padding-top: clamp(0.75rem, 2vw, 1.5rem);
+    }
+
+    .kids-club-hero__copy {
+        min-width: 0;
+        color: var(--surface);
+
+        h1 {
+            max-width: 9ch;
+            margin: 0 0 1rem;
+            color: var(--surface);
+            font-size: clamp(4.2rem, 10vw, 9rem);
+            line-height: 0.9;
+            letter-spacing: 0;
+            text-shadow: 0 0.18rem 1.2rem rgba($color-brand-ink, 0.2);
+            text-wrap: balance;
+        }
+    }
+
+    .kids-club-kicker {
+        display: inline-flex;
+        width: fit-content;
+        margin: 0 0 0.85rem;
+        padding: 0.45rem 0.65rem;
+        border: 2px solid rgba($color-surface, 0.78);
+        border-radius: 8px;
+        background: rgba($color-surface, 0.92);
+        color: #0c6170;
+        font-family: 'Sora', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 0.78rem;
+        font-weight: 850;
+        line-height: 1.15;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .kids-club-hero__lede {
+        max-width: 45rem;
+        margin-bottom: clamp(1.25rem, 3vw, 2rem);
+        color: rgba($color-surface, 0.96);
+        font-family: 'Sora', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+        font-weight: 750;
+        line-height: 1.42;
+        text-shadow: 0 0.1rem 0.8rem rgba($color-brand-ink, 0.22);
+    }
+
+    .kids-club-facts {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.85rem;
+
+        p {
+            min-width: 0;
+            margin: 0;
+            padding: 1rem;
+            border: 1px solid rgba($color-surface, 0.36);
+            border-radius: 8px;
+            background: rgba($color-surface, 0.9);
+            box-shadow: 0 16px 30px rgba($color-brand-ink, 0.12);
+            color: var(--brand-primary-dark);
+            line-height: 1.4;
+        }
+
+        strong,
+        span {
+            display: block;
+        }
+
+        strong {
+            margin-bottom: 0.35rem;
+            font-family: 'Sora', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 0.78rem;
+            font-weight: 850;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #0c6170;
+        }
+
+        span {
+            font-weight: 750;
+        }
+    }
+
+    .kids-club-note,
+    .kids-club-register {
+        border: 1px solid rgba($color-surface, 0.45);
+        border-radius: 8px;
+        background: rgba($color-surface, 0.96);
+        box-shadow: 0 20px 50px rgba($color-brand-ink, 0.16);
+    }
+
+    .kids-club-note {
+        padding: clamp(1.2rem, 3vw, 2rem);
+
+        h2 {
+            margin: 0 0 0.85rem;
+            padding: 0;
+            border: 0;
+            box-shadow: none;
+            color: var(--brand-primary-dark);
+            font-size: clamp(1.75rem, 3vw, 2.45rem);
+            line-height: 1.08;
+            letter-spacing: 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .kids-club-register {
+        display: grid;
+        grid-template-columns: minmax(15rem, 0.32fr) minmax(0, 0.68fr);
+        gap: clamp(1.25rem, 4vw, 3rem);
+        padding: clamp(1.25rem, 4vw, 2.5rem);
+    }
+
+    .kids-club-register__intro {
+        min-width: 0;
+
+        h2 {
+            max-width: 10ch;
+            margin: 0 0 1rem;
+            padding: 0;
+            border: 0;
+            box-shadow: none;
+            color: #0f6b7a;
+            font-size: clamp(2.3rem, 4.5vw, 4rem);
+            line-height: 1.02;
+            letter-spacing: 0;
+            text-wrap: balance;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .kids-club-form {
+        display: grid;
+        gap: 1rem;
+        min-width: 0;
+
+        fieldset {
+            min-width: 0;
+            margin: 0;
+            padding: clamp(1rem, 2.5vw, 1.35rem);
+            border: 1px solid rgba($color-brand-primary-dark, 0.13);
+            border-radius: 8px;
+            background: rgba($color-surface, 0.82);
+        }
+
+        legend {
+            padding: 0 0.45rem;
+            font-family: 'Sora', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            line-height: 1.25;
+            color: var(--brand-primary-dark);
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            min-height: 3.2rem;
+            padding: 0.82rem 0.9rem;
+            border: 1px solid rgba($color-brand-primary-dark, 0.22);
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text-main);
+            font: inherit;
+            line-height: 1.45;
+
+            &:focus {
+                outline: 3px solid rgba(21, 160, 184, 0.28);
+                border-color: #0f6b7a;
+            }
+        }
+
+        textarea {
+            min-height: 7rem;
+            resize: vertical;
+        }
+
+        input[type='checkbox'],
+        input[type='radio'] {
+            width: 1.1rem;
+            min-height: 1.1rem;
+            flex: 0 0 1.1rem;
+            margin: 0.22rem 0 0;
+            padding: 0;
+            accent-color: #0f6b7a;
+        }
+    }
+
+    .kids-club-form__grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 0.95rem;
+    }
+
+    .kids-club-form__field {
+        display: grid;
+        gap: 0.45rem;
+        min-width: 0;
+
+        span {
+            font-family: 'Sora', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 0.92rem;
+            font-weight: 760;
+            line-height: 1.35;
+            color: var(--brand-primary-dark);
+        }
+
+        small {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.45;
+        }
+    }
+
+    .kids-club-form__field--wide {
+        grid-column: 1 / -1;
+    }
+
+    .kids-club-form__field--honeypot {
+        position: absolute;
+        left: -10000px;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
+
+    .kids-club-form__checks {
+        display: grid;
+        gap: 0.75rem;
+        margin-top: 0.95rem;
+    }
+
+    .kids-club-form__radio {
+        display: grid;
+        gap: 0.7rem;
+
+        p {
+            margin: 0;
+            font-size: 0.98rem;
+            line-height: 1.55;
+        }
+
+        label {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+            min-width: 0;
+            padding: 0.82rem 0.95rem;
+            border: 1px solid rgba($color-brand-primary-dark, 0.12);
+            border-radius: 8px;
+            background: var(--surface);
+        }
+    }
+
+    .kids-club-form__check {
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+        min-width: 0;
+        padding: 0.9rem 1rem;
+        border: 1px solid rgba($color-brand-primary-dark, 0.12);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text-main);
+
+        span {
+            font-size: 0.98rem;
+            line-height: 1.55;
+        }
+    }
+
+    .kids-club-form__actions {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 1rem;
+        align-items: center;
+        padding-top: 0.25rem;
+    }
+
+    .kids-club-submit {
+        min-height: 3.35rem;
+        padding: 0.9rem 1.35rem;
+        border: 1px solid rgba($color-brand-primary-dark, 0.18);
+        border-radius: var(--radius-pill);
+        background: var(--brand-primary-dark);
+        color: var(--surface);
+        font-family: 'Sora', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 0.98rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+
+        &:hover,
+        &:focus-visible {
+            background: #0f6b7a;
+            transform: translateY(-1px);
+        }
+
+        &:focus-visible {
+            outline: 3px solid rgba(21, 160, 184, 0.34);
+            outline-offset: 0.2rem;
+        }
+
+        &:disabled {
+            cursor: wait;
+            opacity: 0.68;
+            transform: none;
+        }
+    }
+
+    .kids-club-form__status {
+        margin: 0;
+        padding: 0.85rem 1rem;
+        border-radius: 8px;
+        background: rgba(21, 160, 184, 0.1);
+        color: var(--brand-primary-dark);
+        font-size: 0.95rem;
+        line-height: 1.5;
+
+        &[data-status='success'] {
+            background: rgba($color-brand-highlight, 0.16);
+        }
+
+        &[data-status='error'] {
+            background: rgba($color-brand-coral, 0.13);
+            color: #7a2424;
+        }
+    }
+
+    @include respond-max($breakpoint-tablet) {
+        .kids-club-hero,
+        .kids-club-register {
+            grid-template-columns: 1fr;
+        }
+
+        .kids-club-facts,
+        .kids-club-form__grid,
+        .kids-club-form__actions {
+            grid-template-columns: 1fr;
+        }
+
+        .kids-club-hero__copy h1,
+        .kids-club-register__intro h2 {
+            max-width: none;
+        }
+    }
+
+    @include respond-max($breakpoint-mobile) {
+        .kids-club-2026 {
+            padding: 1.25rem 0.75rem 3rem;
+            background-size: 42rem auto;
+        }
+
+        .kids-club-hero__copy h1 {
+            font-size: clamp(3.35rem, 18vw, 5.2rem);
+        }
+
+        .kids-club-hero__lede {
+            font-size: 1.08rem;
+        }
+
+        .kids-club-register {
+            padding: 1rem;
+        }
+
+        .kids-club-form fieldset {
+            padding: 0.95rem;
+        }
+    }
+
     .contact-page,
     .contact-form-heading,
     .contact-form-heading + .ccm-block-type-form {

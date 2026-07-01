@@ -66,3 +66,120 @@
  *
  * ----------------------------------------------------------------------------
  */
+
+require_once DIR_APPLICATION . '/src/KidsClub/RegistrationSheet.php';
+
+\Route::register(
+    '/kids-club-2026/register',
+    static function () {
+        $request = \Request::getInstance();
+
+        $value = static function (string $key) use ($request): string {
+            return trim((string) $request->request->get($key, ''));
+        };
+
+        $json = static function (array $payload, int $status = 200): \Symfony\Component\HttpFoundation\JsonResponse {
+            return new \Symfony\Component\HttpFoundation\JsonResponse($payload, $status);
+        };
+
+        if ($value('website') !== '') {
+            return $json([
+                'ok' => true,
+                'message' => 'Thank you. The registration has been received.',
+            ]);
+        }
+
+        $required = [
+            'guardian_name',
+            'guardian_email',
+            'guardian_phone',
+            'home_address',
+            'child_name',
+            'date_of_birth',
+            'emergency_contact_name',
+            'emergency_contact_relationship',
+            'emergency_contact_phone',
+            'medication',
+            'allergies',
+            'additional_needs',
+            'photo_video_permission',
+            'first_aid_consent',
+            'privacy_acknowledgement',
+        ];
+
+        foreach ($required as $field) {
+            if ($value($field) === '') {
+                return $json([
+                    'ok' => false,
+                    'message' => 'Please complete all required details before sending.',
+                ], 422);
+            }
+        }
+
+        if (!filter_var($value('guardian_email'), FILTER_VALIDATE_EMAIL)) {
+            return $json([
+                'ok' => false,
+                'message' => 'Please check the email address before sending.',
+            ], 422);
+        }
+
+        $spreadsheetId = getenv('MILLBROOK_KIDS_CLUB_2026_SPREADSHEET_ID') ?: '1DzIYGJEPE_w_-Eh1fIMtHjCu9EiqMNmPlvlQOQrofcw';
+        $range = getenv('MILLBROOK_KIDS_CLUB_2026_SHEET_RANGE') ?: 'Sheet1!A1:Z';
+        $credentialsPath = getenv('MILLBROOK_GOOGLE_SERVICE_ACCOUNT_PATH') ?: null;
+
+        $row = [
+            date('c'),
+            $value('event_name') ?: 'The Big Picnic',
+            $value('event_year') ?: '2026',
+            $value('event_dates') ?: '12-14 August 2026',
+            $value('guardian_name'),
+            $value('guardian_email'),
+            $value('guardian_phone'),
+            $value('home_address'),
+            $value('child_name'),
+            $value('date_of_birth'),
+            $value('child_age_on_first_day'),
+            $value('emergency_contact_name'),
+            $value('emergency_contact_relationship'),
+            $value('emergency_contact_phone'),
+            $value('medication'),
+            $value('allergies'),
+            $value('additional_needs'),
+            $value('photo_video_permission'),
+            $value('first_aid_consent'),
+            $value('privacy_acknowledgement'),
+            $value('future_contact_permission') ?: 'No',
+            $value('source_page') ?: '/kids-club-2026',
+        ];
+
+        try {
+            $sheet = new \Application\KidsClub\RegistrationSheet($spreadsheetId, $range, $credentialsPath);
+            $sheet->append($row);
+        } catch (\RuntimeException $exception) {
+            error_log('[kids-club-2026] ' . $exception->getMessage());
+
+            if (strpos($exception->getMessage(), 'credentials') !== false) {
+                return $json([
+                    'ok' => false,
+                    'message' => 'The registration form is ready, but the Google Sheet connection is not configured yet. Please email info@millbrooknazarene.co.uk.',
+                ], 503);
+            }
+
+            return $json([
+                'ok' => false,
+                'message' => 'Sorry, the registration could not be sent. Please try again or email info@millbrooknazarene.co.uk.',
+            ], 500);
+        }
+
+        return $json([
+            'ok' => true,
+            'message' => 'Thank you. The registration has been sent to the Kids Club team.',
+        ]);
+    },
+    'kids_club_2026_register',
+    [],
+    [],
+    '',
+    [],
+    ['POST']
+);

@@ -1,0 +1,94 @@
+<?php
+
+return [
+    'name' => 'Homegroups',
+    'description' => 'Small, informal gatherings for prayer, conversation, questions, and growing in faith together.',
+    'content' => <<<'HTML'
+<div class="content-guide content-guide--homegroups">
+  <section class="content-guide__anchored">
+    <div class="content-guide__anchor">
+      <p class="content-kicker">Homegroups</p>
+      <h2>A smaller place to connect, pray, and explore faith.</h2>
+      <p class="content-guide__lede">Homegroups are small, informal gatherings where we pray, ask questions, and explore faith together.</p>
+      <p>At the moment, Millbrook has one homegroup. It currently meets on Wednesday evenings in John and Iris's home, usually weekly or fortnightly depending on the rhythm of the group.</p>
+    </div>
+
+    <div class="content-guide__stack">
+      <section class="content-guide-card">
+        <p class="content-kicker">Who it is for</p>
+        <h3>Everyone is welcome.</h3>
+        <p>You do not need to have been around Millbrook for a long time. If you would like a smaller space to get to know people and grow in faith, homegroup is a good place to begin.</p>
+      </section>
+
+      <section class="content-guide-card content-guide-card--lime">
+        <p class="content-kicker">Bible confidence</p>
+        <h3>You do not need to know the Bible well.</h3>
+        <p>We are all learning together. Sometimes the discussion follows a faith topic or the current sermon series, but there is no pressure to contribute and no such thing as a silly question.</p>
+      </section>
+
+      <section class="content-guide-card content-guide-card--split content-guide-card--purple">
+        <div>
+          <p class="content-kicker">First time</p>
+          <h3>You can join at any time.</h3>
+          <p>Because the group meets in a home, it is best to speak to someone from the pastoral or leadership team before coming so they can give you the address and help you know what to expect.</p>
+        </div>
+        <aside class="content-guide-note">
+          <strong>One group at the moment.</strong>
+          <p>You do not need to choose between lots of options. We can simply point you towards the current homegroup.</p>
+        </aside>
+      </section>
+    </div>
+  </section>
+
+  <section class="content-guide-photo">
+    <figure class="content-guide-photo__image">
+      <img src="/application/themes/millbrook/images/placeholders/homegroups.png" alt="Homegroup photo placeholder.">
+    </figure>
+    <div class="content-guide-photo__copy">
+      <p class="content-kicker">What usually happens</p>
+      <h2>Tea, conversation, faith, and prayer.</h2>
+      <p>Homegroup usually begins with tea, coffee, biscuits, and time to settle in. There is often a short devotional or a discussion, then the group finishes with prayer.</p>
+      <div class="content-guide-list">
+        <div class="content-guide-list__item">
+          <strong>Conversation</strong>
+          <p>A friendly and informal setting where people can talk honestly and get to know one another.</p>
+        </div>
+        <div class="content-guide-list__item">
+          <strong>Discussion</strong>
+          <p>Space to explore faith, ask questions, and think about how following Jesus connects with everyday life.</p>
+        </div>
+        <div class="content-guide-list__item">
+          <strong>Prayer</strong>
+          <p>A simple time to pray for one another, the church, and the wider community.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-guide-card content-guide-card--split content-guide-card--coral">
+    <div>
+      <p class="content-kicker">If you are nervous</p>
+      <h3>Arriving at an unfamiliar house can feel like a big step.</h3>
+      <p>That is completely understandable, especially if you do not know many people yet. Homegroup is friendly and informal, and we will do our best to help you feel at home.</p>
+    </div>
+    <aside class="content-guide-note">
+      <strong>Nothing to prepare.</strong>
+      <p>If the discussion follows a recent sermon and you have not heard it, we will help bring you up to speed.</p>
+    </aside>
+  </section>
+
+  <section class="content-guide-cta">
+    <div>
+      <p class="content-kicker">Next step</p>
+      <h2>Ask for the address and come along.</h2>
+      <p>If you would like to try homegroup, speak to someone from the pastoral or leadership team. They can give you the address, confirm the next Wednesday evening, and help you settle in.</p>
+    </div>
+    <div class="content-guide-cta__steps">
+      <p><strong>Want to come?</strong><br><a href="/contact">Contact the team</a></p>
+      <p><strong>New to Millbrook?</strong><br><a href="/visit-us">Plan a Sunday visit</a></p>
+      <p><strong>Looking for other gatherings?</strong><br><a href="/community/whats-on">See What's On</a></p>
+    </div>
+  </section>
+</div>
+HTML,
+];

@@ -420,4 +420,138 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = checkoutUrl.toString();
         });
     });
+
+    document.querySelectorAll('[data-kids-club-form]').forEach(function (form) {
+        var dobInput = form.querySelector('[data-kids-club-dob]');
+        var ageOutput = form.querySelector('[data-kids-club-age-output]');
+        var ageInput = form.querySelector('[data-kids-club-age-input]');
+        var submittedAtInput = form.querySelector('[data-kids-club-submitted-at]');
+        var status = form.querySelector('[data-kids-club-status]');
+        var firstClubDate = new Date('2026-08-12T12:00:00');
+
+        var setStatus = function (message, type) {
+            if (!status) {
+                return;
+            }
+
+            status.textContent = message;
+            status.setAttribute('data-status', type || 'neutral');
+        };
+
+        var setInteractive = function (enabled) {
+            form.querySelectorAll('button, input, textarea, select').forEach(function (field) {
+                field.disabled = !enabled;
+            });
+        };
+
+        var syncAge = function () {
+            if (!dobInput || !ageOutput || !ageInput) {
+                return;
+            }
+
+            if (!dobInput.value) {
+                ageOutput.textContent = 'Age will appear here once a date is selected.';
+                ageInput.value = '';
+                return;
+            }
+
+            var dob = new Date(dobInput.value + 'T12:00:00');
+
+            if (Number.isNaN(dob.getTime())) {
+                ageOutput.textContent = 'Please check the date of birth.';
+                ageInput.value = '';
+                return;
+            }
+
+            var age = firstClubDate.getFullYear() - dob.getFullYear();
+            var hasHadBirthday = firstClubDate.getMonth() > dob.getMonth()
+                || (firstClubDate.getMonth() === dob.getMonth() && firstClubDate.getDate() >= dob.getDate());
+
+            if (!hasHadBirthday) {
+                age -= 1;
+            }
+
+            if (age < 0) {
+                ageOutput.textContent = 'Please check the date of birth.';
+                ageInput.value = '';
+                return;
+            }
+
+            ageOutput.textContent = 'Age on 12 August 2026: ' + age;
+            ageInput.value = String(age);
+        };
+
+        if (dobInput) {
+            dobInput.addEventListener('change', syncAge);
+            dobInput.addEventListener('input', syncAge);
+            syncAge();
+        }
+
+        form.addEventListener('submit', function (event) {
+            var endpoint = (form.getAttribute('data-google-sheet-endpoint') || form.getAttribute('action') || '').trim();
+            var honeypot = form.querySelector('input[name="website"]');
+            var data;
+
+            event.preventDefault();
+
+            if (honeypot && honeypot.value) {
+                form.reset();
+                setStatus('Thank you. The registration has been received.', 'success');
+                return;
+            }
+
+            syncAge();
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                setStatus('Please complete the required details before sending.', 'error');
+                return;
+            }
+
+            if (!endpoint) {
+                setStatus('This form is ready, but the Google Sheet connection has not been added yet.', 'error');
+                return;
+            }
+
+            if (typeof fetch === 'undefined') {
+                setStatus('This browser cannot send the form. Please email info@millbrooknazarene.co.uk.', 'error');
+                return;
+            }
+
+            if (submittedAtInput) {
+                submittedAtInput.value = new Date().toISOString();
+            }
+
+            data = new FormData(form);
+            setInteractive(false);
+            setStatus('Sending registration...', 'neutral');
+
+            fetch(endpoint, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    Accept: 'application/json'
+                },
+                body: data
+            }).then(function (response) {
+                return response.json().catch(function () {
+                    return {};
+                }).then(function (payload) {
+                    if (!response.ok || payload.ok === false) {
+                        throw new Error(payload.message || 'The registration could not be sent.');
+                    }
+
+                    return payload;
+                });
+            }).then(function (payload) {
+                form.reset();
+                syncAge();
+                setInteractive(true);
+                setStatus(payload.message || 'Thank you. The registration has been sent to the Kids Club team.', 'success');
+            }).catch(function (error) {
+                setInteractive(true);
+                setStatus(error.message || 'Sorry, the form could not be sent. Please try again or email info@millbrooknazarene.co.uk.', 'error');
+            });
+        });
+    });
 });
