@@ -4,6 +4,8 @@ use Concrete\Core\Area\Area;
 use Concrete\Core\Block\BlockType\BlockType;
 use Concrete\Core\Page\Page;
 
+$defaultPoliciesFolderUrl = 'https://drive.google.com/drive/folders/1BRifse4KlQLTARa3JgdYg2k5kCUm0Ri6';
+
 $page = Page::getByPath('/resources/policies', 'ACTIVE');
 
 if (!$page instanceof Page || $page->isError()) {
@@ -34,7 +36,7 @@ if (!$contentBlockType) {
 $documentBlockData = [
     'title' => '',
     'intro' => '',
-    'folderUrl' => '',
+    'folderUrl' => $defaultPoliciesFolderUrl,
     'buttonLabel' => 'Open full folder',
     'showButton' => 1,
     'viewMode' => 'list',
@@ -50,7 +52,7 @@ foreach ($existingBlocks as $block) {
     $documentBlockData = [
         'title' => trim((string) ($controller->title ?? '')),
         'intro' => trim((string) ($controller->intro ?? '')),
-        'folderUrl' => trim((string) ($controller->folderUrl ?? '')),
+        'folderUrl' => trim((string) ($controller->folderUrl ?? '')) ?: $defaultPoliciesFolderUrl,
         'buttonLabel' => trim((string) ($controller->buttonLabel ?? '')) ?: 'Open full folder',
         'showButton' => !empty($controller->showButton) ? 1 : 0,
         'viewMode' => in_array((string) ($controller->viewMode ?? ''), ['list', 'grid'], true) ? (string) $controller->viewMode : 'list',
