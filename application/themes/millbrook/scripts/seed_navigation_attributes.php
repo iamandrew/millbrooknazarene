@@ -95,7 +95,7 @@ $pageMap = [
     '/community/mens-ministry' => ['nav_show_in_menu' => true, 'nav_menu_section' => 'connect', 'nav_menu_order' => 40, 'nav_label' => 'Men'],
     '/community/womens-ministry' => ['nav_show_in_menu' => true, 'nav_menu_section' => 'connect', 'nav_menu_order' => 50, 'nav_label' => 'Women'],
     '/community/creche' => ['nav_show_in_menu' => true, 'nav_menu_section' => 'young_people', 'nav_menu_order' => 10, 'nav_label' => 'Creche'],
-    '/community/cheesy-nachos' => ['nav_show_in_menu' => true, 'nav_menu_section' => 'young_people', 'nav_menu_order' => 30, 'nav_label' => 'Youth'],
+    '/community/youth' => ['nav_show_in_menu' => true, 'nav_menu_section' => 'young_people', 'nav_menu_order' => 30, 'nav_label' => 'Youth'],
     '/resources' => ['nav_show_in_menu' => true, 'nav_label' => 'Resources'],
     '/resources/sermons' => ['nav_show_in_menu' => true, 'nav_menu_section' => 'faith_support', 'nav_menu_order' => 10, 'nav_show_in_quick_links' => true, 'nav_quick_link_order' => 3, 'nav_show_in_footer' => true, 'nav_footer_order' => 3, 'nav_label' => 'Latest Sermons'],
     '/resources/policies' => ['nav_show_in_menu' => true, 'nav_menu_section' => 'faith_support', 'nav_menu_order' => 40, 'nav_label' => 'Policies'],

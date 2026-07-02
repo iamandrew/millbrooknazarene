@@ -42,6 +42,9 @@ $findOrCreatePage = static function (Page $parent, array $definition) use ($page
 
     if ($page && !$page->isError()) {
         $update = [];
+        if (method_exists($page, 'getCollectionHandle') && $page->getCollectionHandle() !== $definition['handle']) {
+            $update['cHandle'] = $definition['handle'];
+        }
         if ($page->getCollectionName() !== $definition['name']) {
             $update['cName'] = $definition['name'];
         }
@@ -52,10 +55,10 @@ $findOrCreatePage = static function (Page $parent, array $definition) use ($page
             $update['pTemplateID'] = $fullTemplate->getPageTemplateID();
         }
         if ($update !== []) {
-            if (!isset($update['cHandle'])) {
-                $update['cHandle'] = $definition['handle'];
-            }
             $page->update($update);
+            if (isset($update['cHandle'])) {
+                $page->rescanCollectionPath();
+            }
             $output->writeln(sprintf('Updated page: %s', $page->getCollectionPath()));
             $page = Page::getByID($page->getCollectionID(), 'ACTIVE');
         }
@@ -133,7 +136,7 @@ HTML,
   <li><a href="/community/mens-ministry">Men</a></li>
   <li><a href="/community/womens-ministry">Women</a></li>
   <li><a href="/community/creche">Creche</a></li>
-  <li><a href="/community/cheesy-nachos">Youth</a></li>
+  <li><a href="/community/youth">Youth</a></li>
 </ul>
 HTML,
         'children' => [
@@ -190,7 +193,8 @@ HTML,
             ],
             [
                 'name' => $youthContent['name'],
-                'handle' => 'cheesy-nachos',
+                'handle' => 'youth',
+                'aliases' => ['cheesy-nachos'],
                 'description' => $youthContent['description'],
                 'content' => $youthContent['content'],
             ],
@@ -285,11 +289,8 @@ HTML,
     [
         'name' => 'Resources',
         'handle' => 'resources',
-        'description' => 'Listen, read, and download resources to support faith and church life.',
-        'content' => <<<'HTML'
-<h2>Resources</h2>
-<p>This section gathers together practical resources that support worship, discipleship, and everyday church life. Some pages are for the whole church, while others are more specific to teams or families.</p>
-HTML,
+        'description' => 'Sermons, policies, giving information, and practical links to support faith and church life at Millbrook.',
+        'content' => (require __DIR__ . '/content/resources.php')['content'],
         'children' => [
             [
                 'name' => 'Sermons',

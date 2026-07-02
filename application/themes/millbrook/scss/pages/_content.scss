@@ -163,7 +163,8 @@ h2 {
     box-shadow: inset 0 -3px 0 rgba(53, 72, 94, 0.12);
     font-size: clamp(2rem, 3.5vw, 3rem);
     line-height: 1.05;
-    letter-spacing: -0.035em;
+    font-weight: 400;
+    letter-spacing: 0;
     color: var(--brand-secondary);
 }
 
@@ -172,7 +173,8 @@ h3 {
     margin-bottom: 0.7rem;
     font-size: clamp(1.3rem, 2vw, 1.75rem);
     line-height: 1.14;
-    letter-spacing: -0.025em;
+    font-weight: 400;
+    letter-spacing: 0;
     color: var(--brand-primary);
 }
 
@@ -183,7 +185,7 @@ h4 {
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--brand-coral);
+    color: var(--brand-primary-dark);
 }
 
 p,
@@ -788,6 +790,67 @@ td {
 
     .content-guide-card--coral {
         --guide-accent: var(--brand-coral);
+    }
+
+    .content-card-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: clamp(1rem, 2vw, 1.35rem);
+        width: min(100%, var(--container-width));
+        margin: clamp(1rem, 3vw, 2rem) auto;
+    }
+
+    .content-card {
+        --card-accent: var(--brand-primary-dark);
+        min-width: 0;
+        padding: clamp(1.2rem, 2.4vw, 1.65rem);
+        border-top: 4px solid var(--card-accent);
+        border-radius: var(--radius-card);
+        background: rgba($color-surface-card, 0.84);
+        box-shadow: 0 10px 28px rgba($color-brand-ink, 0.06);
+
+        h3 {
+            margin-top: 0;
+            color: var(--brand-primary-dark);
+            font-size: clamp(1.25rem, 2vw, 1.6rem);
+            font-weight: 500;
+            line-height: 1.12;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .content-card--blue {
+        --card-accent: var(--brand-secondary);
+    }
+
+    .content-card--purple {
+        --card-accent: var(--brand-primary);
+    }
+
+    .content-card--lime {
+        --card-accent: var(--brand-highlight);
+    }
+
+    .content-card--coral {
+        --card-accent: var(--brand-coral);
+    }
+
+    .content-note-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.8fr) minmax(18rem, 0.5fr);
+        gap: clamp(1.5rem, 4vw, 3rem);
+        align-items: start;
+        width: min(100%, var(--container-width));
+        margin: clamp(1rem, 3vw, 2rem) auto 0;
+        padding-top: clamp(1.5rem, 3vw, 2rem);
+        border-top: 1px solid rgba($color-brand-primary-dark, 0.12);
+
+        h2 {
+            margin-top: 0;
+        }
     }
 
     .content-guide-card--split {
@@ -3198,6 +3261,14 @@ td {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
+        .content-card-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .content-note-grid {
+            grid-template-columns: 1fr;
+        }
+
         .church-life-tile--wide {
             grid-column: span 2;
         }
@@ -3240,6 +3311,8 @@ td {
         .content-guide-photo,
         .content-guide-photo--reverse,
         .content-guide-cta,
+        .content-card-grid,
+        .content-note-grid,
         .contact-intro,
         .contact-form-heading,
         .contact-form-heading + .ccm-block-type-form .fields,

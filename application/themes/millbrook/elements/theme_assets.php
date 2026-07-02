@@ -31,10 +31,57 @@ if (!function_exists('millbrook_theme_asset_url')) {
     }
 }
 
+if (!function_exists('millbrook_site_base_url')) {
+    function millbrook_site_base_url(): string
+    {
+        $baseUrl = '';
+
+        if (class_exists('Core')) {
+            $config = \Core::make('config');
+            $baseUrl = trim((string) $config->get('site.sites.default.seo.canonical_url'));
+
+            if ($baseUrl === '') {
+                $baseUrl = trim((string) $config->get('sites.default.seo.canonical_url'));
+            }
+        }
+
+        return rtrim($baseUrl !== '' ? $baseUrl : 'https://millbrooknazarene.co.uk/', '/');
+    }
+}
+
+if (!function_exists('millbrook_absolute_url')) {
+    function millbrook_absolute_url(string $url): string
+    {
+        if (preg_match('/^https?:\/\//i', $url)) {
+            return $url;
+        }
+
+        return millbrook_site_base_url() . '/' . ltrim($url, '/');
+    }
+}
+
 if (!function_exists('millbrook_default_hero_image_url')) {
     function millbrook_default_hero_image_url(string $themePath): string
     {
         return millbrook_theme_asset_url($themePath, 'images/hero-1800.webp');
+    }
+}
+
+if (!function_exists('millbrook_page_thumbnail_url')) {
+    function millbrook_page_thumbnail_url($page): string
+    {
+        if (!is_object($page) || !method_exists($page, 'getCollectionAttributeValue')) {
+            return '';
+        }
+
+        $thumbnail = $page->getCollectionAttributeValue('thumbnail');
+        if (!is_object($thumbnail) || !method_exists($thumbnail, 'getApprovedVersion')) {
+            return '';
+        }
+
+        $version = $thumbnail->getApprovedVersion();
+
+        return $version && method_exists($version, 'getURL') ? (string) $version->getURL() : '';
     }
 }
 

@@ -53,7 +53,7 @@ return [
     <div class="content-pastoral-team__grid">
       <article class="content-profile-card">
         <figure>
-          <img src="https://placehold.co/720x860/35485e/faf8f5?text=Philip+McAlister" alt="Photo placeholder for Philip McAlister.">
+          <img src="https://placehold.co/720x860/35485e/faf8f5?text=Philip+McAlister" alt="Philip McAlister.">
         </figure>
         <div>
           <p class="content-kicker">Teaching Pastor</p>
@@ -63,7 +63,7 @@ return [
 
       <article class="content-profile-card">
         <figure>
-          <img src="https://placehold.co/720x860/866eaf/faf8f5?text=Victoria+Moore" alt="Photo placeholder for Victoria Moore.">
+          <img src="https://placehold.co/720x860/866eaf/faf8f5?text=Victoria+Moore" alt="Victoria Moore.">
         </figure>
         <div>
           <p class="content-kicker">Community Pastor</p>
@@ -73,7 +73,7 @@ return [
 
       <article class="content-profile-card">
         <figure>
-          <img src="https://placehold.co/720x860/298fc2/faf8f5?text=Lucy+Barclay" alt="Photo placeholder for Lucy Barclay.">
+          <img src="https://placehold.co/720x860/298fc2/faf8f5?text=Lucy+Barclay" alt="Lucy Barclay.">
         </figure>
         <div>
           <p class="content-kicker">Youth and Community Worker</p>
@@ -83,7 +83,7 @@ return [
 
       <article class="content-profile-card">
         <figure>
-          <img src="https://placehold.co/720x860/2f3438/faf8f5?text=Dwain+McKay" alt="Photo placeholder for Dwain McKay.">
+          <img src="https://placehold.co/720x860/2f3438/faf8f5?text=Dwain McKay.">
         </figure>
         <div>
           <p class="content-kicker">Student Pastor</p>

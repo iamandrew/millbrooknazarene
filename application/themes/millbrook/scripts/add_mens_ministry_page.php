@@ -48,6 +48,8 @@ $page->update([
     'cHandle' => 'mens-ministry',
     'cDescription' => $mensMinistryContent['description'],
 ]);
+$page->rescanCollectionPath();
+$page = Page::getByID($page->getCollectionID(), 'ACTIVE');
 
 $area = Area::getOrCreate($page, 'Main');
 foreach ($area->getAreaBlocksArray($page) as $block) {

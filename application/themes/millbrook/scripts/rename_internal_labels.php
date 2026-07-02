@@ -27,7 +27,7 @@ $crecheContent = require __DIR__ . '/content/creche.php';
 $youthContent = require __DIR__ . '/content/youth.php';
 
 $pageMap = [
-    '/community/cheesy-nachos' => $youthContent,
+    '/community/youth' => $youthContent,
     '/community/mens-ministry' => $mensMinistryContent,
     '/community/womens-ministry' => $womensMinistryContent,
     '/community/creche' => $crecheContent,

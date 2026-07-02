@@ -333,7 +333,7 @@ function whats_on_seed_items(): array
             'summary' => 'A relaxed space for secondary school age young people, with snacks, games, teaching, trips, and time together.',
             'meta' => '6:30-8:00pm | Secondary school age',
             'link_label' => 'Youth',
-            'link_url' => '/community/cheesy-nachos',
+            'link_url' => '/community/youth',
             'card_style' => 'purple',
             'always_on' => true,
             'start_date' => '',

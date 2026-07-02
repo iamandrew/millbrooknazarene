@@ -138,7 +138,7 @@ $renderArea = static function (string $areaName, $c, callable $fallback): void {
                         <strong>Helping children feel welcome, safe, and included.</strong>
                         <p>Children of all ages are welcome, with creche and Sunday School usually available during the service.</p>
                     </a>
-                    <a class="home-life__rhythm" href="/community/cheesy-nachos">
+                    <a class="home-life__rhythm" href="/community/youth">
                         <span>Youth</span>
                         <strong>A relaxed space for secondary school age young people.</strong>
                         <p>Youth meets on Sunday evenings with snacks, games, teaching, trips, and time to belong.</p>

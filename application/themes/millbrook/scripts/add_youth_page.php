@@ -6,6 +6,8 @@ use Concrete\Core\Attribute\Key\CollectionKey;
 use Concrete\Core\File\FileList;
 use Concrete\Core\File\Import\FileImporter;
 use Concrete\Core\Page\Page;
+use Concrete\Core\Page\Template as PageTemplate;
+use Concrete\Core\Page\Type\Type as PageType;
 
 $contentBlockType = BlockType::getByHandle('content');
 
@@ -14,19 +16,44 @@ if (!$contentBlockType) {
     return 1;
 }
 
-$page = Page::getByPath('/community/cheesy-nachos', 'ACTIVE');
+$page = Page::getByPath('/community/youth', 'ACTIVE');
 
 if (!$page instanceof Page || $page->isError()) {
-    $output->writeln('<error>Could not find /community/cheesy-nachos.</error>');
-    return 1;
+    $page = Page::getByPath('/community/cheesy-nachos', 'ACTIVE');
+}
+
+if (!$page instanceof Page || $page->isError()) {
+    $parent = Page::getByPath('/community', 'ACTIVE');
+    $pageType = PageType::getByHandle('page');
+    $fullTemplate = PageTemplate::getByHandle('full');
+
+    if (!$parent instanceof Page || $parent->isError() || !$pageType || !$fullTemplate) {
+        $output->writeln('<error>Could not resolve /community, page type, or full template.</error>');
+        return 1;
+    }
+
+    $page = $parent->add(
+        $pageType,
+        [
+            'cName' => 'Youth',
+            'cHandle' => 'youth',
+            'cDescription' => '',
+        ],
+        $fullTemplate
+    );
+
+    $output->writeln('<info>Created /community/youth.</info>');
 }
 
 $youthContent = require __DIR__ . '/content/youth.php';
 
 $page->update([
     'cName' => $youthContent['name'],
+    'cHandle' => 'youth',
     'cDescription' => $youthContent['description'],
 ]);
+$page->rescanCollectionPath();
+$page = Page::getByID($page->getCollectionID(), 'ACTIVE');
 
 $area = Area::getOrCreate($page, 'Main');
 foreach ($area->getAreaBlocksArray($page) as $block) {

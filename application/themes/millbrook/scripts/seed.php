@@ -10,6 +10,7 @@ $seedMap = [
     'rename-labels' => __DIR__ . '/rename_internal_labels.php',
     'policies-documents' => __DIR__ . '/add_policies_documents_block.php',
     'sermons-block' => __DIR__ . '/add_sermons_block.php',
+    'resources' => __DIR__ . '/add_resources_page.php',
     'whats-on-block' => __DIR__ . '/add_whats_on_page.php',
     'whats-on' => __DIR__ . '/add_whats_on_page.php',
     'home-whats-on' => __DIR__ . '/add_home_whats_on_block.php',
@@ -28,6 +29,7 @@ $seedMap = [
     'giving' => __DIR__ . '/add_giving_page.php',
     'kids-club-2026' => __DIR__ . '/add_kids_club_2026_page.php',
     'whats-on-express' => __DIR__ . '/migrate_whats_on_to_express.php',
+    'launch-seo' => __DIR__ . '/set_launch_seo.php',
 ];
 
 $seedGroups = [
@@ -47,12 +49,14 @@ $seedGroups = [
         'about',
         'what-we-believe',
         'who-we-are',
+        'resources',
         'contact',
         'womens-ministry',
         'creche',
         'youth',
         'giving',
         'kids-club-2026',
+        'launch-seo',
     ],
 ];
 
@@ -101,7 +105,7 @@ if (isset($seedGroups[$seed])) {
 }
 
 if ($seed === 'all') {
-    foreach (['hero-attributes', 'navigation-attributes', 'whats-on-express', 'demo-sitemap', 'visitor-blueprint', 'new-here', 'visit-us', 'church-life', 'children-families', 'whats-on', 'homegroups', 'mens-ministry', 'about', 'what-we-believe', 'contact', 'giving', 'kids-club-2026', 'rename-labels', 'policies-documents', 'sermons-block', 'home-whats-on'] as $key) {
+    foreach (['hero-attributes', 'navigation-attributes', 'whats-on-express', 'demo-sitemap', 'visitor-blueprint', 'new-here', 'visit-us', 'church-life', 'children-families', 'whats-on', 'homegroups', 'mens-ministry', 'about', 'what-we-believe', 'resources', 'contact', 'giving', 'kids-club-2026', 'launch-seo', 'rename-labels', 'policies-documents', 'sermons-block', 'home-whats-on'] as $key) {
         $rc = $runSeed($key);
         if ($rc !== 0) {
             return $rc;

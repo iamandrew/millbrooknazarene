@@ -71,7 +71,7 @@ $blockData = [
             'title' => 'Sunday evenings for young people',
             'summary' => 'A relaxed space for secondary school age young people, with snacks, games, teaching, trips, and time together.',
             'linkLabel' => 'Youth',
-            'linkUrl' => '/community/cheesy-nachos',
+            'linkUrl' => '/community/youth',
         ],
         [
             'eyebrow' => 'Community',

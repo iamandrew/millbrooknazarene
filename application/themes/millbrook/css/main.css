@@ -19,7 +19,7 @@
   --text-muted: rgba(47, 52, 56, 0.72);
   --shadow-soft: 0 24px 52px rgba(47, 52, 56, 0.1);
   --shadow-card: 0 12px 28px rgba(47, 52, 56, 0.06);
-  --radius-card: 22px;
+  --radius-card: 8px;
   --radius-pill: 999px;
   --container-width: 1180px;
   --container-narrow: 920px;
@@ -66,9 +66,9 @@ h3,
 h4 {
   margin: 0 0 0.8rem;
   font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.02;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
   color: var(--brand-ink);
 }
 
@@ -99,6 +99,7 @@ body:has(#ccm-toolbar) {
 
 .skip-link {
   position: absolute;
+  z-index: 10000;
   width: 1px;
   height: 1px;
   padding: 0;
@@ -109,7 +110,19 @@ body:has(#ccm-toolbar) {
   border: 0;
 }
 .skip-link:focus {
-  clip: rect(0, 0, 0, 0);
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.75rem 1rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--brand-primary-dark);
+  box-shadow: 0 0 0 3px rgba(197, 211, 45, 0.5), 0 12px 32px rgba(47, 52, 56, 0.24);
 }
 
 body.nav-open {
@@ -1130,7 +1143,7 @@ body.nav-open {
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--brand-secondary);
+  color: var(--brand-primary-dark);
 }
 
 .section-eyebrow--light {
@@ -2634,7 +2647,8 @@ h2 {
   box-shadow: inset 0 -3px 0 rgba(53, 72, 94, 0.12);
   font-size: clamp(2rem, 3.5vw, 3rem);
   line-height: 1.05;
-  letter-spacing: -0.035em;
+  font-weight: 400;
+  letter-spacing: 0;
   color: var(--brand-secondary);
 }
 
@@ -2643,7 +2657,8 @@ h3 {
   margin-bottom: 0.7rem;
   font-size: clamp(1.3rem, 2vw, 1.75rem);
   line-height: 1.14;
-  letter-spacing: -0.025em;
+  font-weight: 400;
+  letter-spacing: 0;
   color: var(--brand-primary);
 }
 
@@ -2654,7 +2669,7 @@ h4 {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--brand-coral);
+  color: var(--brand-primary-dark);
 }
 
 p,
@@ -3185,6 +3200,57 @@ td {
 }
 .page-content .content-guide-card--coral {
   --guide-accent: var(--brand-coral);
+}
+.page-content .content-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.35rem);
+  width: min(100%, var(--container-width));
+  margin: clamp(1rem, 3vw, 2rem) auto;
+}
+.page-content .content-card {
+  --card-accent: var(--brand-primary-dark);
+  min-width: 0;
+  padding: clamp(1.2rem, 2.4vw, 1.65rem);
+  border-top: 4px solid var(--card-accent);
+  border-radius: var(--radius-card);
+  background: rgba(250, 248, 245, 0.84);
+  box-shadow: 0 10px 28px rgba(47, 52, 56, 0.06);
+}
+.page-content .content-card h3 {
+  margin-top: 0;
+  color: var(--brand-primary-dark);
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 500;
+  line-height: 1.12;
+}
+.page-content .content-card p:last-child {
+  margin-bottom: 0;
+}
+.page-content .content-card--blue {
+  --card-accent: var(--brand-secondary);
+}
+.page-content .content-card--purple {
+  --card-accent: var(--brand-primary);
+}
+.page-content .content-card--lime {
+  --card-accent: var(--brand-highlight);
+}
+.page-content .content-card--coral {
+  --card-accent: var(--brand-coral);
+}
+.page-content .content-note-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(18rem, 0.5fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+  width: min(100%, var(--container-width));
+  margin: clamp(1rem, 3vw, 2rem) auto 0;
+  padding-top: clamp(1.5rem, 3vw, 2rem);
+  border-top: 1px solid rgba(53, 72, 94, 0.12);
+}
+.page-content .content-note-grid h2 {
+  margin-top: 0;
 }
 .page-content .content-guide-card--split {
   display: grid;
@@ -5227,6 +5293,12 @@ td {
   .page-content .church-life-tiles__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .page-content .content-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .page-content .content-note-grid {
+    grid-template-columns: 1fr;
+  }
   .page-content .church-life-tile--wide {
     grid-column: span 2;
   }
@@ -5263,6 +5335,8 @@ td {
   .page-content .content-guide-photo,
   .page-content .content-guide-photo--reverse,
   .page-content .content-guide-cta,
+  .page-content .content-card-grid,
+  .page-content .content-note-grid,
   .page-content .contact-intro,
   .page-content .contact-form-heading,
   .page-content .contact-form-heading + .ccm-block-type-form .fields,

@@ -231,7 +231,7 @@ $applePodcastButtonDisplayLabel = preg_replace('/^\s*Listen\s+on\s+/i', '', $app
                                     <img
                                         class="sermons-block__archive-image"
                                         src="<?= h($archiveImageUrl) ?>"
-                                        alt=""
+                                        alt="<?= h(t('Artwork for %s', $sermon['title'])) ?>"
                                         loading="lazy"
                                         decoding="async"
                                     >

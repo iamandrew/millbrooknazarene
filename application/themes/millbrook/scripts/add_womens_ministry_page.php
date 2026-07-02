@@ -28,8 +28,11 @@ $womensMinistryContent = require __DIR__ . '/content/womens_ministry.php';
 
 $page->update([
     'cName' => $womensMinistryContent['name'],
+    'cHandle' => 'womens-ministry',
     'cDescription' => $womensMinistryContent['description'],
 ]);
+$page->rescanCollectionPath();
+$page = Page::getByID($page->getCollectionID(), 'ACTIVE');
 
 $area = Area::getOrCreate($page, 'Main');
 foreach ($area->getAreaBlocksArray($page) as $block) {

@@ -91,7 +91,7 @@ $fallbackMenuMap = [
     '/community/womens-ministry' => ['section' => 'connect', 'order' => 50],
     '/community/creche' => ['section' => 'young_people', 'order' => 10],
     '/community/children' => ['section' => 'young_people', 'order' => 20],
-    '/community/cheesy-nachos' => ['section' => 'young_people', 'order' => 30],
+    '/community/youth' => ['section' => 'young_people', 'order' => 30],
     '/resources/sermons' => ['section' => 'faith_support', 'order' => 10],
     '/about/what-we-believe' => ['section' => 'faith_support', 'order' => 20],
     '/giving' => ['section' => 'faith_support', 'order' => 30],

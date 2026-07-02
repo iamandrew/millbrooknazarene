@@ -40,7 +40,7 @@ return [
     <article class="contact-info-card contact-info-card--coral">
       <p class="content-kicker">Social</p>
       <h3>Facebook and Instagram</h3>
-      <p>Social media links can be added here once the correct page URLs are confirmed.</p>
+      <p>Follow Millbrook Church of the Nazarene on Facebook and Instagram for recent updates, photos, and reminders.</p>
     </article>
   </section>
 </div>

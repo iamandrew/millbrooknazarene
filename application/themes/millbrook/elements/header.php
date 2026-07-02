@@ -39,6 +39,10 @@ $loadPlyrAssets = millbrook_page_uses_sermon_player($c ?? null);
 $brandLogoUrl = millbrook_theme_asset_url($themePath, 'images/' . $brandLogo);
 $brandLogoWidth = $wheelHeaderLogo ? '1080' : '2361';
 $brandLogoHeight = $wheelHeaderLogo ? '1080' : '490';
+$homeMetaDescription = 'A warm, family-friendly, Christ-centred church in Larne, living out faith in practical care for others.';
+$pageMetaDescription = isset($c) && method_exists($c, 'getCollectionDescription') ? trim((string) $c->getCollectionDescription()) : '';
+$thumbnailUrl = millbrook_page_thumbnail_url($c ?? null);
+$ogImageUrl = millbrook_absolute_url($thumbnailUrl !== '' ? $thumbnailUrl : millbrook_default_hero_fallback_url($themePath));
 ?>
 <!doctype html>
 <html lang="<?php echo Localization::activeLanguage(); ?>">
@@ -46,6 +50,13 @@ $brandLogoHeight = $wheelHeaderLogo ? '1080' : '490';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php Loader::element('header_required'); ?>
+    <?php if ($isHomePage && $pageMetaDescription === '') { ?>
+        <meta name="description" content="<?php echo h($homeMetaDescription); ?>">
+    <?php } ?>
+    <meta property="og:image" content="<?php echo h($ogImageUrl); ?>">
+    <meta property="og:image:width" content="1800">
+    <meta property="og:image:height" content="956">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&family=Sora:wght@300;400;500;600;700;800&display=swap">

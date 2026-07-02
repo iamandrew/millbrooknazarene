@@ -14,3 +14,5 @@ Disallow: /application/page_types
 Disallow: /application/single_pages
 Disallow: /application/views
 Disallow: /ccm/system/captcha/picture
+
+Sitemap: https://millbrooknazarene.co.uk/sitemap.xml
