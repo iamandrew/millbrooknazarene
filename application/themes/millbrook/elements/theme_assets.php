@@ -34,18 +34,20 @@ if (!function_exists('millbrook_theme_asset_url')) {
 if (!function_exists('millbrook_site_base_url')) {
     function millbrook_site_base_url(): string
     {
-        $baseUrl = '';
-
-        if (class_exists('Core')) {
-            $config = \Core::make('config');
-            $baseUrl = trim((string) $config->get('site.sites.default.seo.canonical_url'));
-
-            if ($baseUrl === '') {
-                $baseUrl = trim((string) $config->get('sites.default.seo.canonical_url'));
-            }
+        $scheme = 'http';
+        if (
+            (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off')
+            || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower((string) $_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
+        ) {
+            $scheme = 'https';
         }
 
-        return rtrim($baseUrl !== '' ? $baseUrl : 'https://millbrooknazarene.co.uk/', '/');
+        $host = trim((string) ($_SERVER['HTTP_HOST'] ?? ''));
+        if ($host === '') {
+            return '';
+        }
+
+        return $scheme . '://' . $host;
     }
 }
 
@@ -56,7 +58,12 @@ if (!function_exists('millbrook_absolute_url')) {
             return $url;
         }
 
-        return millbrook_site_base_url() . '/' . ltrim($url, '/');
+        $baseUrl = millbrook_site_base_url();
+        if ($baseUrl === '') {
+            return '/' . ltrim($url, '/');
+        }
+
+        return $baseUrl . '/' . ltrim($url, '/');
     }
 }
 

@@ -39,10 +39,18 @@ $buildNavigationItem = static function (Page $page) use ($currentPageId, $trailI
         $label = (string) $page->getCollectionName();
     }
 
+    $url = (string) $page->getCollectionLink();
+    if (!$page->isExternalLink()) {
+        $path = (string) $page->getCollectionPath();
+        if ($path !== '') {
+            $url = $path === '/' ? '/' : $path;
+        }
+    }
+
     return [
         'id' => (int) $page->getCollectionID(),
         'name' => $label,
-        'url' => (string) $page->getCollectionLink(),
+        'url' => $url,
         'target' => $page->isExternalLink() && $page->openCollectionPointerExternalLinkInNewWindow() ? '_blank' : '_self',
         'is_current' => (int) $page->getCollectionID() === $currentPageId,
         'in_path' => in_array((int) $page->getCollectionID(), $trailIds, true),
