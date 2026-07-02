@@ -10,13 +10,14 @@ return [
       <p class="content-kicker">Homegroups</p>
       <h2>A smaller place to connect, pray, and explore faith.</h2>
       <p class="content-guide__lede">Homegroups are small, informal gatherings where we pray, ask questions, and explore faith together.</p>
-      <p>At the moment, Millbrook has one homegroup. It currently meets on Wednesday evenings in John and Iris's home, usually weekly or fortnightly depending on the rhythm of the group.</p>
+      <p>Millbrook has three homegroup opportunities: a Sunday evening women’s group connected with Abide, and two Wednesday evening groups, including one for young adults.</p>
+      <p>Because homegroups meet in homes, it is best to get in touch before coming. We can confirm the current rhythm, help you find the right group, and share the address privately.</p>
     </div>
 
     <div class="content-guide__stack">
       <section class="content-guide-card">
         <p class="content-kicker">Who it is for</p>
-        <h3>Everyone is welcome.</h3>
+        <h3>There are a few ways to join in.</h3>
         <p>You do not need to have been around Millbrook for a long time. If you would like a smaller space to get to know people and grow in faith, homegroup is a good place to begin.</p>
       </section>
 
@@ -30,24 +31,52 @@ return [
         <div>
           <p class="content-kicker">First time</p>
           <h3>You can join at any time.</h3>
-          <p>Because the group meets in a home, it is best to speak to someone from the pastoral or leadership team before coming so they can give you the address and help you know what to expect.</p>
+          <p>Because groups meet in homes, it is best to speak to someone from the pastoral or leadership team before coming so they can give you the right address and help you know what to expect.</p>
         </div>
         <aside class="content-guide-note">
-          <strong>One group at the moment.</strong>
-          <p>You do not need to choose between lots of options. We can simply point you towards the current homegroup.</p>
+          <strong>Not sure which group fits?</strong>
+          <p>Tell us a little about what you are looking for and we will point you towards the best place to start.</p>
         </aside>
       </section>
     </div>
   </section>
 
+  <section class="homegroup-options" aria-labelledby="homegroup-options-title">
+    <div class="homegroup-options__intro">
+      <p class="content-kicker">Homegroup options</p>
+      <h2 id="homegroup-options-title">Three places to begin.</h2>
+      <p>Each group has the same heart: space for friendship, prayer, honest conversation, and growing in faith. The setting and rhythm may look a little different depending on the group.</p>
+    </div>
+
+    <div class="homegroup-options__grid">
+      <article class="homegroup-option homegroup-option--lime">
+        <p class="content-kicker">Sunday evenings</p>
+        <h3>Abide women’s homegroup</h3>
+        <p>A women-only homegroup led by Carolyn, connected with <a href="/community/womens-ministry">Abide Women’s Ministry</a>.</p>
+      </article>
+
+      <article class="homegroup-option homegroup-option--blue">
+        <p class="content-kicker">Wednesday evenings</p>
+        <h3>John and Iris</h3>
+        <p>A midweek homegroup for conversation, Bible discussion, prayer, and shared support.</p>
+      </article>
+
+      <article class="homegroup-option homegroup-option--purple">
+        <p class="content-kicker">Wednesday evenings</p>
+        <h3>Young Adults</h3>
+        <p>A young adults homegroup at Lucy and Nick’s, with space to eat together, talk honestly, explore faith, and pray.</p>
+      </article>
+    </div>
+  </section>
+
   <section class="content-guide-photo">
     <figure class="content-guide-photo__image">
-      <img src="/application/themes/millbrook/images/placeholders/homegroups.png" alt="Homegroup photo placeholder.">
+      <img src="/application/themes/millbrook/images/content/homegroups/young-adults-homegroup.jpeg" alt="Young adults sharing food together at homegroup.">
     </figure>
     <div class="content-guide-photo__copy">
       <p class="content-kicker">What usually happens</p>
       <h2>Tea, conversation, faith, and prayer.</h2>
-      <p>Homegroup usually begins with tea, coffee, biscuits, and time to settle in. There is often a short devotional or a discussion, then the group finishes with prayer.</p>
+      <p>Homegroup usually begins with tea, coffee, biscuits, food, or time to settle in. There is often a short devotional or a discussion, then the group finishes with prayer.</p>
       <div class="content-guide-list">
         <div class="content-guide-list__item">
           <strong>Conversation</strong>
@@ -69,7 +98,7 @@ return [
     <div>
       <p class="content-kicker">If you are nervous</p>
       <h3>Arriving at an unfamiliar house can feel like a big step.</h3>
-      <p>That is completely understandable, especially if you do not know many people yet. Homegroup is friendly and informal, and we will do our best to help you feel at home.</p>
+      <p>That is completely understandable, especially if you do not know many people yet. Homegroups are friendly and informal, and we will do our best to help you feel at home.</p>
     </div>
     <aside class="content-guide-note">
       <strong>Nothing to prepare.</strong>
@@ -80,8 +109,8 @@ return [
   <section class="content-guide-cta">
     <div>
       <p class="content-kicker">Next step</p>
-      <h2>Ask for the address and come along.</h2>
-      <p>If you would like to try homegroup, speak to someone from the pastoral or leadership team. They can give you the address, confirm the next Wednesday evening, and help you settle in.</p>
+      <h2>Ask which group would suit you best.</h2>
+      <p>If you would like to try homegroup, speak to someone from the pastoral or leadership team. They can confirm what is happening that week, share the right address, and help you settle in.</p>
     </div>
     <div class="content-guide-cta__steps">
       <p><strong>Want to come?</strong><br><a href="/contact">Contact the team</a></p>

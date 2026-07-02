@@ -28,6 +28,8 @@
 }
 
 .home-page .page-hero--home {
+    padding-top: calc(var(--header-shell-height) + var(--header-shell-height) + var(--toolbar-offset));
+
     .page-hero__logo {
         width: clamp(290px, 36vw, 540px);
         filter: drop-shadow(0 0.45rem 1.35rem rgba($color-brand-ink, 0.24));

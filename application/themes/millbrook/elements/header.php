@@ -28,6 +28,7 @@ while ($trailPage instanceof Page && !$trailPage->isError() && $trailPage->getCo
 
 $navigationData = require dirname(__FILE__) . '/navigation_builder.php';
 $navigationGroups = $navigationData['groups'] ?? [];
+$primaryMenuSections = $navigationData['primary_sections'] ?? [];
 $navigationLinks = $navigationData['quick_links'] ?? [];
 ?>
 <!doctype html>
@@ -115,52 +116,81 @@ $navigationLinks = $navigationData['quick_links'] ?? [];
         <div class="site-menu__panel" role="dialog" aria-modal="true" aria-label="Site menu">
             <div class="container site-menu__shell">
                 <div class="site-menu__content">
-                    <div class="site-menu__primary">
-                        <?php foreach ($navigationGroups as $group) { ?>
-                            <section class="site-menu__group">
+                    <?php if ($navigationLinks !== []) { ?>
+                        <nav class="site-menu__quick" aria-label="Quick links">
+                            <?php foreach ($navigationLinks as $index => $link) { ?>
                                 <a
-                                    href="<?php echo h($group['heading']['url']); ?>"
-                                    target="<?php echo h($group['heading']['target']); ?>"
-                                    class="site-menu__heading<?php echo $group['heading']['is_current'] || $group['heading']['in_path'] ? ' is-active' : ''; ?>"
+                                    href="<?php echo h($link['url']); ?>"
+                                    target="<?php echo h($link['target']); ?>"
+                                    class="site-menu__quick-link<?php echo $index === 0 ? ' site-menu__quick-link--primary' : ''; ?>"
                                 >
-                                    <?php echo h($group['heading']['name']); ?>
+                                    <?php echo h($link['name']); ?>
                                 </a>
+                            <?php } ?>
+                        </nav>
+                    <?php } ?>
 
-                                <ul class="site-menu__list">
-                                    <?php foreach ($group['children'] as $child) { ?>
-                                        <li class="site-menu__item">
-                                            <a
-                                                href="<?php echo h($child['url']); ?>"
-                                                target="<?php echo h($child['target']); ?>"
-                                                class="site-menu__link<?php echo $child['is_current'] || $child['in_path'] ? ' is-active' : ''; ?>"
-                                            >
-                                                <?php echo h($child['name']); ?>
-                                            </a>
-                                        </li>
-                                    <?php } ?>
-                                </ul>
-                            </section>
-                        <?php } ?>
+                    <?php if ($primaryMenuSections !== []) { ?>
+                        <div class="site-menu__primary site-menu__primary--journey">
+                            <?php foreach ($primaryMenuSections as $section) { ?>
+                                <section class="site-menu__card site-menu__card--<?php echo h($section['accent']); ?>">
+                                    <a
+                                        href="<?php echo h($section['url']); ?>"
+                                        target="<?php echo h($section['target']); ?>"
+                                        class="site-menu__card-heading<?php echo $section['is_current'] || $section['in_path'] ? ' is-active' : ''; ?>"
+                                    >
+                                        <span><?php echo h($section['heading']); ?></span>
+                                        <span class="site-menu__arrow" aria-hidden="true">&rarr;</span>
+                                    </a>
 
-                        <?php if ($navigationLinks !== []) { ?>
-                            <section class="site-menu__group site-menu__group--links">
-                                <p class="site-menu__eyebrow">Quick Links</p>
-                                <ul class="site-menu__feature-list">
-                                    <?php foreach ($navigationLinks as $link) { ?>
-                                        <li class="site-menu__feature-item">
-                                            <a
-                                                href="<?php echo h($link['url']); ?>"
-                                                target="<?php echo h($link['target']); ?>"
-                                                class="site-menu__feature-link"
-                                            >
-                                                <?php echo h($link['name']); ?>
-                                            </a>
-                                        </li>
-                                    <?php } ?>
-                                </ul>
-                            </section>
-                        <?php } ?>
-                    </div>
+                                    <p class="site-menu__tag"><?php echo h($section['eyebrow']); ?></p>
+                                    <p class="site-menu__description"><?php echo h($section['description']); ?></p>
+
+                                    <ul class="site-menu__list">
+                                        <?php foreach ($section['items'] as $item) { ?>
+                                            <li class="site-menu__item">
+                                                <a
+                                                    href="<?php echo h($item['url']); ?>"
+                                                    target="<?php echo h($item['target']); ?>"
+                                                    class="site-menu__link<?php echo $item['is_current'] || $item['in_path'] ? ' is-active' : ''; ?>"
+                                                >
+                                                    <?php echo h($item['name']); ?>
+                                                </a>
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
+                                </section>
+                            <?php } ?>
+                        </div>
+                    <?php } else { ?>
+                        <div class="site-menu__primary">
+                            <?php foreach ($navigationGroups as $group) { ?>
+                                <section class="site-menu__group">
+                                    <a
+                                        href="<?php echo h($group['heading']['url']); ?>"
+                                        target="<?php echo h($group['heading']['target']); ?>"
+                                        class="site-menu__heading<?php echo $group['heading']['is_current'] || $group['heading']['in_path'] ? ' is-active' : ''; ?>"
+                                    >
+                                        <?php echo h($group['heading']['name']); ?>
+                                    </a>
+
+                                    <ul class="site-menu__list">
+                                        <?php foreach ($group['children'] as $child) { ?>
+                                            <li class="site-menu__item">
+                                                <a
+                                                    href="<?php echo h($child['url']); ?>"
+                                                    target="<?php echo h($child['target']); ?>"
+                                                    class="site-menu__link<?php echo $child['is_current'] || $child['in_path'] ? ' is-active' : ''; ?>"
+                                                >
+                                                    <?php echo h($child['name']); ?>
+                                                </a>
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
+                                </section>
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
 
                     <div class="site-menu__footer">
                         <div class="site-menu__meta">

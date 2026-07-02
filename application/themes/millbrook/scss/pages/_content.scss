@@ -901,6 +901,81 @@ td {
         }
     }
 
+    .content-guide--homegroups {
+        gap: clamp(2.4rem, 5vw, 4.7rem);
+    }
+
+    .homegroup-options {
+        display: grid;
+        gap: clamp(1.25rem, 3vw, 2rem);
+        padding: clamp(1.8rem, 4vw, 3rem) 0 0;
+        border-top: 1px solid rgba($color-brand-primary-dark, 0.14);
+    }
+
+    .homegroup-options__intro {
+        display: grid;
+        gap: 0.9rem;
+        max-width: 54rem;
+
+        h2 {
+            max-width: 12ch;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            box-shadow: none;
+            color: var(--brand-secondary);
+            font-size: clamp(2.35rem, 4.4vw, 3.8rem);
+            line-height: 1.03;
+            letter-spacing: 0;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .homegroup-options__grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: clamp(1rem, 2.5vw, 1.6rem);
+    }
+
+    .homegroup-option {
+        --homegroup-accent: var(--brand-secondary);
+
+        min-width: 0;
+        min-height: 100%;
+        padding: clamp(1.15rem, 2.6vw, 1.45rem);
+        border: 1px solid rgba($color-brand-primary-dark, 0.12);
+        border-top: 4px solid var(--homegroup-accent);
+        border-radius: 8px;
+        background: rgba($color-surface, 0.72);
+
+        h3 {
+            margin: 0.35rem 0 0.75rem;
+            color: var(--brand-primary-dark);
+            font-size: clamp(1.35rem, 2.35vw, 1.9rem);
+            line-height: 1.08;
+            letter-spacing: 0;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .homegroup-option--lime {
+        --homegroup-accent: var(--brand-highlight);
+    }
+
+    .homegroup-option--blue {
+        --homegroup-accent: var(--brand-secondary);
+    }
+
+    .homegroup-option--purple {
+        --homegroup-accent: var(--brand-primary);
+    }
+
     .church-life-tiles {
         display: grid;
         gap: clamp(1.25rem, 3vw, 2rem);
@@ -3126,6 +3201,10 @@ td {
             grid-column: span 2;
         }
 
+        .homegroup-options__grid {
+            grid-template-columns: 1fr;
+        }
+
         .whats-on-intro,
         .whats-on-board,
         .whats-on-board__header,
@@ -3201,6 +3280,23 @@ td {
         .content-about-identity__mission {
             padding-left: 1rem;
             border-left-width: 3px;
+        }
+
+        .homegroup-options {
+            gap: 1.25rem;
+            padding-top: 1.4rem;
+        }
+
+        .homegroup-options__intro {
+            gap: 0.75rem;
+        }
+
+        .homegroup-options__intro h2 {
+            font-size: 2.4rem;
+        }
+
+        .homegroup-option {
+            min-height: 0;
         }
 
         .content-about-identity__image img {
