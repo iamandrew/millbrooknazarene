@@ -31,7 +31,7 @@
         'cards' => t('Full cards'),
         'compact' => t('Compact list'),
     ], $layout) ?>
-    <p class="help-block"><?= t('Compact mode is intended for the homepage and can use curated block items. Full cards mode is intended for the main What’s On page.') ?></p>
+    <p class="help-block"><?= t('Full cards use the shared Express entries and group them by section. Compact mode is intended for the homepage and can still use the curated block items saved on that block.') ?></p>
 </div>
 
 <div class="form-group">

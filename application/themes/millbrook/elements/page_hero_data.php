@@ -1,10 +1,13 @@
 <?php
 defined('C5_EXECUTE') or die("Access Denied.");
 
+require_once __DIR__ . '/theme_assets.php';
+
 $pageTitle = isset($c) && method_exists($c, 'getCollectionName') ? (string) $c->getCollectionName() : 'Millbrook Church';
 $pageDescription = isset($c) && method_exists($c, 'getCollectionDescription') ? trim((string) $c->getCollectionDescription()) : '';
 $pageHeroImageUrl = '';
 $pageHeroImageDisabled = false;
+$pageHeroImageIsDefault = false;
 
 if (isset($c) && method_exists($c, 'getCollectionAttributeValue')) {
     $pageHeroImageDisabled = (bool) $c->getCollectionAttributeValue('disable_hero_image');
@@ -27,5 +30,6 @@ if (isset($c) && method_exists($c, 'getCollectionAttributeValue')) {
 }
 
 if (!$pageHeroImageDisabled && $pageHeroImageUrl === '' && isset($this) && method_exists($this, 'getThemePath')) {
-    $pageHeroImageUrl = $this->getThemePath() . '/images/hero.png';
+    $pageHeroImageUrl = millbrook_default_hero_image_url($this->getThemePath());
+    $pageHeroImageIsDefault = true;
 }

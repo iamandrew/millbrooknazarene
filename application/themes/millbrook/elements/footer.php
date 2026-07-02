@@ -105,9 +105,17 @@ $footerLinks = $navigationData['footer_links'] ?? [];
     </div>
 </footer>
 
+<?php
+require_once __DIR__ . '/theme_assets.php';
+$themePath = $view->getThemePath();
+$loadPlyrAssets = millbrook_page_uses_sermon_player($c ?? null);
+?>
+
 <?php Loader::element('footer_required'); ?>
-<script src="<?php echo $view->getThemePath(); ?>/vendor/plyr/plyr.polyfilled.min.js"></script>
-<script src="<?php echo $view->getThemePath(); ?>/js/main.js"></script>
+<?php if ($loadPlyrAssets) { ?>
+    <script src="<?php echo h(millbrook_theme_asset_url($themePath, 'vendor/plyr/plyr.polyfilled.min.js')); ?>"></script>
+<?php } ?>
+<script src="<?php echo h(millbrook_theme_asset_url($themePath, 'js/main.js')); ?>"></script>
 
 </body>
 </html>

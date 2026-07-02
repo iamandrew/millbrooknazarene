@@ -42,7 +42,7 @@ return [
 
   <section class="content-guide-photo">
     <figure class="content-guide-photo__image">
-      <img src="/application/themes/millbrook/images/content/general/worship-team.jpg" alt="The worship team leading music during a Sunday service at Millbrook.">
+      <img src="/application/themes/millbrook/images/content/general/worship-team.webp" alt="The worship team leading music during a Sunday service at Millbrook.">
     </figure>
     <div class="content-guide-photo__copy">
       <p class="content-kicker">In plain English</p>

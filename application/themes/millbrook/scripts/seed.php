@@ -36,6 +36,7 @@ $seedGroups = [
         'navigation-attributes',
     ],
     'staging-content' => [
+        'whats-on-express',
         'home-whats-on',
         'whats-on',
         'visit-us',
@@ -100,7 +101,7 @@ if (isset($seedGroups[$seed])) {
 }
 
 if ($seed === 'all') {
-    foreach (['hero-attributes', 'navigation-attributes', 'demo-sitemap', 'visitor-blueprint', 'new-here', 'visit-us', 'church-life', 'children-families', 'whats-on', 'homegroups', 'mens-ministry', 'about', 'what-we-believe', 'contact', 'giving', 'kids-club-2026', 'rename-labels', 'policies-documents', 'sermons-block', 'home-whats-on', 'whats-on-express'] as $key) {
+    foreach (['hero-attributes', 'navigation-attributes', 'whats-on-express', 'demo-sitemap', 'visitor-blueprint', 'new-here', 'visit-us', 'church-life', 'children-families', 'whats-on', 'homegroups', 'mens-ministry', 'about', 'what-we-believe', 'contact', 'giving', 'kids-club-2026', 'rename-labels', 'policies-documents', 'sermons-block', 'home-whats-on'] as $key) {
         $rc = $runSeed($key);
         if ($rc !== 0) {
             return $rc;

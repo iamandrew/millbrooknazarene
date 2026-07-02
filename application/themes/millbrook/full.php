@@ -4,7 +4,9 @@ defined('C5_EXECUTE') or die("Access Denied.");
 $this->inc('elements/header.php');
 require __DIR__ . '/elements/page_hero_data.php';
 $mainArea = new Area('Main');
-$heroImageStyle = $pageHeroImageUrl !== '' ? sprintf('--hero-image: url(\'%s\');', h($pageHeroImageUrl)) : '';
+$heroImageMarkup = $pageHeroImageUrl !== ''
+    ? millbrook_hero_image_markup($pageHeroImageUrl, (bool) ($pageHeroImageIsDefault ?? false), $this->getThemePath())
+    : '';
 $collectionPath = isset($c) && method_exists($c, 'getCollectionPath') ? (string) $c->getCollectionPath() : '';
 $isKidsClubPage = $collectionPath === '/kids-club-2026';
 ?>
@@ -19,10 +21,10 @@ $isKidsClubPage = $collectionPath === '/kids-club-2026';
                         <p class="full-page-hero__description"><?php echo h($pageDescription); ?></p>
                     <?php } ?>
                 </div>
-                <?php if ($heroImageStyle !== '') { ?>
+                <?php if ($heroImageMarkup !== '') { ?>
                     <div class="full-page-hero__media">
                         <div class="hero-visual">
-                            <div class="hero-image-card" aria-hidden="true" style="<?php echo $heroImageStyle; ?>"></div>
+                            <div class="hero-image-card" aria-hidden="true"><?php echo $heroImageMarkup; ?></div>
                         </div>
                     </div>
                 <?php } ?>

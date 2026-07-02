@@ -35,7 +35,7 @@ foreach ($area->getAreaBlocksArray($page) as $block) {
 
 $page->addBlock($contentBlockType, $area, ['content' => $youthContent['content']]);
 
-$heroImagePath = DIR_BASE . '/application/themes/millbrook/images/content/youth/youth-hero.jpg';
+$heroImagePath = DIR_BASE . '/application/themes/millbrook/images/content/youth/youth-hero.webp';
 $heroImage = find_or_import_youth_hero_image($heroImagePath);
 
 if ($heroImage) {

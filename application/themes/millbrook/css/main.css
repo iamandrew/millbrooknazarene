@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&family=Sora:wght@300;400;500;600;700;800&display=swap");
 :root {
   --brand-primary: #866eaf;
   --brand-primary-dark: #35485e;
@@ -2527,8 +2526,8 @@ body.menu-open .menu-toggle__label {
   z-index: 1;
   background: linear-gradient(180deg, rgba(53, 72, 94, 0.24), rgba(53, 72, 94, 0.14) 42%, rgba(53, 72, 94, 0.34)), linear-gradient(90deg, rgba(41, 143, 194, 0.28), rgba(53, 72, 94, 0.1) 55%, rgba(236, 94, 97, 0.1));
 }
-.page-hero .hero-image-card::after,
-.full-page-hero .hero-image-card::after {
+.page-hero .hero-image-card .hero-image-card__image,
+.full-page-hero .hero-image-card .hero-image-card__image {
   filter: saturate(0.72) contrast(1.04) brightness(0.8);
 }
 @media (max-width: 760px) {
@@ -2604,14 +2603,20 @@ body.menu-open .menu-toggle__label {
   background: linear-gradient(180deg, rgba(53, 72, 94, 0.24), rgba(53, 72, 94, 0.14) 42%, rgba(53, 72, 94, 0.34)), linear-gradient(90deg, rgba(41, 143, 194, 0.28), rgba(53, 72, 94, 0.1) 55%, rgba(236, 94, 97, 0.1));
   z-index: 1;
 }
-.hero-image-card::after {
-  content: "";
+.hero-image-card .hero-image-card__picture {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: var(--hero-image);
-  background-position: center;
-  background-size: cover;
+  display: block;
+}
+.hero-image-card .hero-image-card__image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   filter: saturate(0.72) contrast(1.04) brightness(0.8);
 }
 @media (max-width: 760px) {
@@ -3513,7 +3518,8 @@ td {
   gap: clamp(0.9rem, 2vw, 1.25rem);
   align-items: stretch;
 }
-.page-content .whats-on-cards--seasonal {
+.page-content .whats-on-cards--seasonal,
+.page-content .whats-on-cards--special {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .page-content .whats-on-card {
@@ -5234,7 +5240,8 @@ td {
     grid-template-columns: 1fr;
   }
   .page-content .whats-on-cards,
-  .page-content .whats-on-cards--seasonal {
+  .page-content .whats-on-cards--seasonal,
+  .page-content .whats-on-cards--special {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .page-content .giving-funds {
@@ -5483,7 +5490,8 @@ td {
     font-size: 2.15rem;
   }
   .page-content .whats-on-cards,
-  .page-content .whats-on-cards--seasonal {
+  .page-content .whats-on-cards--seasonal,
+  .page-content .whats-on-cards--special {
     grid-template-columns: 1fr;
   }
   .page-content .whats-on-card {

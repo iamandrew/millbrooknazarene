@@ -43,7 +43,7 @@ return [
 
     <div class="church-life-tiles__grid">
       <a class="church-life-tile church-life-tile--wide" href="/community/whats-on">
-        <img src="/application/themes/millbrook/images/content/general/sunday-gathering.jpg" alt="">
+        <img src="/application/themes/millbrook/images/content/general/sunday-gathering.webp" alt="">
         <span class="church-life-tile__copy">
           <span class="content-kicker">Community gatherings</span>
           <span class="church-life-tile__title">What's On</span>
@@ -52,7 +52,7 @@ return [
       </a>
 
       <a class="church-life-tile" href="/community/cheesy-nachos">
-        <img src="/application/themes/millbrook/images/content/youth/youth-welcome.jpg" alt="">
+        <img src="/application/themes/millbrook/images/content/youth/youth-welcome.webp" alt="">
         <span class="church-life-tile__copy">
           <span class="content-kicker">Young people</span>
           <span class="church-life-tile__title">Youth</span>
@@ -61,7 +61,7 @@ return [
       </a>
 
       <a class="church-life-tile" href="/community/womens-ministry">
-        <img src="/application/themes/millbrook/images/content/womens/abide-craft.jpg" alt="">
+        <img src="/application/themes/millbrook/images/content/womens/abide-craft.webp" alt="">
         <span class="church-life-tile__copy">
           <span class="content-kicker">Women</span>
           <span class="church-life-tile__title">Abide</span>
@@ -70,7 +70,7 @@ return [
       </a>
 
       <a class="church-life-tile" href="/community/homegroups">
-        <img src="/application/themes/millbrook/images/content/general/community-conversation.jpg" alt="">
+        <img src="/application/themes/millbrook/images/content/general/community-conversation.webp" alt="">
         <span class="church-life-tile__copy">
           <span class="content-kicker">Midweek</span>
           <span class="church-life-tile__title">Homegroups</span>
@@ -79,7 +79,7 @@ return [
       </a>
 
       <a class="church-life-tile" href="/community/children">
-        <img src="/application/themes/millbrook/images/content/general/community-chat.jpg" alt="">
+        <img src="/application/themes/millbrook/images/content/general/community-chat.webp" alt="">
         <span class="church-life-tile__copy">
           <span class="content-kicker">Families</span>
           <span class="church-life-tile__title">Children &amp; Families</span>
@@ -88,7 +88,7 @@ return [
       </a>
 
       <a class="church-life-tile" href="/community/creche">
-        <img src="/application/themes/millbrook/images/content/creche/creche-books.jpg" alt="">
+        <img src="/application/themes/millbrook/images/content/creche/creche-books.webp" alt="">
         <span class="church-life-tile__copy">
           <span class="content-kicker">Sunday mornings</span>
           <span class="church-life-tile__title">Creche</span>
@@ -97,7 +97,7 @@ return [
       </a>
 
       <a class="church-life-tile" href="/community/mens-ministry">
-        <img src="/application/themes/millbrook/images/content/general/community-chat.jpg" alt="">
+        <img src="/application/themes/millbrook/images/content/general/community-chat.webp" alt="">
         <span class="church-life-tile__copy">
           <span class="content-kicker">Men</span>
           <span class="church-life-tile__title">Men's Ministry</span>
@@ -106,7 +106,7 @@ return [
       </a>
 
       <a class="church-life-tile church-life-tile--care" href="/contact">
-        <img src="/application/themes/millbrook/images/content/general/community-conversation.jpg" alt="">
+        <img src="/application/themes/millbrook/images/content/general/community-conversation.webp" alt="">
         <span class="church-life-tile__copy">
           <span class="content-kicker">Prayer and care</span>
           <span class="church-life-tile__title">Talk to someone</span>
@@ -118,7 +118,7 @@ return [
 
   <section class="content-guide-photo content-guide-photo--reverse">
     <figure class="content-guide-photo__image">
-      <img src="/application/themes/millbrook/images/content/general/community-conversation.jpg" alt="People chatting over tea and coffee at Millbrook Community Centre.">
+      <img src="/application/themes/millbrook/images/content/general/community-conversation.webp" alt="People chatting over tea and coffee at Millbrook Community Centre.">
     </figure>
     <div class="content-guide-photo__copy">
       <p class="content-kicker">First Breakfast</p>

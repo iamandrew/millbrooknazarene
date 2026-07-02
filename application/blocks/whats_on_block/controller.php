@@ -6,12 +6,44 @@ use Concrete\Core\Block\BlockController;
 use Concrete\Core\Entity\Express\Entity;
 use Concrete\Core\Entity\Express\Entry;
 use Concrete\Core\Express\EntryList;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 defined('C5_EXECUTE') or die('Access Denied.');
 
 class Controller extends BlockController
 {
+    protected const SECTION_CONFIG = [
+        'weekly' => [
+            'kicker' => 'Weekly',
+            'title' => 'Weekly rhythm.',
+            'summary' => 'Some gatherings are open to everyone. Others are for a particular age or stage, but you are always welcome to ask where to start.',
+            'cardsClass' => 'weekly',
+            'order' => 20,
+        ],
+        'monthly' => [
+            'kicker' => 'Monthly',
+            'title' => 'Monthly rhythm.',
+            'summary' => 'Monthly gatherings are a good way to get to know people at an easier pace.',
+            'cardsClass' => 'monthly',
+            'order' => 30,
+        ],
+        'seasonal' => [
+            'kicker' => 'Seasonal',
+            'title' => 'Seasonal moments.',
+            'summary' => 'These are advertised when dates are confirmed, so it is worth checking before you come.',
+            'cardsClass' => 'seasonal',
+            'order' => 40,
+        ],
+        'special' => [
+            'kicker' => 'Upcoming',
+            'title' => 'Upcoming',
+            'summary' => 'Current one-off gatherings and sign-ups will appear here when there is something to highlight.',
+            'cardsClass' => 'special',
+            'order' => 10,
+        ],
+    ];
+
     protected $btTable = 'btWhatsOnBlock';
     protected $btInterfaceWidth = 760;
     protected $btInterfaceHeight = 620;
@@ -52,8 +84,11 @@ class Controller extends BlockController
 
         $this->set('title', $title);
         $this->set('intro', $intro);
+        $this->set('introParagraphs', $this->getIntroParagraphs($intro));
         $this->set('layout', $layout);
         $this->set('items', $items);
+        $this->set('groupedItems', $layout === 'cards' ? $this->getGroupedItems($items) : []);
+        $this->set('sectionConfig', self::SECTION_CONFIG);
         $this->set('primaryButtonLabel', $primaryButtonLabel);
         $this->set('primaryButtonUrl', $primaryButtonUrl);
         $this->set('secondaryButtonLabel', $secondaryButtonLabel);
@@ -78,8 +113,8 @@ class Controller extends BlockController
 
     protected function setDefaults(): void
     {
-        $this->set('title', $this->title ?: t('A few simple ways to connect through the month.'));
-        $this->set('intro', $this->intro ?: t('Alongside Sunday worship, there are regular gatherings, groups, and church rhythms that help people pray, connect, and grow together.'));
+        $this->set('title', $this->title ?: t('A simple guide to what happens at Millbrook.'));
+        $this->set('intro', $this->intro ?: t("Church life has a regular rhythm, but it is not always the same every week. This page gives you the shape of what usually happens, rather than a live events calendar.\n\nIf you are new, Sunday morning is always a good place to begin. For one-off events, current dates, or booking details, check social media, the newsletter, or get in touch."));
         $this->set('layout', $this->getValidLayout((string) ($this->layout ?: 'cards')));
         $this->set('items', $this->getItems());
         $this->set('primaryButtonLabel', $this->primaryButtonLabel ?: t('Visit Us?'));
@@ -122,15 +157,19 @@ class Controller extends BlockController
 
         $items = [];
         foreach ($list->getResults() as $entry) {
-            if (!$entry instanceof Entry) {
+            if (!$entry instanceof Entry || !$this->isEntryVisible($entry)) {
                 continue;
             }
 
             $title = trim((string) $entry->getAttribute('item_title'));
             $summary = trim((string) $entry->getAttribute('summary'));
             $eyebrow = trim((string) $entry->getAttribute('eyebrow'));
+            $meta = trim((string) $entry->getAttribute('meta'));
             $linkLabel = trim((string) $entry->getAttribute('link_label'));
             $linkUrl = trim((string) $entry->getAttribute('link_url'));
+            $section = $this->getValidSection((string) $entry->getAttribute('section'));
+            $cardStyle = $this->getValidCardStyle((string) $entry->getAttribute('card_style'));
+            $sortOrder = (int) $entry->getAttribute('sort_order');
 
             if ($title === '' && $summary === '') {
                 continue;
@@ -140,12 +179,115 @@ class Controller extends BlockController
                 'eyebrow' => $eyebrow,
                 'title' => $title,
                 'summary' => $summary,
+                'meta' => $meta,
                 'linkLabel' => $linkLabel,
                 'linkUrl' => $linkUrl,
+                'section' => $section,
+                'cardStyle' => $cardStyle,
+                'sortOrder' => $sortOrder,
+                'displayOrder' => (int) $entry->getEntryDisplayOrder(),
             ];
         }
 
+        usort($items, function (array $a, array $b): int {
+            $sectionCompare = (self::SECTION_CONFIG[$a['section']]['order'] ?? 999)
+                <=> (self::SECTION_CONFIG[$b['section']]['order'] ?? 999);
+
+            if ($sectionCompare !== 0) {
+                return $sectionCompare;
+            }
+
+            $sortCompare = ($a['sortOrder'] ?: $a['displayOrder']) <=> ($b['sortOrder'] ?: $b['displayOrder']);
+
+            if ($sortCompare !== 0) {
+                return $sortCompare;
+            }
+
+            return strcasecmp($a['title'], $b['title']);
+        });
+
         return $items;
+    }
+
+    protected function isEntryVisible(Entry $entry): bool
+    {
+        if ((bool) $entry->getAttribute('always_on')) {
+            return true;
+        }
+
+        $start = $this->normaliseDate($entry->getAttribute('start_date'));
+        $end = $this->normaliseDate($entry->getAttribute('end_date'));
+
+        if (!$start && !$end) {
+            return false;
+        }
+
+        $now = new \DateTimeImmutable('now');
+
+        if ($start && $now < $start) {
+            return false;
+        }
+
+        if ($end) {
+            $endTime = $end;
+            if ($endTime->format('H:i:s') === '00:00:00') {
+                $endTime = $endTime->setTime(23, 59, 59);
+            }
+
+            if ($now > $endTime) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    protected function normaliseDate($value): ?\DateTimeImmutable
+    {
+        if ($value instanceof \DateTimeImmutable) {
+            return $value;
+        }
+
+        if ($value instanceof DateTimeInterface) {
+            return \DateTimeImmutable::createFromInterface($value);
+        }
+
+        $value = trim((string) $value);
+        if ($value === '') {
+            return null;
+        }
+
+        try {
+            return new \DateTimeImmutable($value);
+        } catch (\Throwable $exception) {
+            return null;
+        }
+    }
+
+    protected function getGroupedItems(array $items): array
+    {
+        $groups = [];
+
+        foreach ($items as $item) {
+            $section = $this->getValidSection((string) ($item['section'] ?? 'weekly'));
+            $groups[$section][] = $item;
+        }
+
+        uksort($groups, function (string $a, string $b): int {
+            return (self::SECTION_CONFIG[$a]['order'] ?? 999) <=> (self::SECTION_CONFIG[$b]['order'] ?? 999);
+        });
+
+        return $groups;
+    }
+
+    protected function getIntroParagraphs(string $intro): array
+    {
+        $intro = trim($intro);
+        if ($intro === '') {
+            return [];
+        }
+
+        return array_values(array_filter(array_map('trim', preg_split('/\R{2,}/', $intro))));
     }
 
     protected function getLegacyItems(): array
@@ -195,8 +337,13 @@ class Controller extends BlockController
                 'eyebrow' => $eyebrow,
                 'title' => $title,
                 'summary' => $summary,
+                'meta' => '',
                 'linkLabel' => $linkLabel,
                 'linkUrl' => $linkUrl,
+                'section' => 'weekly',
+                'cardStyle' => 'blue',
+                'sortOrder' => 0,
+                'displayOrder' => count($clean),
             ];
         }
 
@@ -210,29 +357,49 @@ class Controller extends BlockController
                 'eyebrow' => 'Sunday',
                 'title' => 'Worship at 11:00am',
                 'summary' => 'A welcoming Sunday gathering with worship, prayer, Bible teaching, and time together afterwards.',
+                'meta' => '',
                 'linkLabel' => 'Plan your visit',
                 'linkUrl' => '/visit-us',
+                'section' => 'weekly',
+                'cardStyle' => 'blue',
+                'sortOrder' => 10,
+                'displayOrder' => 10,
             ],
             [
                 'eyebrow' => 'Midweek',
                 'title' => 'Homegroups, prayer, and shared life',
                 'summary' => 'Smaller gatherings through the week help people build friendships, pray together, and keep growing in faith.',
+                'meta' => '',
                 'linkLabel' => 'Explore church life',
                 'linkUrl' => '/community',
+                'section' => 'weekly',
+                'cardStyle' => 'blue',
+                'sortOrder' => 20,
+                'displayOrder' => 20,
             ],
             [
                 'eyebrow' => 'Families',
                 'title' => 'Children and families are welcome',
                 'summary' => 'Children are a valued part of church life, with support for families and age-appropriate opportunities to belong.',
+                'meta' => '',
                 'linkLabel' => 'Children & families',
                 'linkUrl' => '/community/children',
+                'section' => 'weekly',
+                'cardStyle' => 'lime',
+                'sortOrder' => 30,
+                'displayOrder' => 30,
             ],
             [
                 'eyebrow' => 'Recent teaching',
                 'title' => 'Catch up on sermons and Bible teaching',
                 'summary' => 'Listen back to recent messages from Millbrook before you visit or during the week.',
+                'meta' => '',
                 'linkLabel' => 'Listen to latest sermons',
                 'linkUrl' => '/resources/sermons',
+                'section' => 'weekly',
+                'cardStyle' => 'purple',
+                'sortOrder' => 40,
+                'displayOrder' => 40,
             ],
         ];
     }
@@ -240,5 +407,19 @@ class Controller extends BlockController
     protected function getValidLayout(string $layout): string
     {
         return in_array($layout, ['cards', 'compact'], true) ? $layout : 'cards';
+    }
+
+    protected function getValidSection(string $section): string
+    {
+        $section = strtolower(trim($section));
+
+        return array_key_exists($section, self::SECTION_CONFIG) ? $section : 'weekly';
+    }
+
+    protected function getValidCardStyle(string $cardStyle): string
+    {
+        $cardStyle = strtolower(trim($cardStyle));
+
+        return in_array($cardStyle, ['blue', 'lime', 'purple', 'coral', 'dark'], true) ? $cardStyle : 'blue';
     }
 }

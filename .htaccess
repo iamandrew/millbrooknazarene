@@ -6,3 +6,11 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.php/$1 [L]
 </IfModule>
+
+<IfModule mod_setenvif.c>
+    SetEnvIfNoCase Request_URI "^/application/themes/millbrook/.*\.(css|js|mjs|png|jpe?g|gif|webp|svg|ico|woff2?)(\?.*)?$" millbrook_theme_asset=1
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set Cache-Control "public, max-age=31536000, immutable" env=millbrook_theme_asset
+</IfModule>

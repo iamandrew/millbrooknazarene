@@ -71,7 +71,7 @@ return [
 
   <section class="content-guide-photo">
     <figure class="content-guide-photo__image">
-      <img src="/application/themes/millbrook/images/content/homegroups/young-adults-homegroup.jpeg" alt="Young adults sharing food together at homegroup.">
+      <img src="/application/themes/millbrook/images/content/homegroups/young-adults-homegroup.webp" alt="Young adults sharing food together at homegroup.">
     </figure>
     <div class="content-guide-photo__copy">
       <p class="content-kicker">What usually happens</p>

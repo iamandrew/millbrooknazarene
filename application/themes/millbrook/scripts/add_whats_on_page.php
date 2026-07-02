@@ -6,10 +6,14 @@ use Concrete\Core\Page\Page;
 use Concrete\Core\Page\Template as PageTemplate;
 use Concrete\Core\Page\Type\Type as PageType;
 
-$contentBlockType = BlockType::getByHandle('content');
+$blockType = BlockType::getByHandle('whats_on_block');
+if (!$blockType) {
+    $blockType = BlockType::installBlockType('whats_on_block');
+    $output->writeln('<info>Installed block type: whats_on_block</info>');
+}
 
-if (!$contentBlockType) {
-    $output->writeln('<error>Content block type is not available.</error>');
+if (!$blockType) {
+    $output->writeln('<error>Could not install or load the What’s On block type.</error>');
     return 1;
 }
 
@@ -50,8 +54,17 @@ foreach ($area->getAreaBlocksArray($page) as $block) {
     $block->deleteBlock();
 }
 
-$page->addBlock($contentBlockType, $area, ['content' => $whatsOnContent['content']]);
+$page->addBlock($blockType, $area, [
+    'title' => $whatsOnContent['title'],
+    'intro' => $whatsOnContent['intro'],
+    'layout' => 'cards',
+    'itemsJson' => '',
+    'primaryButtonLabel' => '',
+    'primaryButtonUrl' => '',
+    'secondaryButtonLabel' => '',
+    'secondaryButtonUrl' => '',
+]);
 
-$output->writeln('<info>Updated What\'s On page content from the leadership questionnaire.</info>');
+$output->writeln('<info>Updated What\'s On page with the Express-driven What’s On block.</info>');
 
 return 0;

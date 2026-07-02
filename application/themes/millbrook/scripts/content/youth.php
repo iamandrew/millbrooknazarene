@@ -48,7 +48,7 @@ return [
 
   <section class="content-guide-photo">
     <figure class="content-guide-photo__image">
-      <img src="/application/themes/millbrook/images/content/youth/youth-welcome.jpg" alt="Young people smiling and waving during a youth gathering.">
+      <img src="/application/themes/millbrook/images/content/youth/youth-welcome.webp" alt="Young people smiling and waving during a youth gathering.">
     </figure>
     <div class="content-guide-photo__copy">
       <p class="content-kicker">What usually happens</p>
@@ -77,7 +77,7 @@ return [
 
   <section class="content-guide-photo content-guide-photo--reverse">
     <figure class="content-guide-photo__image">
-      <img src="/application/themes/millbrook/images/content/youth/youth-activity.jpg" alt="Young people taking part in an interactive youth activity.">
+      <img src="/application/themes/millbrook/images/content/youth/youth-activity.webp" alt="Young people taking part in an interactive youth activity.">
     </figure>
     <div class="content-guide-photo__copy">
       <p class="content-kicker">If you are new</p>

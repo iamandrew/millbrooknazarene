@@ -43,7 +43,7 @@ return [
 
   <section class="content-guide-photo">
     <figure class="content-guide-photo__image">
-      <img src="/application/themes/millbrook/images/content/womens/abide-craft.jpg" alt="Women taking part in an Abide craft evening.">
+      <img src="/application/themes/millbrook/images/content/womens/abide-craft.webp" alt="Women taking part in an Abide craft evening.">
     </figure>
     <div class="content-guide-photo__copy">
       <p class="content-kicker">What usually happens</p>
@@ -72,7 +72,7 @@ return [
 
   <section class="content-guide-photo content-guide-photo--reverse">
     <figure class="content-guide-photo__image">
-      <img src="/application/themes/millbrook/images/content/womens/abide-day-out.jpg" alt="Women from Abide on a day out together.">
+      <img src="/application/themes/millbrook/images/content/womens/abide-day-out.webp" alt="Women from Abide on a day out together.">
     </figure>
     <div class="content-guide-photo__copy">
       <p class="content-kicker">If you are new</p>

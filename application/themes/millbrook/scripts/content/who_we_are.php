@@ -19,7 +19,7 @@ return [
     </aside>
 
     <figure class="content-about-identity__image">
-      <img src="/application/themes/millbrook/images/content/general/community-conversation.jpg" alt="People talking together after a Sunday gathering at Millbrook.">
+      <img src="/application/themes/millbrook/images/content/general/community-conversation.webp" alt="People talking together after a Sunday gathering at Millbrook.">
     </figure>
 
     <div class="content-about-identity__beliefs">
@@ -95,7 +95,7 @@ return [
 
   <section class="content-guide-photo">
     <figure class="content-guide-photo__image">
-      <img src="/application/themes/millbrook/images/content/general/sunday-gathering.jpg" alt="People gathered for teaching at Millbrook Community Centre.">
+      <img src="/application/themes/millbrook/images/content/general/sunday-gathering.webp" alt="People gathered for teaching at Millbrook Community Centre.">
     </figure>
     <div class="content-guide-photo__copy">
       <p class="content-kicker">Millbrook today</p>

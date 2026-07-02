@@ -5,7 +5,9 @@ require __DIR__ . '/page_hero_data.php';
 
 $hero = new GlobalArea('Hero');
 $hasCustomHero = $hero->getTotalBlocksInArea($c) > 0;
-$heroImageStyle = $pageHeroImageUrl !== '' ? sprintf('--hero-image: url(\'%s\');', h($pageHeroImageUrl)) : '';
+$heroImageMarkup = $pageHeroImageUrl !== ''
+    ? millbrook_hero_image_markup($pageHeroImageUrl, (bool) ($pageHeroImageIsDefault ?? false), $this->getThemePath())
+    : '';
 ?>
 
 <section
@@ -27,10 +29,10 @@ $heroImageStyle = $pageHeroImageUrl !== '' ? sprintf('--hero-image: url(\'%s\');
                     ?>
                 </p>
             </div>
-            <?php if ($heroImageStyle !== '') { ?>
+            <?php if ($heroImageMarkup !== '') { ?>
                 <div class="page-hero__media">
                     <div class="hero-visual">
-                        <div class="hero-image-card" aria-hidden="true" style="<?php echo $heroImageStyle; ?>"></div>
+                        <div class="hero-image-card" aria-hidden="true"><?php echo $heroImageMarkup; ?></div>
                     </div>
                 </div>
             <?php } ?>

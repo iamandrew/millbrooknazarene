@@ -48,7 +48,7 @@ return [
 
   <section class="content-guide-photo">
     <figure class="content-guide-photo__image">
-      <img src="/application/themes/millbrook/images/content/general/sunday-worship.jpg" alt="People gathered for Sunday worship at Millbrook Community Centre.">
+      <img src="/application/themes/millbrook/images/content/general/sunday-worship.webp" alt="People gathered for Sunday worship at Millbrook Community Centre.">
     </figure>
     <div class="content-guide-photo__copy">
       <p class="content-kicker">Our heart</p>

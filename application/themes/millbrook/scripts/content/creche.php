@@ -42,7 +42,7 @@ return [
 
   <section class="content-guide-photo">
     <figure class="content-guide-photo__image">
-      <img src="/application/themes/millbrook/images/content/creche/creche-books.jpg" alt="Bible story books used in the creche space.">
+      <img src="/application/themes/millbrook/images/content/creche/creche-books.webp" alt="Bible story books used in the creche space.">
     </figure>
     <div class="content-guide-photo__copy">
       <p class="content-kicker">What usually happens</p>
@@ -67,7 +67,7 @@ return [
 
   <section class="content-guide-photo content-guide-photo--reverse">
     <figure class="content-guide-photo__image">
-      <img src="/application/themes/millbrook/images/content/creche/creche-puzzles.jpg" alt="A child playing with a puzzle in creche.">
+      <img src="/application/themes/millbrook/images/content/creche/creche-puzzles.webp" alt="A child playing with a puzzle in creche.">
     </figure>
     <div class="content-guide-photo__copy">
       <p class="content-kicker">If you are visiting</p>

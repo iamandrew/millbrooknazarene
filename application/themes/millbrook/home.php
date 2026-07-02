@@ -2,7 +2,10 @@
 defined('C5_EXECUTE') or die("Access Denied.");
 
 $this->inc('elements/header.php');
+require_once __DIR__ . '/elements/theme_assets.php';
 $themePath = $view->getThemePath();
+$homeHeroMarkup = millbrook_default_hero_image_markup($themePath);
+$homeLogoUrl = millbrook_theme_asset_url($themePath, 'images/logo-no-sub.svg');
 
 $renderArea = static function (string $areaName, $c, callable $fallback): void {
     $area = new Area($areaName);
@@ -20,9 +23,11 @@ $renderArea = static function (string $areaName, $c, callable $fallback): void {
         <div class="container page-hero__layout">
             <div class="page-hero__brand">
                 <img
-                    src="<?php echo $themePath; ?>/images/logo-no-sub.svg"
+                    src="<?php echo h($homeLogoUrl); ?>"
                     alt="Millbrook Church of the Nazarene"
                     class="page-hero__logo"
+                    width="2361"
+                    height="490"
                 >
                 <h1 class="home-hero__title" id="home-hero-title">Millbrook Church, Larne</h1>
                 <p class="page-hero__description page-hero__description--home">A warm, family-friendly, Christ-centred church in Larne, living out faith in practical care for others.</p>
@@ -37,8 +42,7 @@ $renderArea = static function (string $areaName, $c, callable $fallback): void {
                     <div
                         class="hero-image-card"
                         aria-hidden="true"
-                        style="--hero-image: url('<?php echo $themePath; ?>/images/hero.png');"
-                    ></div>
+                    ><?php echo $homeHeroMarkup; ?></div>
                 </div>
             </div>
         </div>

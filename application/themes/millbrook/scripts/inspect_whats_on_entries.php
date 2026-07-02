@@ -24,13 +24,29 @@ foreach ($list->getResults() as $entry) {
     }
 
     $output->writeln(sprintf(
-        'ITEM|%s|%s|%s|%s|%s',
+        'ITEM|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s',
+        trim((string) $entry->getAttribute('section')),
         trim((string) $entry->getAttribute('eyebrow')),
         trim((string) $entry->getAttribute('item_title')),
         trim((string) $entry->getAttribute('summary')),
+        trim((string) $entry->getAttribute('meta')),
         trim((string) $entry->getAttribute('link_label')),
-        trim((string) $entry->getAttribute('link_url'))
+        trim((string) $entry->getAttribute('link_url')),
+        trim((string) $entry->getAttribute('card_style')),
+        (bool) $entry->getAttribute('always_on') ? 'always_on' : 'dated',
+        format_whats_on_date($entry->getAttribute('start_date')),
+        format_whats_on_date($entry->getAttribute('end_date')),
+        trim((string) $entry->getAttribute('sort_order'))
     ));
 }
 
 return 0;
+
+function format_whats_on_date($value): string
+{
+    if ($value instanceof DateTimeInterface) {
+        return $value->format('Y-m-d H:i:s');
+    }
+
+    return trim((string) $value);
+}

@@ -30,6 +30,15 @@ $navigationData = require dirname(__FILE__) . '/navigation_builder.php';
 $navigationGroups = $navigationData['groups'] ?? [];
 $primaryMenuSections = $navigationData['primary_sections'] ?? [];
 $navigationLinks = $navigationData['quick_links'] ?? [];
+
+require_once dirname(__FILE__) . '/theme_assets.php';
+
+$themePath = $view->getThemePath();
+$preloadDefaultHero = millbrook_page_uses_default_hero($c ?? null);
+$loadPlyrAssets = millbrook_page_uses_sermon_player($c ?? null);
+$brandLogoUrl = millbrook_theme_asset_url($themePath, 'images/' . $brandLogo);
+$brandLogoWidth = $wheelHeaderLogo ? '1080' : '2361';
+$brandLogoHeight = $wheelHeaderLogo ? '1080' : '490';
 ?>
 <!doctype html>
 <html lang="<?php echo Localization::activeLanguage(); ?>">
@@ -37,8 +46,16 @@ $navigationLinks = $navigationData['quick_links'] ?? [];
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php Loader::element('header_required'); ?>
-    <link rel="stylesheet" href="<?php echo $view->getThemePath(); ?>/vendor/plyr/plyr.css">
-    <link rel="stylesheet" href="<?php echo $view->getThemePath(); ?>/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&family=Sora:wght@300;400;500;600;700;800&display=swap">
+    <?php if ($preloadDefaultHero) { ?>
+        <link rel="preload" as="image" href="<?php echo h(millbrook_default_hero_image_url($themePath)); ?>" type="image/webp" fetchpriority="high">
+    <?php } ?>
+    <?php if ($loadPlyrAssets) { ?>
+        <link rel="stylesheet" href="<?php echo h(millbrook_theme_asset_url($themePath, 'vendor/plyr/plyr.css')); ?>">
+    <?php } ?>
+    <link rel="stylesheet" href="<?php echo h(millbrook_theme_asset_url($themePath, 'css/main.css')); ?>">
 </head>
 <body>
 
@@ -91,9 +108,11 @@ $navigationLinks = $navigationData['quick_links'] ?? [];
 
                 <a class="brand" href="/" aria-label="Millbrook Church home">
                     <img
-                        src="<?php echo $view->getThemePath(); ?>/images/<?php echo h($brandLogo); ?>"
+                        src="<?php echo h($brandLogoUrl); ?>"
                         alt="Millbrook Church of the Nazarene"
                         class="brand-logo<?php echo $wheelHeaderLogo ? ' brand-logo--wheel' : ''; ?>"
+                        width="<?php echo $brandLogoWidth; ?>"
+                        height="<?php echo $brandLogoHeight; ?>"
                     >
                 </a>
 

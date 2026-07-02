@@ -38,7 +38,7 @@ foreach ($area->getAreaBlocksArray($page) as $block) {
 
 $page->addBlock($contentBlockType, $area, ['content' => $womensMinistryContent['content']]);
 
-$heroImagePath = DIR_BASE . '/application/themes/millbrook/images/content/womens/women-hero.jpg';
+$heroImagePath = DIR_BASE . '/application/themes/millbrook/images/content/womens/women-hero.webp';
 $heroImage = find_or_import_women_hero_image($heroImagePath);
 
 if ($heroImage) {

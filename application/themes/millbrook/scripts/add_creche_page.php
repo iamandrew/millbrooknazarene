@@ -35,7 +35,7 @@ foreach ($area->getAreaBlocksArray($page) as $block) {
 
 $page->addBlock($contentBlockType, $area, ['content' => $crecheContent['content']]);
 
-$heroImagePath = DIR_BASE . '/application/themes/millbrook/images/content/creche/creche-hero.jpg';
+$heroImagePath = DIR_BASE . '/application/themes/millbrook/images/content/creche/creche-hero.webp';
 $heroImage = find_or_import_creche_hero_image($heroImagePath);
 
 if ($heroImage) {
