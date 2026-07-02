@@ -2,7 +2,9 @@
     RewriteEngine On
     RewriteBase /
 
+    RewriteCond %{THE_REQUEST} \s/+index\.php[/?\s]
     RewriteRule ^index\.php/?$ / [R=301,L,NE]
+    RewriteCond %{THE_REQUEST} \s/+index\.php/
     RewriteRule ^index\.php/(.*)$ /$1 [R=301,L,NE]
     RewriteRule ^community/cheesy-nachos/?$ /community/youth [R=301,L,NE]
     RewriteRule ^community/men/?$ /community/mens-ministry [R=301,L,NE]

@@ -15,4 +15,4 @@ Disallow: /application/single_pages
 Disallow: /application/views
 Disallow: /ccm/system/captcha/picture
 
-Sitemap: https://millbrooknazarene.co.uk/sitemap.xml
+Sitemap: https://millbrooknazarene.church/sitemap.xml
