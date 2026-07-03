@@ -2016,8 +2016,8 @@ body.menu-open .menu-toggle__label {
   max-width: 12ch;
   margin-bottom: 1rem;
   color: var(--brand-secondary);
-  font-size: clamp(2.5rem, 5.4vw, 4.45rem);
-  line-height: 0.96;
+  font-size: clamp(2.25rem, 4.4vw, 3.55rem);
+  line-height: 1.02;
   letter-spacing: 0;
 }
 .home-sunday__copy p {
@@ -2125,8 +2125,8 @@ body.menu-open .menu-toggle__label {
 .home-life__copy h2 {
   margin-bottom: 1rem;
   color: #faf8f5;
-  font-size: clamp(2.2rem, 4.5vw, 3.9rem);
-  line-height: 1;
+  font-size: clamp(2.05rem, 3.8vw, 3.3rem);
+  line-height: 1.04;
   letter-spacing: 0;
 }
 .home-life__copy p {
@@ -2209,8 +2209,8 @@ body.menu-open .menu-toggle__label {
   max-width: 14ch;
   margin-bottom: 0.65rem;
   color: var(--brand-primary-dark);
-  font-size: clamp(2rem, 4vw, 3.35rem);
-  line-height: 1;
+  font-size: clamp(1.9rem, 3.4vw, 3.05rem);
+  line-height: 1.04;
   letter-spacing: 0;
 }
 .visit-card__lead,
@@ -2819,7 +2819,7 @@ td {
   border: 0;
   box-shadow: none;
   color: var(--brand-secondary);
-  font-size: 2.85rem;
+  font-size: 2.45rem;
   line-height: 1.06;
   letter-spacing: 0;
 }
@@ -3044,8 +3044,8 @@ td {
   border: 0;
   box-shadow: none;
   color: var(--brand-secondary);
-  font-size: clamp(3.8rem, 8vw, 7rem);
-  line-height: 0.96;
+  font-size: clamp(2.65rem, 4.6vw, 3.8rem);
+  line-height: 1.02;
   letter-spacing: 0;
 }
 .page-content .content-about-identity__statement p:last-child {
@@ -3066,7 +3066,7 @@ td {
   max-width: 15ch;
   margin: 0 0 0.85rem;
   color: var(--brand-primary-dark);
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-size: clamp(1.45rem, 2.4vw, 2rem);
   line-height: 1.08;
   letter-spacing: 0;
 }
@@ -3130,7 +3130,7 @@ td {
   border: 0;
   box-shadow: none;
   color: var(--brand-secondary);
-  font-size: clamp(2.65rem, 5vw, 4.35rem);
+  font-size: clamp(2.3rem, 4vw, 3.5rem);
   line-height: 1.04;
   letter-spacing: 0;
 }
@@ -3342,7 +3342,7 @@ td {
   border: 0;
   box-shadow: none;
   color: var(--brand-secondary);
-  font-size: clamp(2.35rem, 4.4vw, 3.8rem);
+  font-size: clamp(2.2rem, 3.6vw, 3.25rem);
   line-height: 1.03;
   letter-spacing: 0;
 }
@@ -3397,7 +3397,7 @@ td {
   border: 0;
   box-shadow: none;
   color: var(--brand-secondary);
-  font-size: clamp(2.3rem, 4.6vw, 4rem);
+  font-size: clamp(2.1rem, 3.8vw, 3.35rem);
   line-height: 1.04;
   letter-spacing: 0;
 }
@@ -3507,7 +3507,7 @@ td {
   border: 0;
   box-shadow: none;
   color: var(--brand-secondary);
-  font-size: clamp(2.55rem, 5vw, 4.15rem);
+  font-size: clamp(2.25rem, 4vw, 3.45rem);
   line-height: 1.04;
   letter-spacing: 0;
   text-wrap: balance;
@@ -3831,7 +3831,7 @@ td {
   border: 0;
   box-shadow: none;
   color: #0f6b7a;
-  font-size: clamp(2.3rem, 4.5vw, 4rem);
+  font-size: clamp(2.1rem, 3.6vw, 3.2rem);
   line-height: 1.02;
   letter-spacing: 0;
   text-wrap: balance;
@@ -4074,8 +4074,8 @@ td {
   border: 0;
   box-shadow: none;
   color: var(--brand-secondary);
-  font-size: clamp(3rem, 6vw, 5.4rem);
-  line-height: 0.99;
+  font-size: clamp(2.4rem, 4.2vw, 3.7rem);
+  line-height: 1.02;
   letter-spacing: 0;
 }
 .page-content .contact-intro__copy p:last-child {
@@ -4156,7 +4156,7 @@ td {
   border: 0;
   box-shadow: none;
   color: var(--brand-secondary);
-  font-size: clamp(2.15rem, 4.5vw, 3.65rem);
+  font-size: clamp(2rem, 3.5vw, 3rem);
   line-height: 1.04;
   letter-spacing: 0;
 }
@@ -4393,7 +4393,7 @@ td {
   border: 0;
   box-shadow: none;
   color: var(--brand-secondary);
-  font-size: clamp(2.4rem, 4.8vw, 4rem);
+  font-size: clamp(2.15rem, 3.8vw, 3.35rem);
   line-height: 1.04;
   letter-spacing: 0;
 }
@@ -4466,7 +4466,7 @@ td {
   border: 0;
   box-shadow: none;
   color: var(--brand-secondary);
-  font-size: clamp(2.2rem, 4.4vw, 3.5rem);
+  font-size: clamp(2.05rem, 3.5vw, 3.1rem);
   line-height: 1.05;
   letter-spacing: 0;
 }
@@ -4517,7 +4517,7 @@ td {
   border: 0;
   box-shadow: none;
   color: var(--brand-secondary);
-  font-size: clamp(2.6rem, 5vw, 4.5rem);
+  font-size: clamp(2.25rem, 4vw, 3.55rem);
   line-height: 1.02;
   letter-spacing: 0;
 }
@@ -4531,7 +4531,7 @@ td {
 }
 .page-content .content-guide--about .content-pastoral-team__intro h2 {
   max-width: none;
-  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-size: clamp(1.95rem, 3.5vw, 3.05rem);
 }
 .page-content .content-pastoral-team__grid {
   display: grid;
@@ -4586,7 +4586,7 @@ td {
   border: 0;
   box-shadow: none;
   color: var(--brand-primary-dark);
-  font-size: clamp(2.2rem, 4.2vw, 3.3rem);
+  font-size: clamp(2.05rem, 3.4vw, 3rem);
   line-height: 1.05;
   letter-spacing: 0;
 }
@@ -4623,21 +4623,35 @@ td {
   margin-bottom: 0;
 }
 .page-content .content-guide--giving {
-  gap: clamp(2.4rem, 5vw, 4.5rem);
+  grid-template-columns: minmax(0, 0.92fr) minmax(24rem, 1.08fr);
+  column-gap: clamp(2.25rem, 5vw, 4.75rem);
+  row-gap: clamp(1.8rem, 4vw, 3.4rem);
+  align-items: start;
+}
+.page-content .content-guide--giving > .giving-intro {
+  grid-column: 1;
+}
+.page-content .content-guide--giving > .giving-panel--featured {
+  grid-column: 2;
+}
+.page-content .content-guide--giving > .giving-details,
+.page-content .content-guide--giving > .giving-principles,
+.page-content .content-guide--giving > .giving-privacy {
+  grid-column: 1/-1;
 }
 .page-content .giving-intro {
   display: grid;
-  grid-template-columns: minmax(0, 0.68fr) minmax(18rem, 0.32fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(2rem, 6vw, 5rem);
-  align-items: end;
-  padding-bottom: clamp(1.6rem, 4vw, 3rem);
-  border-bottom: 1px solid rgba(53, 72, 94, 0.14);
+  align-items: start;
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 .page-content .giving-intro--simple {
-  grid-template-columns: minmax(0, 0.72fr);
+  grid-template-columns: minmax(0, 1fr);
 }
 .page-content .giving-intro--simple .giving-intro__copy {
-  max-width: 48rem;
+  max-width: none;
 }
 .page-content .giving-intro__copy {
   min-width: 0;
@@ -4649,8 +4663,8 @@ td {
   border: 0;
   box-shadow: none;
   color: var(--brand-secondary);
-  font-size: clamp(3.1rem, 6.8vw, 6rem);
-  line-height: 0.98;
+  font-size: clamp(2.4rem, 4.2vw, 3.75rem);
+  line-height: 1.02;
   letter-spacing: 0;
 }
 .page-content .giving-intro__copy p:last-child {
@@ -4664,7 +4678,7 @@ td {
 .page-content .giving-intro__note h3 {
   margin: 0 0 0.85rem;
   color: var(--brand-primary-dark);
-  font-size: clamp(1.55rem, 2.8vw, 2.25rem);
+  font-size: clamp(1.35rem, 2.3vw, 1.95rem);
   line-height: 1.08;
   letter-spacing: 0;
 }
@@ -4676,8 +4690,11 @@ td {
   padding: clamp(1.45rem, 4vw, 2.6rem);
   border-top: 4px solid var(--brand-secondary);
   border-radius: 8px;
-  background: linear-gradient(180deg, rgba(250, 248, 245, 0.92), rgba(250, 248, 245, 0.98)), rgba(41, 143, 194, 0.06);
+  background: rgba(250, 248, 245, 0.96);
   box-shadow: inset 0 0 0 1px rgba(53, 72, 94, 0.12);
+}
+.page-content .giving-panel--featured {
+  margin-top: 0.45rem;
 }
 .page-content .giving-panel__header {
   display: grid;
@@ -4693,7 +4710,7 @@ td {
   border: 0;
   box-shadow: none;
   color: var(--brand-primary-dark);
-  font-size: clamp(2rem, 4vw, 3.1rem);
+  font-size: clamp(1.9rem, 3.2vw, 2.65rem);
   line-height: 1.05;
   letter-spacing: 0;
 }
@@ -4905,20 +4922,23 @@ td {
 }
 .page-content .giving-principles {
   display: grid;
-  gap: clamp(1.25rem, 3vw, 2rem);
-  padding-top: clamp(0.5rem, 2vw, 1rem);
+  grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: start;
+  padding-top: clamp(1.4rem, 4vw, 2.5rem);
+  border-top: 1px solid rgba(53, 72, 94, 0.14);
 }
 .page-content .giving-principles__intro {
-  max-width: 50rem;
+  max-width: none;
 }
 .page-content .giving-principles__intro h2 {
-  max-width: 14ch;
+  max-width: 12ch;
   margin: 0 0 1rem;
   padding: 0;
   border: 0;
   box-shadow: none;
   color: var(--brand-secondary);
-  font-size: clamp(2.15rem, 4.5vw, 3.65rem);
+  font-size: clamp(2rem, 3.3vw, 2.9rem);
   line-height: 1.04;
   letter-spacing: 0;
 }
@@ -4927,7 +4947,7 @@ td {
 }
 .page-content .giving-funds {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: clamp(0.9rem, 2vw, 1.25rem);
 }
 .page-content .giving-fund-card {
@@ -4961,8 +4981,125 @@ td {
   gap: clamp(2rem, 6vw, 5rem);
   align-items: start;
 }
+.page-content .giving-details--cards {
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+.page-content .giving-details--cards .giving-details__copy {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: clamp(1rem, 2.6vw, 1.5rem);
+  width: 100%;
+  align-items: stretch;
+}
 .page-content .giving-details__copy {
   display: grid;
+}
+.page-content .giving-method-card {
+  min-width: 0;
+  padding: clamp(1.15rem, 2.5vw, 1.65rem);
+  border: 1px solid rgba(53, 72, 94, 0.1);
+  border-top: 5px solid var(--guide-accent);
+  border-radius: 8px;
+  background: rgba(250, 248, 245, 0.9);
+}
+.page-content .giving-method-card h3 {
+  font-size: clamp(1.3rem, 2.3vw, 1.8rem);
+}
+.page-content .giving-method-card--intro,
+.page-content .giving-method-card--gift-aid {
+  grid-column: 1;
+}
+.page-content .giving-method-card--bank {
+  grid-column: 2;
+  grid-row: 1/span 2;
+}
+.page-content .giving-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.page-content .giving-list li {
+  position: relative;
+  padding-left: 1rem;
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.58;
+}
+.page-content .giving-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: var(--guide-accent);
+}
+.page-content .giving-privacy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1.25rem, 4vw, 3rem);
+  align-items: end;
+  padding: clamp(1.35rem, 3vw, 2rem);
+  border-left: 5px solid var(--brand-primary);
+  border-radius: 8px;
+  background: var(--brand-primary-dark);
+  color: var(--surface);
+}
+.page-content .giving-privacy .content-kicker {
+  color: var(--brand-highlight);
+}
+.page-content .giving-privacy h3 {
+  max-width: 18ch;
+  margin: 0 0 0.85rem;
+  color: var(--surface);
+  font-size: clamp(1.55rem, 3vw, 2.25rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+.page-content .giving-privacy p {
+  max-width: 58rem;
+  color: rgba(250, 248, 245, 0.84);
+}
+.page-content .giving-privacy p:last-child {
+  margin-bottom: 0;
+}
+.page-content .giving-privacy__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: flex-end;
+}
+.page-content .giving-privacy__actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.65rem;
+  padding: 0.68rem 0.95rem;
+  border: 1px solid rgba(250, 248, 245, 0.2);
+  border-radius: 999px;
+  background: rgba(250, 248, 245, 0.08);
+  color: var(--surface);
+  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+}
+.page-content .giving-privacy__actions a:first-child {
+  border-color: var(--brand-highlight);
+  background: var(--brand-highlight);
+  color: var(--brand-primary-dark);
+}
+.page-content .giving-privacy__actions a:hover {
+  border-color: rgba(197, 211, 45, 0.8);
+  color: var(--brand-highlight);
+}
+.page-content .giving-privacy__actions a:first-child:hover {
+  color: var(--brand-primary-dark);
 }
 .page-content .giving-bank-details {
   display: grid;
@@ -5295,6 +5432,33 @@ td {
   .page-content .giving-funds {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .page-content .giving-principles,
+  .page-content .giving-details--cards .giving-details__copy,
+  .page-content .giving-privacy {
+    grid-template-columns: 1fr;
+  }
+  .page-content .giving-method-card--intro,
+  .page-content .giving-method-card--gift-aid,
+  .page-content .giving-method-card--bank {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .page-content .giving-privacy__actions {
+    justify-content: flex-start;
+  }
+  .page-content .content-guide--giving {
+    grid-template-columns: 1fr;
+  }
+  .page-content .content-guide--giving > .giving-intro,
+  .page-content .content-guide--giving > .giving-panel--featured,
+  .page-content .content-guide--giving > .giving-details,
+  .page-content .content-guide--giving > .giving-principles,
+  .page-content .content-guide--giving > .giving-privacy {
+    grid-column: 1;
+  }
+  .page-content .giving-panel--featured {
+    margin-top: 0;
+  }
   .page-content .contact-info-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -5342,7 +5506,7 @@ td {
   }
   .page-content .content-about-identity__statement h2 {
     max-width: 9ch;
-    font-size: 3.25rem;
+    font-size: 2.85rem;
   }
   .page-content .content-about-identity__statement p:last-child {
     font-size: 1.15rem;
@@ -5387,11 +5551,11 @@ td {
   }
   .page-content .giving-intro {
     gap: 1.4rem;
-    padding-bottom: 1.8rem;
+    padding-bottom: 0;
   }
   .page-content .giving-intro__copy h2 {
     max-width: 10ch;
-    font-size: 3rem;
+    font-size: 2.65rem;
   }
   .page-content .giving-intro__note {
     padding-left: 1rem;
@@ -5554,7 +5718,7 @@ td {
     gap: 1.25rem;
   }
   .page-content .contact-intro__copy h2 {
-    font-size: 3rem;
+    font-size: 2.65rem;
   }
   .page-content .contact-info-grid {
     grid-template-columns: 1fr;

@@ -128,8 +128,8 @@
             max-width: 12ch;
             margin-bottom: 1rem;
             color: var(--brand-secondary);
-            font-size: clamp(2.5rem, 5.4vw, 4.45rem);
-            line-height: 0.96;
+            font-size: clamp(2.25rem, 4.4vw, 3.55rem);
+            line-height: 1.02;
             letter-spacing: 0;
         }
 
@@ -255,8 +255,8 @@
         h2 {
             margin-bottom: 1rem;
             color: $color-surface;
-            font-size: clamp(2.2rem, 4.5vw, 3.9rem);
-            line-height: 1;
+            font-size: clamp(2.05rem, 3.8vw, 3.3rem);
+            line-height: 1.04;
             letter-spacing: 0;
         }
 
@@ -353,8 +353,8 @@
         max-width: 14ch;
         margin-bottom: 0.65rem;
         color: var(--brand-primary-dark);
-        font-size: clamp(2rem, 4vw, 3.35rem);
-        line-height: 1;
+        font-size: clamp(1.9rem, 3.4vw, 3.05rem);
+        line-height: 1.04;
         letter-spacing: 0;
     }
 
