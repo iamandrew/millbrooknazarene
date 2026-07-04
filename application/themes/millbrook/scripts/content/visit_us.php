@@ -35,6 +35,21 @@ return [
     </div>
   </section>
 
+  <section class="visit-simple__arrival">
+    <figure>
+      <img src="/application/themes/millbrook/images/content/general/sunday-gathering.webp" alt="People gathered for Sunday worship in Millbrook Community Centre.">
+    </figure>
+    <div>
+      <p class="content-kicker">Finding us</p>
+      <h2>Parking, entrance, and a friendly face.</h2>
+      <div class="visit-simple__arrival-list">
+        <p><strong>Parking</strong><br>There is parking outside the community centre. The nearby park and ride is also a short walk away.</p>
+        <p><strong>Entrance</strong><br>Use the main fully accessible entrance to the community centre.</p>
+        <p><strong>Welcome team</strong><br>Someone will be there to say hello, answer questions, and help you settle in.</p>
+      </div>
+    </div>
+  </section>
+
   <div class="visit-simple__split">
     <section class="visit-simple__section">
       <h2>When You Arrive</h2>
@@ -79,7 +94,7 @@ return [
       <p>If you have a question before Sunday, we would be glad to help.</p>
     </div>
     <div class="visit-simple__contact">
-      <p><strong>Email</strong><br><a href="mailto:info@millbrooknazarene.co.uk">info@millbrooknazarene.co.uk</a></p>
+      <p><strong>Ask a question before Sunday</strong><br><a href="mailto:info@millbrooknazarene.co.uk">info@millbrooknazarene.co.uk</a></p>
       <p><strong>Before you visit</strong><br><a href="/resources/sermons">Listen to a recent sermon</a> or send us a message on Facebook.</p>
     </div>
   </section>

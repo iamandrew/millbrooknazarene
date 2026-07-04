@@ -84,9 +84,10 @@ return [
 
   <section class="content-guide-card content-guide-card--split content-guide-card--coral">
     <div>
-      <p class="content-kicker">Good to know</p>
-      <h3>Most evenings do not need any preparation.</h3>
-      <p>If there is something to bring, book, or know beforehand, it will be shared in church announcements or in the Abide WhatsApp group.</p>
+      <p class="content-kicker">First time?</p>
+      <h3>You do not need to sign up before coming.</h3>
+      <p>Most evenings do not need any preparation. If there is something to bring, book, or know beforehand, it will be shared in church announcements or in the Abide WhatsApp group.</p>
+      <p>If you are coming for the first time, it helps to send a message so someone can let you know what is happening that month and look out for you.</p>
     </div>
     <aside class="content-guide-note">
       <strong>No pressure to have everything figured out.</strong>
@@ -102,7 +103,7 @@ return [
     </div>
     <div class="content-guide-cta__steps">
       <p><strong>Want to join the WhatsApp group?</strong> Please speak to Megan.</p>
-      <p><strong>Have a question first?</strong> Megan or Irene would be glad to help.</p>
+      <p><strong>Ask Megan or Irene about Abide</strong><br><a href="/contact">Send a question before coming</a></p>
     </div>
   </section>
 </div>

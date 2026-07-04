@@ -72,8 +72,21 @@
                                     <?php if ($item['summary'] !== '') { ?>
                                         <p><?= h($item['summary']) ?></p>
                                     <?php } ?>
+                                    <?php if (!empty($item['details'])) { ?>
+                                        <dl class="whats-on-card__details">
+                                            <?php foreach ($item['details'] as $detail) { ?>
+                                                <div>
+                                                    <dt><?= h($detail['label']) ?></dt>
+                                                    <dd><?= h($detail['value']) ?></dd>
+                                                </div>
+                                            <?php } ?>
+                                        </dl>
+                                    <?php } ?>
                                     <?php if ($item['meta'] !== '') { ?>
                                         <span class="whats-on-card__meta"><?= h($item['meta']) ?></span>
+                                    <?php } ?>
+                                    <?php if ($hasLink && $item['linkLabel'] !== '') { ?>
+                                        <span class="whats-on-card__action"><?= h($item['linkLabel']) ?></span>
                                     <?php } ?>
                                 </div>
                             </<?= $tag ?>>
@@ -100,7 +113,7 @@
                 <p>It is natural to feel unsure about walking into something new. If you message us before coming, we can let you know what to expect and help you find a friendly face.</p>
             </div>
             <div class="whats-on-help__links">
-                <p><strong>General enquiries</strong><br><a href="mailto:info@millbrooknazarene.co.uk">info@millbrooknazarene.co.uk</a></p>
+                <p><strong>Check this week’s details</strong><br><a href="mailto:info@millbrooknazarene.co.uk">info@millbrooknazarene.co.uk</a></p>
                 <p><strong>Coming on Sunday?</strong><br><a href="/visit-us">Plan your first visit</a></p>
                 <p><strong>Want the wider picture?</strong><br><a href="/community">Explore Church Life</a></p>
             </div>

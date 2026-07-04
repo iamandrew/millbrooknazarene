@@ -51,9 +51,7 @@
   overflow: hidden;
   border: 1px solid rgba($color-brand-primary-dark, 0.1);
   border-radius: var(--radius-card);
-  background:
-    linear-gradient(180deg, rgba($color-surface-card, 0.98), rgba($color-surface-mist, 0.42)),
-    $color-surface-card;
+  background: rgba($color-surface-card, 0.92);
   box-shadow: none;
 }
 
@@ -62,7 +60,7 @@
   position: absolute;
   inset: 0 0 auto;
   height: 0.22rem;
-  background: linear-gradient(90deg, rgba($color-brand-secondary, 0.64), rgba($color-brand-coral, 0.5));
+  background: rgba($color-brand-secondary, 0.72);
   opacity: 0.75;
   pointer-events: none;
 }
@@ -102,7 +100,7 @@
   font-weight: 700;
   letter-spacing: 0;
   text-transform: uppercase;
-  color: $color-brand-coral;
+  color: $color-brand-primary-dark;
 }
 
 .whats-on-block__item-title {

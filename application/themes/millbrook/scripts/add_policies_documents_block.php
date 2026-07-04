@@ -67,8 +67,28 @@ foreach ($existingBlocks as $block) {
 
 $page->addBlock($contentBlockType, $area, [
     'content' => <<<'HTML'
-<div class="content-intro">
-  <p>You can use the document library below to access important church policies, safeguarding information, and other key documents.</p>
+<div class="content-guide content-guide--resources">
+  <section class="content-guide__anchored">
+    <div class="content-guide__anchor">
+      <p class="content-kicker">Policies</p>
+      <h2>Church documents and safeguarding information.</h2>
+      <p class="content-guide__lede">You can use the document library below to access important church policies, safeguarding information, and other key documents.</p>
+    </div>
+    <div class="content-guide__stack">
+      <section class="content-guide-card content-guide-card--lime">
+        <p class="content-kicker">Safeguarding</p>
+        <h3>Ask about safeguarding.</h3>
+        <p>If you have a safeguarding question or concern, please contact the safeguarding team directly.</p>
+        <p><a href="mailto:safeguarding@millbrooknazarene.co.uk">safeguarding@millbrooknazarene.co.uk</a></p>
+      </section>
+      <section class="content-guide-card">
+        <p class="content-kicker">Other questions</p>
+        <h3>Need help finding a document?</h3>
+        <p>If you cannot find what you need, send us a message and we will point you in the right direction.</p>
+        <p><a href="/contact">Contact the church</a></p>
+      </section>
+    </div>
+  </section>
 </div>
 HTML,
 ]);

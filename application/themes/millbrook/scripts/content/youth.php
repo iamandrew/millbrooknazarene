@@ -109,7 +109,8 @@ return [
     </div>
     <div class="content-guide-cta__steps">
       <p><strong>Contact Lucy Barclay</strong><br><a href="tel:+447557365504">07557 365504</a><br><a href="mailto:lucy@millbrooknazarene.co.uk">lucy@millbrooknazarene.co.uk</a></p>
-      <p><strong>Bringing a friend?</strong> That is great. Please make sure we have parent permission and emergency contact details.</p>
+      <p><strong>First visit?</strong> Please make sure we have parent permission and emergency contact details.</p>
+      <p><strong>Bringing a friend?</strong> That is great. The same first-visit details are needed for them too.</p>
     </div>
   </section>
 </div>

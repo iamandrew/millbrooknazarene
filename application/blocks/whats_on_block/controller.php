@@ -165,6 +165,12 @@ class Controller extends BlockController
             $summary = trim((string) $entry->getAttribute('summary'));
             $eyebrow = trim((string) $entry->getAttribute('eyebrow'));
             $meta = trim((string) $entry->getAttribute('meta'));
+            $details = $this->getDetailRows([
+                'When' => trim((string) $entry->getAttribute('detail_when')),
+                'Where' => trim((string) $entry->getAttribute('detail_where')),
+                'For' => trim((string) $entry->getAttribute('detail_for')),
+                'First time?' => trim((string) $entry->getAttribute('detail_first_time')),
+            ]);
             $linkLabel = trim((string) $entry->getAttribute('link_label'));
             $linkUrl = trim((string) $entry->getAttribute('link_url'));
             $section = $this->getValidSection((string) $entry->getAttribute('section'));
@@ -180,6 +186,7 @@ class Controller extends BlockController
                 'title' => $title,
                 'summary' => $summary,
                 'meta' => $meta,
+                'details' => $details,
                 'linkLabel' => $linkLabel,
                 'linkUrl' => $linkUrl,
                 'section' => $section,
@@ -207,6 +214,25 @@ class Controller extends BlockController
         });
 
         return $items;
+    }
+
+    protected function getDetailRows(array $details): array
+    {
+        $rows = [];
+
+        foreach ($details as $label => $value) {
+            $value = trim((string) $value);
+            if ($value === '') {
+                continue;
+            }
+
+            $rows[] = [
+                'label' => (string) $label,
+                'value' => $value,
+            ];
+        }
+
+        return $rows;
     }
 
     protected function isEntryVisible(Entry $entry): bool

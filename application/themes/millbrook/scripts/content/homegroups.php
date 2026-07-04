@@ -113,7 +113,7 @@ return [
       <p>If you would like to try homegroup, speak to someone from the pastoral or leadership team. They can confirm what is happening that week, share the right address, and help you settle in.</p>
     </div>
     <div class="content-guide-cta__steps">
-      <p><strong>Want to come?</strong><br><a href="/contact">Contact the team</a></p>
+      <p><strong>Ask which group would suit you</strong><br><a href="/contact">Send us a message before coming</a></p>
       <p><strong>New to Millbrook?</strong><br><a href="/visit-us">Plan a Sunday visit</a></p>
       <p><strong>Looking for other gatherings?</strong><br><a href="/community/whats-on">See What's On</a></p>
     </div>

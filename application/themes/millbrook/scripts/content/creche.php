@@ -96,7 +96,7 @@ return [
       <p>If your child is aged 0-4, you are welcome to consider using creche during the service.</p>
     </div>
     <div class="content-guide-cta__steps">
-      <p><strong>Have a question?</strong><br>Please speak to Rhonda.</p>
+      <p><strong>Ask about creche before Sunday</strong><br>Please speak to Rhonda.</p>
       <p><strong>Want to stay at first?</strong><br>That is completely fine. You can help your child settle at their own pace.</p>
       <p><strong>Planning your first Sunday?</strong><br><a href="/visit-us">Find out what to expect</a></p>
     </div>

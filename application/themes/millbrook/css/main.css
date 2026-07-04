@@ -65,7 +65,7 @@ h2,
 h3,
 h4 {
   margin: 0 0 0.8rem;
-  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Sora", "Figtree", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 400;
   line-height: 1.02;
   letter-spacing: 0;
@@ -256,7 +256,7 @@ body.nav-open {
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--brand-secondary);
+  color: var(--brand-primary-dark);
 }
 
 .drive-documents-block__count {
@@ -454,7 +454,7 @@ body.nav-open {
   font-weight: 700;
   letter-spacing: 0;
   text-transform: none;
-  color: #298fc2;
+  color: #35485e;
 }
 
 .sermons-block__count {
@@ -614,7 +614,7 @@ body.nav-open {
 .sermons-block__feature-title {
   margin: 0;
   max-width: 27ch;
-  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Sora", "Figtree", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 3rem;
   font-weight: 500;
   line-height: 1.06;
@@ -977,7 +977,7 @@ body.nav-open {
   overflow: hidden;
   border: 1px solid rgba(53, 72, 94, 0.1);
   border-radius: var(--radius-card);
-  background: linear-gradient(180deg, rgba(250, 248, 245, 0.98), rgba(41, 143, 194, 0.42)), #faf8f5;
+  background: rgba(250, 248, 245, 0.92);
   box-shadow: none;
 }
 
@@ -986,7 +986,7 @@ body.nav-open {
   position: absolute;
   inset: 0 0 auto;
   height: 0.22rem;
-  background: linear-gradient(90deg, rgba(41, 143, 194, 0.64), rgba(236, 94, 97, 0.5));
+  background: rgba(41, 143, 194, 0.72);
   opacity: 0.75;
   pointer-events: none;
 }
@@ -1026,7 +1026,7 @@ body.nav-open {
   font-weight: 700;
   letter-spacing: 0;
   text-transform: uppercase;
-  color: #ec5e61;
+  color: #35485e;
 }
 
 .whats-on-block__item-title {
@@ -1947,7 +1947,7 @@ body.menu-open .menu-toggle__label {
 .home-page .page-hero--home .page-hero__description--home {
   width: min(100%, 46rem);
   color: #faf8f5;
-  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Sora", "Figtree", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: clamp(1.3rem, 2.2vw, 2rem);
   font-weight: 600;
   line-height: 1.14;
@@ -2075,7 +2075,7 @@ body.menu-open .menu-toggle__label {
 .home-sunday__detail span {
   display: block;
   margin-bottom: 0.3rem;
-  color: var(--brand-primary);
+  color: var(--brand-primary-dark);
   font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0;
@@ -2084,7 +2084,7 @@ body.menu-open .menu-toggle__label {
 .home-sunday__detail strong {
   display: block;
   color: var(--brand-primary-dark);
-  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Sora", "Figtree", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: clamp(1.25rem, 2.2vw, 1.7rem);
   font-weight: 400;
   line-height: 1.12;
@@ -2155,7 +2155,7 @@ body.menu-open .menu-toggle__label {
 }
 .home-life__rhythm strong {
   color: #faf8f5;
-  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Sora", "Figtree", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: clamp(1.22rem, 2vw, 1.55rem);
   font-weight: 400;
   line-height: 1.16;
@@ -2253,7 +2253,7 @@ body.menu-open .menu-toggle__label {
 }
 .visit-card .whats-on-block--compact .whats-on-block__eyebrow {
   margin-top: 0.22rem;
-  color: var(--brand-primary);
+  color: var(--brand-primary-dark);
   font-size: 0.7rem;
   letter-spacing: 0.08em;
 }
@@ -2287,7 +2287,7 @@ body.menu-open .menu-toggle__label {
 .visit-details__label {
   display: block;
   margin-bottom: 0.3rem;
-  color: var(--brand-primary);
+  color: var(--brand-primary-dark);
   font-size: 0.88rem;
   font-weight: 700;
   letter-spacing: 0;
@@ -2794,7 +2794,7 @@ td {
   line-height: 1.2;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--brand-primary);
+  color: var(--brand-primary-dark);
 }
 .page-content .content-feature,
 .page-content .content-split,
@@ -3130,7 +3130,7 @@ td {
   border: 0;
   box-shadow: none;
   color: var(--brand-secondary);
-  font-size: clamp(2.3rem, 4vw, 3.5rem);
+  font-size: clamp(2.3rem, 4vw, 3rem);
   line-height: 1.04;
   letter-spacing: 0;
 }
@@ -3490,7 +3490,7 @@ td {
   color: rgba(250, 248, 245, 0.88);
 }
 .page-content .content-guide--whats-on-grid {
-  gap: clamp(2.25rem, 5vw, 4.75rem);
+  gap: clamp(1.9rem, 4vw, 3.75rem);
 }
 .page-content .whats-on-intro {
   display: grid;
@@ -3556,22 +3556,18 @@ td {
 }
 .page-content .whats-on-cards {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(0.9rem, 2vw, 1.25rem);
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: clamp(0.85rem, 1.8vw, 1.15rem);
   align-items: stretch;
-}
-.page-content .whats-on-cards--seasonal,
-.page-content .whats-on-cards--special {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .page-content .whats-on-card {
   --whats-on-accent: var(--brand-secondary);
   position: relative;
   display: flex;
   min-width: 0;
-  min-height: 13.75rem;
+  min-height: 0;
   overflow: hidden;
-  padding: clamp(1.05rem, 2.2vw, 1.35rem);
+  padding: clamp(1rem, 2vw, 1.25rem);
   border: 1px solid rgba(53, 72, 94, 0.1);
   border-left: 5px solid var(--whats-on-accent);
   border-radius: 8px;
@@ -3610,7 +3606,7 @@ td {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.7rem;
   min-width: 0;
 }
 .page-content .whats-on-card__eyebrow {
@@ -3620,7 +3616,7 @@ td {
   line-height: 1.2;
   letter-spacing: 0.11em;
   text-transform: uppercase;
-  color: var(--whats-on-accent);
+  color: var(--brand-primary-dark);
 }
 .page-content .whats-on-card h3 {
   margin: 0;
@@ -3635,15 +3631,57 @@ td {
   color: var(--text-muted);
   line-height: 1.6;
 }
+.page-content .whats-on-card__details {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0.15rem 0 0;
+  padding: 0.8rem 0 0;
+  border-top: 1px solid rgba(53, 72, 94, 0.12);
+}
+.page-content .whats-on-card__details div {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 0.32fr) minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: baseline;
+}
+.page-content .whats-on-card__details dt,
+.page-content .whats-on-card__details dd {
+  margin: 0;
+  font-size: 0.93rem;
+  line-height: 1.38;
+}
+.page-content .whats-on-card__details dt {
+  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 800;
+  color: var(--brand-primary-dark);
+}
+.page-content .whats-on-card__details dd {
+  color: var(--text-muted);
+}
 .page-content .whats-on-card__meta {
   display: block;
-  margin-top: auto;
-  padding-top: 0.75rem;
+  margin-top: 0.15rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(53, 72, 94, 0.12);
   font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 0.86rem;
   font-weight: 750;
   line-height: 1.4;
   color: var(--brand-primary-dark);
+}
+.page-content .whats-on-card__action {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: auto;
+  padding-top: 0.15rem;
+  color: var(--brand-primary-dark);
+  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 0.94rem;
+  font-weight: 850;
+  line-height: 1.35;
+  text-decoration: underline;
+  text-decoration-color: rgba(41, 143, 194, 0.45);
+  text-underline-offset: 0.16em;
 }
 .page-content .whats-on-help {
   display: grid;
@@ -5225,7 +5263,6 @@ td {
   color: var(--brand-primary-dark);
 }
 .page-content .visit-simple {
-  width: min(100%, 54rem);
   margin-inline: auto;
   display: grid;
   gap: clamp(1.7rem, 4vw, 2.8rem);
@@ -5289,7 +5326,7 @@ td {
   line-height: 1.2;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--brand-primary);
+  color: var(--brand-primary-dark);
 }
 .page-content .visit-simple__detail strong {
   font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -5303,6 +5340,46 @@ td {
   font-size: 1rem;
   line-height: 1.7;
   color: var(--text-muted);
+}
+.page-content .visit-simple__arrival {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(17rem, 0.72fr);
+  gap: clamp(1.1rem, 3vw, 1.75rem);
+  align-items: stretch;
+  padding: clamp(1rem, 2.5vw, 1.25rem);
+  border: 1px solid rgba(53, 72, 94, 0.12);
+  border-radius: 8px;
+  background: rgba(250, 248, 245, 0.9);
+}
+.page-content .visit-simple__arrival figure {
+  min-width: 0;
+  margin: 0;
+}
+.page-content .visit-simple__arrival img {
+  width: 100%;
+  height: 100%;
+  min-height: 16rem;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.page-content .visit-simple__arrival h2 {
+  color: var(--brand-primary-dark);
+  font-size: clamp(1.55rem, 2.8vw, 2.15rem);
+}
+.page-content .visit-simple__arrival-list {
+  display: grid;
+  gap: 0.8rem;
+}
+.page-content .visit-simple__arrival-list p {
+  margin: 0;
+  padding-left: 0.95rem;
+  border-left: 3px solid rgba(41, 143, 194, 0.42);
+}
+.page-content .visit-simple__arrival-list p:nth-child(2) {
+  border-left-color: rgba(197, 211, 45, 0.85);
+}
+.page-content .visit-simple__arrival-list p:nth-child(3) {
+  border-left-color: rgba(134, 110, 175, 0.58);
 }
 .page-content .visit-simple__split {
   display: grid;
@@ -5421,7 +5498,8 @@ td {
   .page-content .whats-on-intro,
   .page-content .whats-on-board,
   .page-content .whats-on-board__header,
-  .page-content .whats-on-help {
+  .page-content .whats-on-help,
+  .page-content .visit-simple__arrival {
     grid-template-columns: 1fr;
   }
   .page-content .whats-on-cards,
@@ -5708,9 +5786,6 @@ td {
   .page-content .whats-on-cards--special {
     grid-template-columns: 1fr;
   }
-  .page-content .whats-on-card {
-    min-height: 13.5rem;
-  }
   .page-content .whats-on-card h3 {
     font-size: 1.6rem;
   }
@@ -5744,6 +5819,7 @@ td {
   }
   .page-content .visit-simple__details,
   .page-content .visit-simple__split,
+  .page-content .visit-simple__arrival,
   .page-content .visit-simple__cta {
     grid-template-columns: 1fr;
   }
@@ -6114,7 +6190,7 @@ body.ccm-edit-mode .page-content__inner--builder .ccm-area-drag-area {
 }
 .not-found-page__detail strong {
   display: block;
-  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Sora", "Figtree", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 1.55rem;
   line-height: 1.05;
   letter-spacing: 0;
@@ -6167,7 +6243,7 @@ body.ccm-edit-mode .page-content__inner--builder .ccm-area-drag-area {
   transform: translateY(-1px);
 }
 .not-found-page__link strong {
-  font-family: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Sora", "Figtree", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 1rem;
   line-height: 1.1;
   letter-spacing: 0;
