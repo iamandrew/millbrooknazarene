@@ -226,7 +226,7 @@ $ogImageUrl = millbrook_absolute_url($thumbnailUrl !== '' ? $thumbnailUrl : mill
                         <div class="site-menu__meta">
                             <p class="site-menu__eyebrow">Gatherings</p>
                             <p>Sundays at 11:00am</p>
-                            <p>Homegroup on Wednesday evenings</p>
+                            <p>Homegroups on Sunday and Wednesday evenings</p>
                         </div>
 
                         <div class="site-menu__meta">

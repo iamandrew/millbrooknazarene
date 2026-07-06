@@ -94,7 +94,7 @@ return [
       <p>If you have a question before Sunday, we would be glad to help.</p>
     </div>
     <div class="visit-simple__contact">
-      <p><strong>Ask a question before Sunday</strong><br><a href="mailto:info@millbrooknazarene.co.uk">info@millbrooknazarene.co.uk</a></p>
+      <p><strong>Have a question?</strong><br><a href="mailto:info@millbrooknazarene.co.uk">info@millbrooknazarene.co.uk</a></p>
       <p><strong>Before you visit</strong><br><a href="/resources/sermons">Listen to a recent sermon</a> or send us a message on Facebook.</p>
     </div>
   </section>

@@ -39,6 +39,7 @@ $paths = [
     '/community',
     '/community/whats-on',
     '/community/homegroups',
+    '/community/young-adults',
     '/community/children',
     '/community/youth',
     '/community/mens-ministry',

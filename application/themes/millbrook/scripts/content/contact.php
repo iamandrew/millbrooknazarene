@@ -38,6 +38,12 @@ return [
     </article>
 
     <article class="contact-info-card contact-info-card--coral">
+      <p class="content-kicker">Pastoral support</p>
+      <h3>Prayer, care, or support</h3>
+      <p><a href="mailto:victoria@millbrooknazarene.co.uk">victoria@millbrooknazarene.co.uk</a></p>
+    </article>
+
+    <article class="contact-info-card">
       <p class="content-kicker">Social</p>
       <h3>Facebook and Instagram</h3>
       <p>Follow Millbrook Church of the Nazarene on Facebook and Instagram for recent updates, photos, and reminders.</p>

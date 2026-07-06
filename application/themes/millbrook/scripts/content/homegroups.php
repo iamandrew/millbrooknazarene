@@ -10,8 +10,8 @@ return [
       <p class="content-kicker">Homegroups</p>
       <h2>A smaller place to connect, pray, and explore faith.</h2>
       <p class="content-guide__lede">Homegroups are small, informal gatherings where we pray, ask questions, and explore faith together.</p>
-      <p>Millbrook has three homegroup opportunities: a Sunday evening women’s group connected with Abide, and two Wednesday evening groups, including one for young adults.</p>
-      <p>Because homegroups meet in homes, it is best to get in touch before coming. We can confirm the current rhythm, help you find the right group, and share the address privately.</p>
+      <p>Millbrook has three homegroup opportunities across Sunday and Wednesday evenings: a Sunday evening women’s group connected with Abide, and two Wednesday evening groups, including one for young adults.</p>
+      <p>Because homegroups meet in homes, it is helpful to get in touch first. We can confirm the current rhythm, help you find the right group, and share the address privately.</p>
     </div>
 
     <div class="content-guide__stack">
@@ -31,7 +31,7 @@ return [
         <div>
           <p class="content-kicker">First time</p>
           <h3>You can join at any time.</h3>
-          <p>Because groups meet in homes, it is best to speak to someone from the pastoral or leadership team before coming so they can give you the right address and help you know what to expect.</p>
+          <p>Because groups meet in homes, you are welcome to get in touch first so someone can give you the right address and help you know what to expect.</p>
         </div>
         <aside class="content-guide-note">
           <strong>Not sure which group fits?</strong>
@@ -53,18 +53,21 @@ return [
         <p class="content-kicker">Sunday evenings</p>
         <h3>Abide women’s homegroup</h3>
         <p>A women-only homegroup led by Carolyn, connected with <a href="/community/womens-ministry">Abide Women’s Ministry</a>.</p>
+        <p><a href="mailto:megan@millbrooknazarene.co.uk">Ask about Abide</a></p>
       </article>
 
       <article class="homegroup-option homegroup-option--blue">
         <p class="content-kicker">Wednesday evenings</p>
         <h3>John and Iris</h3>
         <p>A midweek homegroup for conversation, Bible discussion, prayer, and shared support.</p>
+        <p><a href="mailto:john@millbrooknazarene.co.uk">Ask about this homegroup</a></p>
       </article>
 
       <article class="homegroup-option homegroup-option--purple">
         <p class="content-kicker">Wednesday evenings</p>
         <h3>Young Adults</h3>
         <p>A young adults homegroup at Lucy and Nick’s, with space to eat together, talk honestly, explore faith, and pray.</p>
+        <p><a href="/community/young-adults">Find out about Young Adults</a></p>
       </article>
     </div>
   </section>
@@ -109,11 +112,11 @@ return [
   <section class="content-guide-cta">
     <div>
       <p class="content-kicker">Next step</p>
-      <h2>Ask which group would suit you best.</h2>
-      <p>If you would like to try homegroup, speak to someone from the pastoral or leadership team. They can confirm what is happening that week, share the right address, and help you settle in.</p>
+      <h2>We can help you find the right group.</h2>
+      <p>If you would like to try homegroup, John can confirm what is happening that week, share the right address, and help you settle in.</p>
     </div>
     <div class="content-guide-cta__steps">
-      <p><strong>Ask which group would suit you</strong><br><a href="/contact">Send us a message before coming</a></p>
+      <p><strong>Questions about homegroups?</strong><br><a href="mailto:john@millbrooknazarene.co.uk">john@millbrooknazarene.co.uk</a></p>
       <p><strong>New to Millbrook?</strong><br><a href="/visit-us">Plan a Sunday visit</a></p>
       <p><strong>Looking for other gatherings?</strong><br><a href="/community/whats-on">See What's On</a></p>
     </div>

@@ -74,7 +74,16 @@ return [
         <span class="church-life-tile__copy">
           <span class="content-kicker">Midweek</span>
           <span class="church-life-tile__title">Homegroups</span>
-          <span class="church-life-tile__summary">Smaller spaces for friendship, prayer, Bible study, and support.</span>
+          <span class="church-life-tile__summary">Sunday and Wednesday evening spaces for friendship, prayer, Bible study, and support.</span>
+        </span>
+      </a>
+
+      <a class="church-life-tile" href="/community/young-adults">
+        <img src="/application/themes/millbrook/images/content/homegroups/young-adults-homegroup.webp" alt="Young adults sharing food together at homegroup.">
+        <span class="church-life-tile__copy">
+          <span class="content-kicker">Young adults</span>
+          <span class="church-life-tile__title">Young Adults</span>
+          <span class="church-life-tile__summary">A Wednesday evening space for food, friendship, Bible discussion, and prayer.</span>
         </span>
       </a>
 

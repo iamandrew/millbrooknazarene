@@ -81,11 +81,11 @@ return [
     <div>
       <p class="content-kicker">Next step</p>
       <h2>Come along to the next gathering.</h2>
-      <p>Send a message on social media or email Rhyan or Matt to ask what is coming up next.</p>
+      <p>Rhyan and Matt can help you find out what is coming up next. You can also send a message on social media.</p>
     </div>
     <div class="content-guide-cta__steps">
-      <p><strong>Ask Rhyan what is next</strong><br><a href="mailto:rhyanmccoy@millbrooknazarene.co.uk">rhyanmccoy@millbrooknazarene.co.uk</a></p>
-      <p><strong>Ask Matt what is next</strong><br><a href="mailto:matt@millbrooknazarene.co.uk">matt@millbrooknazarene.co.uk</a></p>
+      <p><strong>Questions about Men's Ministry?</strong><br><a href="mailto:rhyanmccoy@millbrooknazarene.co.uk">rhyanmccoy@millbrooknazarene.co.uk</a></p>
+      <p><strong>Matt can also help</strong><br><a href="mailto:matt@millbrooknazarene.co.uk">matt@millbrooknazarene.co.uk</a></p>
       <p><strong>Want to see other gatherings?</strong><br><a href="/community/whats-on">Go to What's On</a></p>
     </div>
   </section>

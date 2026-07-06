@@ -52,6 +52,6 @@ foreach ($area->getAreaBlocksArray($page) as $block) {
 
 $page->addBlock($contentBlockType, $area, ['content' => $childrenFamiliesContent['content']]);
 
-$output->writeln('<info>Updated Children & Families page placeholder content.</info>');
+$output->writeln('<info>Updated Children & Families page content.</info>');
 
 return 0;

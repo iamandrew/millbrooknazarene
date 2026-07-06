@@ -181,6 +181,11 @@ $renderArea = static function (string $areaName, $c, callable $fallback): void {
                             <p>A relaxed space with snacks, games, teaching, trips, and time together.</p>
                         </div>
                         <div class="visit-details__item">
+                            <span class="visit-details__label">Homegroups</span>
+                            <strong>Sunday and Wednesday evenings in homes</strong>
+                            <p>Smaller spaces for friendship, Bible discussion, support, and prayer.</p>
+                        </div>
+                        <div class="visit-details__item">
                             <span class="visit-details__label">Community</span>
                             <strong>Community Cafe, Cafe Fit, and local events</strong>
                             <p>Simple spaces through the week for connection, wellbeing, friendship, and support.</p>

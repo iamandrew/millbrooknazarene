@@ -94,6 +94,7 @@ $seedMainArea = static function (Page $page, string $html) use ($contentBlockTyp
 $womensMinistryContent = require __DIR__ . '/content/womens_ministry.php';
 $crecheContent = require __DIR__ . '/content/creche.php';
 $youthContent = require __DIR__ . '/content/youth.php';
+$youngAdultsContent = require __DIR__ . '/content/young_adults.php';
 
 $tree = [
     [
@@ -132,6 +133,7 @@ HTML,
 <ul>
   <li><a href="/community/whats-on">What’s On</a></li>
   <li><a href="/community/homegroups">Homegroups</a></li>
+  <li><a href="/community/young-adults">Young Adults</a></li>
   <li><a href="/community/children">Children &amp; Families</a></li>
   <li><a href="/community/mens-ministry">Men</a></li>
   <li><a href="/community/womens-ministry">Women</a></li>
@@ -173,6 +175,12 @@ HTML,
   <li>A natural place to ask questions and get to know others</li>
 </ul>
 HTML,
+            ],
+            [
+                'name' => $youngAdultsContent['name'],
+                'handle' => 'young-adults',
+                'description' => $youngAdultsContent['description'],
+                'content' => $youngAdultsContent['content'],
             ],
             [
                 'name' => 'Children & Families',

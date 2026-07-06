@@ -38,11 +38,11 @@ $blockData = [
             'linkUrl' => '/visit-us',
         ],
         [
-            'eyebrow' => 'Midweek',
-            'title' => 'Homegroups, prayer, and shared life',
-            'summary' => 'Smaller gatherings through the week help people build friendships, pray together, and keep growing in faith.',
-            'linkLabel' => 'Explore church life',
-            'linkUrl' => '/community',
+            'eyebrow' => 'Homegroups',
+            'title' => 'Sunday and Wednesday evenings in homes',
+            'summary' => 'Smaller gatherings help people build friendships, pray together, and keep growing in faith.',
+            'linkLabel' => 'Homegroups',
+            'linkUrl' => '/community/homegroups',
         ],
         [
             'eyebrow' => 'Families',

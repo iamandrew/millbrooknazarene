@@ -1,0 +1,120 @@
+<?php
+
+use Concrete\Core\Area\Area;
+use Concrete\Core\Attribute\Key\CollectionKey;
+use Concrete\Core\Block\BlockType\BlockType;
+use Concrete\Core\File\FileList;
+use Concrete\Core\File\Import\FileImporter;
+use Concrete\Core\Page\Page;
+use Concrete\Core\Page\Template as PageTemplate;
+use Concrete\Core\Page\Type\Type as PageType;
+
+$contentBlockType = BlockType::getByHandle('content');
+
+if (!$contentBlockType) {
+    $output->writeln('<error>Content block type is not available.</error>');
+    return 1;
+}
+
+$youngAdultsContent = require __DIR__ . '/content/young_adults.php';
+$page = Page::getByPath('/community/young-adults', 'ACTIVE');
+
+if (!$page instanceof Page || $page->isError()) {
+    $parent = Page::getByPath('/community', 'ACTIVE');
+    $pageType = PageType::getByHandle('page');
+    $fullTemplate = PageTemplate::getByHandle('full');
+
+    if (!$parent instanceof Page || $parent->isError() || !$pageType || !$fullTemplate) {
+        $output->writeln('<error>Could not resolve /community, page type, or full template.</error>');
+        return 1;
+    }
+
+    $page = $parent->add(
+        $pageType,
+        [
+            'cName' => $youngAdultsContent['name'],
+            'cHandle' => 'young-adults',
+            'cDescription' => $youngAdultsContent['description'],
+        ],
+        $fullTemplate
+    );
+
+    $output->writeln('<info>Created /community/young-adults.</info>');
+}
+
+$page->update([
+    'cName' => $youngAdultsContent['name'],
+    'cHandle' => 'young-adults',
+    'cDescription' => $youngAdultsContent['description'],
+]);
+$page->rescanCollectionPath();
+$page = Page::getByID($page->getCollectionID(), 'ACTIVE');
+
+$area = Area::getOrCreate($page, 'Main');
+foreach ($area->getAreaBlocksArray($page) as $block) {
+    $block->deleteBlock();
+}
+
+$page->addBlock($contentBlockType, $area, ['content' => $youngAdultsContent['content']]);
+
+$heroImagePath = DIR_BASE . '/application/themes/millbrook/images/content/homegroups/young-adults-homegroup.webp';
+$heroImage = find_or_import_young_adults_hero_image($heroImagePath);
+
+if ($heroImage) {
+    $heroImageKey = CollectionKey::getByHandle('hero_image');
+    $disableHeroImageKey = CollectionKey::getByHandle('disable_hero_image');
+
+    if ($heroImageKey) {
+        $page->setAttribute($heroImageKey, $heroImage);
+        $output->writeln('<info>Set Young Adults page hero image.</info>');
+    } else {
+        $output->writeln('<comment>Hero image attribute does not exist yet; run the hero attributes seed first.</comment>');
+    }
+
+    if ($disableHeroImageKey) {
+        $page->setAttribute($disableHeroImageKey, false);
+    }
+} else {
+    $output->writeln('<comment>Young Adults hero image not found at ' . $heroImagePath . '.</comment>');
+}
+
+$output->writeln('<info>Updated Young Adults page content from the leadership questionnaire.</info>');
+
+return 0;
+
+function find_or_import_young_adults_hero_image(string $path)
+{
+    if (!is_file($path)) {
+        return null;
+    }
+
+    $filename = basename($path);
+    $list = new FileList();
+    $list->ignorePermissions();
+    $list->filterByKeywords($filename);
+
+    foreach ($list->getResults() as $file) {
+        $version = $file->getApprovedVersion();
+        if ($version && $version->getFileName() === $filename) {
+            $sourceHash = sha1_file($path);
+            $existingContents = $version->getFileContents();
+            $existingHash = $existingContents !== null ? sha1($existingContents) : '';
+
+            if ($sourceHash !== $existingHash) {
+                $version = $file->createNewVersion(true);
+                $version->updateContents(file_get_contents($path));
+            }
+
+            $version->updateTitle('Young Adults hero');
+            $version->updateDescription('Young adults sharing food together at homegroup.');
+
+            return $file;
+        }
+    }
+
+    $version = app(FileImporter::class)->importLocalFile($path, $filename);
+    $version->updateTitle('Young Adults hero');
+    $version->updateDescription('Young adults sharing food together at homegroup.');
+
+    return $version->getFile();
+}

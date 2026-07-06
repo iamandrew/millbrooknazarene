@@ -102,8 +102,8 @@ return [
       <p>Dates are shared in church announcements, the newsletter, and the Abide WhatsApp group.</p>
     </div>
     <div class="content-guide-cta__steps">
-      <p><strong>Want to join the WhatsApp group?</strong> Please speak to Megan.</p>
-      <p><strong>Ask Megan or Irene about Abide</strong><br><a href="/contact">Send a question before coming</a></p>
+      <p><strong>Want to join the WhatsApp group?</strong> Megan can point you in the right direction.</p>
+      <p><strong>Questions about Abide?</strong><br><a href="mailto:megan@millbrooknazarene.co.uk">megan@millbrooknazarene.co.uk</a></p>
     </div>
   </section>
 </div>

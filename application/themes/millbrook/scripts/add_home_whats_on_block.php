@@ -74,6 +74,13 @@ $blockData = [
             'linkUrl' => '/community/youth',
         ],
         [
+            'eyebrow' => 'Homegroups',
+            'title' => 'Sunday and Wednesday evenings in homes',
+            'summary' => 'Smaller spaces for friendship, Bible discussion, support, and prayer.',
+            'linkLabel' => 'Homegroups',
+            'linkUrl' => '/community/homegroups',
+        ],
+        [
             'eyebrow' => 'Community',
             'title' => 'Community Cafe, Cafe Fit, and local events',
             'summary' => 'Simple spaces through the week for connection, wellbeing, friendship, and support.',
@@ -97,7 +104,8 @@ foreach ($existingBlocks as $block) {
         $currentItemsJson = trim((string) ($controller->itemsJson ?? ''));
         $shouldRefreshItems = $currentItemsJson === ''
             || str_contains($currentItemsJson, 'Recent teaching')
-            || str_contains($currentItemsJson, 'Homegroups')
+            || !str_contains($currentItemsJson, 'Homegroups')
+            || !str_contains($currentItemsJson, 'Sunday and Wednesday evenings in homes')
             || !str_contains($currentItemsJson, 'Community Cafe')
             || str_contains($currentItemsJson, 'Latest sermons');
         $blockData = [

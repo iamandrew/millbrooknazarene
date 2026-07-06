@@ -105,10 +105,10 @@ return [
     <div>
       <p class="content-kicker">Next step</p>
       <h2>Come along and try it out.</h2>
-      <p>If you have a question before coming, please get in touch with Lucy. You can also keep an eye on our social media for updates about youth nights, outings, and trips.</p>
+      <p>If you have a question or would like to check anything before coming, Lucy would be happy to help. You can also keep an eye on our social media for updates about youth nights, outings, and trips.</p>
     </div>
     <div class="content-guide-cta__steps">
-      <p><strong>Contact Lucy Barclay</strong><br><a href="tel:+447557365504">07557 365504</a><br><a href="mailto:lucy@millbrooknazarene.co.uk">lucy@millbrooknazarene.co.uk</a></p>
+      <p><strong>Ask about Youth</strong><br><a href="mailto:lucy@millbrooknazarene.co.uk">lucy@millbrooknazarene.co.uk</a></p>
       <p><strong>First visit?</strong> Please make sure we have parent permission and emergency contact details.</p>
       <p><strong>Bringing a friend?</strong> That is great. The same first-visit details are needed for them too.</p>
     </div>
