@@ -15,7 +15,7 @@ return [
     </div>
   </section>
 
-  <section class="giving-panel giving-panel--featured" data-giving-widget data-campaign-id="millbrook-nazarene-giving" data-website-base="https://givealittle.co" data-donation-prefix="/c/" data-return-path="/giving?thanks=1" data-tag="millbrook-web" data-fetch-campaign="false" data-donation-limit="1000">
+  <section class="giving-panel giving-panel--featured" data-giving-widget data-campaign-id="millbrook-nazarene-giving" data-website-base="https://givealittle.co" data-donation-prefix="/c/" data-donation-action="/givealittle/start" data-public-campaign-url="https://givealittle.co/c/millbrook-nazarene-giving" data-return-path="/giving?thanks=1" data-tag="millbrook-web" data-fetch-campaign="false" data-donation-limit="1000">
     <div class="giving-panel__header">
       <div>
         <p class="content-kicker">Online giving</p>
@@ -65,7 +65,7 @@ return [
         <button class="btn giving-submit" type="submit" data-giving-submit>Continue securely</button>
         <div class="giving-form__feedback">
           <p class="giving-status" data-giving-status role="status" aria-live="polite">Loading the Give A Little campaign…</p>
-          <a class="giving-fallback-link" href="https://givealittle.co" target="_blank" rel="noopener" data-giving-fallback-link hidden>Open the Give A Little donation page in a new tab</a>
+          <a class="giving-fallback-link" href="https://givealittle.co/c/millbrook-nazarene-giving" target="_blank" rel="noopener" data-giving-fallback-link hidden>Open the Give A Little donation page in a new tab</a>
         </div>
       </div>
     </form>

@@ -210,7 +210,8 @@ document.addEventListener('DOMContentLoaded', function () {
         var apiBase = (widget.getAttribute('data-api-base') || '').replace(/\/$/, '');
         var websiteBase = (widget.getAttribute('data-website-base') || '').replace(/\/$/, '');
         var donationPrefix = widget.getAttribute('data-donation-prefix') || widget.getAttribute('data-checkout-prefix') || '/c/';
-        var returnPath = widget.getAttribute('data-return-path') || window.location.pathname;
+        var donationAction = widget.getAttribute('data-donation-action') || '/givealittle/start';
+        var publicCampaignUrl = widget.getAttribute('data-public-campaign-url') || '';
         var tag = (widget.getAttribute('data-tag') || '').slice(0, 36);
         var fetchCampaign = widget.getAttribute('data-fetch-campaign') !== 'false';
         var configuredDonationLimit = parseFloat(widget.getAttribute('data-donation-limit') || '');
@@ -389,8 +390,34 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
 
-        var getReturnUrl = function () {
-            return new URL(returnPath, window.location.origin).toString();
+        var getPublicCampaignUrl = function () {
+            if (publicCampaignUrl) {
+                return new URL(publicCampaignUrl, websiteBase + '/').toString();
+            }
+
+            return new URL(donationPrefix + encodeURIComponent(donationCampaignId), websiteBase + '/').toString();
+        };
+
+        var getDonationActionUrl = function () {
+            return new URL(donationAction, window.location.origin).toString();
+        };
+
+        var submitDonationForm = function (actionUrl, fields) {
+            var postForm = document.createElement('form');
+            postForm.method = 'post';
+            postForm.action = actionUrl;
+            postForm.hidden = true;
+
+            Object.keys(fields).forEach(function (name) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = name;
+                input.value = fields[name];
+                postForm.appendChild(input);
+            });
+
+            document.body.appendChild(postForm);
+            postForm.submit();
         };
 
         var disableWithMessage = function (message) {
@@ -486,18 +513,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
             var frequency = form.querySelector('input[name="giving_frequency"]:checked');
             var isRecurring = frequency && frequency.value === 'monthly';
-            var donationPath = donationPrefix + encodeURIComponent(donationCampaignId) + '/initiate-donation';
-            var donationUrl = new URL(donationPath, websiteBase + '/');
-
-            donationUrl.searchParams.set('amount', amount.toFixed(2));
-            donationUrl.searchParams.set('recurring', isRecurring ? 'true' : 'false');
-            donationUrl.searchParams.set('returnUrl', getReturnUrl());
+            var donationUrlString = getPublicCampaignUrl();
+            var donationActionUrl = getDonationActionUrl();
+            var donationFields = {
+                amount: amount.toFixed(2).replace(/\.00$/, ''),
+                isRecurring: isRecurring ? 'true' : 'false',
+                tag: tag
+            };
 
             if (tag) {
-                donationUrl.searchParams.set('tag', tag);
+                donationUrlString += (donationUrlString.indexOf('?') === -1 ? '?' : '&') + 'tag=' + encodeURIComponent(tag);
             }
-
-            var donationUrlString = donationUrl.toString();
 
             setInteractive(false);
             setFallbackLink(donationUrlString, true);
@@ -505,7 +531,7 @@ document.addEventListener('DOMContentLoaded', function () {
             showDonationOverlay(donationUrlString);
 
             window.setTimeout(function () {
-                window.location.href = donationUrlString;
+                submitDonationForm(donationActionUrl, donationFields);
             }, 650);
 
             window.setTimeout(function () {

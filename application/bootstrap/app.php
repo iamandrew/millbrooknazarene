@@ -183,3 +183,83 @@ require_once DIR_APPLICATION . '/src/KidsClub/RegistrationSheet.php';
     [],
     ['POST']
 );
+
+\Route::register(
+    '/givealittle/start',
+    static function () {
+        $request = \Request::getInstance();
+
+        $campaignId = 'd7cf8912-aaae-4fb2-8c5b-224f5b3ac8a3';
+        $campaignUrl = 'https://givealittle.co/c/millbrook-nazarene-giving';
+        $donationActionUrl = 'https://givealittle.co/c/' . $campaignId . '/select-amount';
+
+        $redirect = static function (string $url): \Symfony\Component\HttpFoundation\RedirectResponse {
+            return new \Symfony\Component\HttpFoundation\RedirectResponse($url, 303);
+        };
+
+        $amountValue = trim((string) $request->request->get('amount', ''));
+        $amountValue = str_replace(',', '.', $amountValue);
+        $amount = is_numeric($amountValue) ? (float) $amountValue : 0.0;
+
+        if ($amount < 1 || $amount > 1000) {
+            return $redirect($campaignUrl);
+        }
+
+        $isRecurringValue = strtolower(trim((string) $request->request->get('isRecurring', 'false')));
+        $isRecurring = in_array($isRecurringValue, ['1', 'true', 'monthly'], true) ? 'true' : 'false';
+        $tag = preg_replace('/[^a-zA-Z0-9_-]/', '', (string) $request->request->get('tag', 'millbrook-web'));
+        $tag = substr($tag ?: 'millbrook-web', 0, 36);
+
+        $postFields = http_build_query([
+            'amount' => rtrim(rtrim(number_format($amount, 2, '.', ''), '0'), '.'),
+            'isRecurring' => $isRecurring,
+            'tag' => $tag,
+        ]);
+
+        $ch = curl_init($donationActionUrl);
+        curl_setopt_array($ch, [
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $postFields,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => true,
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/x-www-form-urlencoded',
+                'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Origin: https://givealittle.co',
+                'Referer: ' . $campaignUrl,
+                'User-Agent: MillbrookChurchWebsite/1.0',
+            ],
+        ]);
+
+        $response = curl_exec($ch);
+        $status = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $headerSize = (int) curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $error = curl_error($ch);
+        curl_close($ch);
+
+        if ($response !== false && $status >= 300 && $status < 400) {
+            $headers = substr($response, 0, $headerSize);
+
+            if (preg_match('/^location:\s*(.+)$/mi', $headers, $matches)) {
+                $location = trim($matches[1]);
+
+                if (strpos($location, 'https://givealittle.co/c/') === 0) {
+                    return $redirect($location);
+                }
+            }
+        }
+
+        error_log('[givealittle] Unable to start donation handoff. HTTP ' . $status . ($error ? ' - ' . $error : ''));
+
+        return $redirect($campaignUrl . '#' . rawurlencode($tag));
+    },
+    'givealittle_start',
+    [],
+    [],
+    '',
+    [],
+    ['POST']
+);
