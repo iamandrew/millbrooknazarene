@@ -32,6 +32,6 @@ foreach ($area->getAreaBlocksArray($page) as $block) {
 
 $page->addBlock($contentBlockType, $area, ['content' => $givingContent['content']]);
 
-$output->writeln('<info>Updated Giving page content with the Give A Little test form.</info>');
+$output->writeln('<info>Updated Giving page content with the live Give A Little form.</info>');
 
 return 0;

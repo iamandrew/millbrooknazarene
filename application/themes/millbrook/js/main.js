@@ -211,7 +211,9 @@ document.addEventListener('DOMContentLoaded', function () {
         var checkoutPrefix = widget.getAttribute('data-checkout-prefix') || '/c/';
         var returnPath = widget.getAttribute('data-return-path') || window.location.pathname;
         var tag = (widget.getAttribute('data-tag') || '').slice(0, 36);
-        var donationLimit = null;
+        var fetchCampaign = widget.getAttribute('data-fetch-campaign') !== 'false';
+        var configuredDonationLimit = parseFloat(widget.getAttribute('data-donation-limit') || '');
+        var donationLimit = Number.isNaN(configuredDonationLimit) ? null : configuredDonationLimit;
         var selectedAmount = null;
         var checkoutCampaignId = campaignId;
 
@@ -346,47 +348,54 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        if (!campaignId || !apiBase || !websiteBase || typeof fetch === 'undefined') {
-            disableWithMessage('The Give A Little test campaign is not configured yet.');
+        if (!campaignId || !websiteBase) {
+            disableWithMessage('Online giving is not available at the moment. You can still give by bank transfer or contact finance for help.');
             return;
         }
 
-        fetch(apiBase + '/webdonations/campaigns/' + encodeURIComponent(campaignId), {
-            headers: {
-                Accept: 'application/json'
-            }
-        }).then(function (response) {
-            if (!response.ok) {
-                throw new Error('Campaign unavailable');
-            }
-
-            return response.json();
-        }).then(function (campaign) {
-            checkoutCampaignId = campaign.id || campaignId;
-            donationLimit = campaign.donationLimit ? parseFloat(campaign.donationLimit) : null;
-
-            if (campaignName && (campaign.charityName || campaign.heading)) {
-                campaignName.textContent = campaign.charityName || campaign.heading;
-            }
-
-            renderAmounts(campaign.items || []);
-
-            if (customAmount && campaign.showCustomAmount === false) {
-                customAmount.closest('.giving-custom-amount').hidden = true;
-            }
-
-            if (campaign.allowRecurring === false) {
-                widget.querySelectorAll('input[name="giving_frequency"][value="monthly"]').forEach(function (input) {
-                    input.closest('label').hidden = true;
-                    input.checked = false;
-                });
-            }
-
+        if (!fetchCampaign) {
             setInteractive(true);
-            setStatus('Ready to continue to Give A Little’s secure test checkout.', 'success');
-        }).catch(function () {
-            disableWithMessage('The Give A Little test campaign could not be found. Add the published test campaign ID to enable this form.');
-        });
+            setStatus('Ready to continue to Give A Little’s secure checkout.', 'success');
+        } else if (!apiBase || typeof fetch === 'undefined') {
+            disableWithMessage('Online giving is not available at the moment. You can still give by bank transfer or contact finance for help.');
+        } else {
+            fetch(apiBase + '/webdonations/campaigns/' + encodeURIComponent(campaignId), {
+                headers: {
+                    Accept: 'application/json'
+                }
+            }).then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Campaign unavailable');
+                }
+
+                return response.json();
+            }).then(function (campaign) {
+                checkoutCampaignId = campaign.id || campaignId;
+                donationLimit = campaign.donationLimit ? parseFloat(campaign.donationLimit) : donationLimit;
+
+                if (campaignName && (campaign.charityName || campaign.heading)) {
+                    campaignName.textContent = campaign.charityName || campaign.heading;
+                }
+
+                renderAmounts(campaign.items || []);
+
+                if (customAmount && campaign.showCustomAmount === false) {
+                    customAmount.closest('.giving-custom-amount').hidden = true;
+                }
+
+                if (campaign.allowRecurring === false) {
+                    widget.querySelectorAll('input[name="giving_frequency"][value="monthly"]').forEach(function (input) {
+                        input.closest('label').hidden = true;
+                        input.checked = false;
+                    });
+                }
+
+                setInteractive(true);
+                setStatus('Ready to continue to Give A Little’s secure checkout.', 'success');
+            }).catch(function () {
+                disableWithMessage('Online giving is not available at the moment. You can still give by bank transfer or contact finance for help.');
+            });
+        }
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();

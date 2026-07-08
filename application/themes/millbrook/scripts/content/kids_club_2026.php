@@ -31,7 +31,7 @@ return [
         <p class="kids-club-kicker">Registration Form</p>
         <h2 id="kids-club-register-title">Tell us about your child.</h2>
         <p>Fill in the details below and the registration will be sent to the Kids Club team.</p>
-        <p>Your information will be used to manage this registration and help us care for your child safely during the event.</p>
+        <p>We only use this information to manage Kids Club registration and help care for your child safely during the event.</p>
       </div>
 
       <form class="kids-club-form" method="post" action="/kids-club-2026/register" data-kids-club-form data-google-sheet-endpoint="/kids-club-2026/register">
@@ -133,7 +133,7 @@ return [
           <div class="kids-club-form__checks">
             <fieldset class="kids-club-form__radio">
               <legend>Photo and video permission</legend>
-              <p>May we use photos or short video clips of your child in Millbrook Church communications?</p>
+              <p>May we use photos or short video clips of your child in Millbrook Church communications? Saying no is completely fine and will not affect your child's place.</p>
               <label>
                 <input type="radio" name="photo_video_permission" value="Yes" required>
                 <span>Yes</span>

@@ -15,7 +15,7 @@ return [
     </div>
   </section>
 
-  <section class="giving-panel giving-panel--featured" data-giving-widget data-campaign-id="73RaDUKovkVWzLrxJioCJi" data-api-base="https://api.test-givealittle.cyb.dev" data-website-base="https://test-givealittle.cyb.dev" data-checkout-prefix="/c/" data-return-path="/giving?thanks=1" data-tag="millbrook-web-test">
+  <section class="giving-panel giving-panel--featured" data-giving-widget data-campaign-id="e7d2d86c-9be5-430c-a886-c208cc0f6106" data-website-base="https://givealittle.co" data-checkout-prefix="/c/" data-return-path="/giving?thanks=1" data-tag="millbrook-web" data-fetch-campaign="false" data-donation-limit="1000">
     <div class="giving-panel__header">
       <div>
         <p class="content-kicker">Online giving</p>
@@ -23,7 +23,6 @@ return [
         <p>You can give securely online using the form below. You can choose a one-off gift or, where available, a monthly gift.</p>
         <p data-giving-campaign-name>Millbrook Church of the Nazarene</p>
       </div>
-      <p class="giving-panel__mode">Test mode</p>
     </div>
 
     <div class="giving-thanks" data-giving-thanks hidden>
@@ -67,13 +66,13 @@ return [
 
       <div class="giving-form__actions">
         <button class="btn giving-submit" type="submit" data-giving-submit>Continue securely</button>
-        <p class="giving-status" data-giving-status role="status" aria-live="polite">Loading the Give A Little test campaign…</p>
+        <p class="giving-status" data-giving-status role="status" aria-live="polite">Loading the Give A Little campaign…</p>
       </div>
     </form>
 
     <div class="giving-panel__footer">
       <p><strong>No pressure.</strong> Online giving is here for those who want to use it. You are welcome at Millbrook whether or not you give financially.</p>
-      <p>This is currently connected to Give A Little's test system while the new site is in development.</p>
+      <p>Give A Little handles online gifts securely and will guide you through the next steps.</p>
     </div>
   </section>
 
