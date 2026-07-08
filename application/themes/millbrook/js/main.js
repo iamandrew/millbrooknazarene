@@ -203,19 +203,20 @@ document.addEventListener('DOMContentLoaded', function () {
         var customAmount = widget.querySelector('[data-giving-custom-amount]');
         var submitButton = widget.querySelector('[data-giving-submit]');
         var status = widget.querySelector('[data-giving-status]');
+        var fallbackLink = widget.querySelector('[data-giving-fallback-link]');
         var campaignName = widget.querySelector('[data-giving-campaign-name]');
         var thanks = widget.querySelector('[data-giving-thanks]');
         var campaignId = widget.getAttribute('data-campaign-id') || '';
         var apiBase = (widget.getAttribute('data-api-base') || '').replace(/\/$/, '');
         var websiteBase = (widget.getAttribute('data-website-base') || '').replace(/\/$/, '');
-        var checkoutPrefix = widget.getAttribute('data-checkout-prefix') || '/c/';
+        var donationPrefix = widget.getAttribute('data-donation-prefix') || widget.getAttribute('data-checkout-prefix') || '/c/';
         var returnPath = widget.getAttribute('data-return-path') || window.location.pathname;
         var tag = (widget.getAttribute('data-tag') || '').slice(0, 36);
         var fetchCampaign = widget.getAttribute('data-fetch-campaign') !== 'false';
         var configuredDonationLimit = parseFloat(widget.getAttribute('data-donation-limit') || '');
         var donationLimit = Number.isNaN(configuredDonationLimit) ? null : configuredDonationLimit;
         var selectedAmount = null;
-        var checkoutCampaignId = campaignId;
+        var donationCampaignId = campaignId;
 
         if (thanks && window.location.search.indexOf('thanks=1') !== -1) {
             thanks.hidden = false;
@@ -234,6 +235,76 @@ document.addEventListener('DOMContentLoaded', function () {
             widget.querySelectorAll('button, input').forEach(function (field) {
                 field.disabled = !enabled;
             });
+        };
+
+        var setFallbackLink = function (url, visible) {
+            if (!fallbackLink) {
+                return;
+            }
+
+            if (url) {
+                fallbackLink.href = url;
+            }
+
+            fallbackLink.hidden = !visible;
+        };
+
+        var getDonationOverlay = function () {
+            var overlay = document.querySelector('[data-giving-donation-overlay]');
+
+            if (overlay) {
+                return overlay;
+            }
+
+            overlay = document.createElement('div');
+            overlay.className = 'giving-donation-overlay';
+            overlay.setAttribute('data-giving-donation-overlay', '');
+            overlay.setAttribute('role', 'alertdialog');
+            overlay.setAttribute('aria-modal', 'true');
+            overlay.setAttribute('aria-labelledby', 'giving-donation-overlay-title');
+            overlay.setAttribute('aria-describedby', 'giving-donation-overlay-message');
+            overlay.hidden = true;
+            overlay.tabIndex = -1;
+            overlay.innerHTML = [
+                '<div class="giving-donation-overlay__panel">',
+                '<div class="giving-donation-overlay__spinner" aria-hidden="true"></div>',
+                '<p class="content-kicker">Secure donation</p>',
+                '<h2 id="giving-donation-overlay-title">Opening Give A Little</h2>',
+                '<p id="giving-donation-overlay-message" data-giving-donation-overlay-message>We are taking you to Give A Little’s secure donation page. This can take a few seconds.</p>',
+                '<a href="https://givealittle.co" target="_blank" rel="noopener" data-giving-donation-overlay-link>Open donation page in a new tab</a>',
+                '</div>'
+            ].join('');
+
+            document.body.appendChild(overlay);
+            return overlay;
+        };
+
+        var showDonationOverlay = function (url) {
+            if (!document.body) {
+                return;
+            }
+
+            var overlay = getDonationOverlay();
+            var overlayLink = overlay.querySelector('[data-giving-donation-overlay-link]');
+
+            if (overlayLink) {
+                overlayLink.href = url;
+            }
+
+            overlay.hidden = false;
+            document.body.classList.add('is-giving-donation-loading');
+
+            window.setTimeout(function () {
+                overlay.focus({ preventScroll: true });
+            }, 0);
+        };
+
+        var updateDonationOverlayMessage = function (message) {
+            var overlayMessage = document.querySelector('[data-giving-donation-overlay-message]');
+
+            if (overlayMessage) {
+                overlayMessage.textContent = message;
+            }
         };
 
         var formatCurrency = function (amount) {
@@ -355,7 +426,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!fetchCampaign) {
             setInteractive(true);
-            setStatus('Ready to continue to Give A Little’s secure checkout.', 'success');
+            setStatus('Ready to continue to Give A Little’s secure donation page.', 'success');
         } else if (!apiBase || typeof fetch === 'undefined') {
             disableWithMessage('Online giving is not available at the moment. You can still give by bank transfer or contact finance for help.');
         } else {
@@ -370,7 +441,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 return response.json();
             }).then(function (campaign) {
-                checkoutCampaignId = campaign.id || campaignId;
+                donationCampaignId = campaign.id || campaignId;
                 donationLimit = campaign.donationLimit ? parseFloat(campaign.donationLimit) : donationLimit;
 
                 if (campaignName && (campaign.charityName || campaign.heading)) {
@@ -391,7 +462,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 setInteractive(true);
-                setStatus('Ready to continue to Give A Little’s secure checkout.', 'success');
+                setStatus('Ready to continue to Give A Little’s secure donation page.', 'success');
             }).catch(function () {
                 disableWithMessage('Online giving is not available at the moment. You can still give by bank transfer or contact finance for help.');
             });
@@ -415,18 +486,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
             var frequency = form.querySelector('input[name="giving_frequency"]:checked');
             var isRecurring = frequency && frequency.value === 'monthly';
-            var checkoutPath = checkoutPrefix + encodeURIComponent(checkoutCampaignId) + '/initiate-donation';
-            var checkoutUrl = new URL(checkoutPath, websiteBase + '/');
+            var donationPath = donationPrefix + encodeURIComponent(donationCampaignId) + '/initiate-donation';
+            var donationUrl = new URL(donationPath, websiteBase + '/');
 
-            checkoutUrl.searchParams.set('amount', amount.toFixed(2));
-            checkoutUrl.searchParams.set('recurring', isRecurring ? 'true' : 'false');
-            checkoutUrl.searchParams.set('returnUrl', getReturnUrl());
+            donationUrl.searchParams.set('amount', amount.toFixed(2));
+            donationUrl.searchParams.set('recurring', isRecurring ? 'true' : 'false');
+            donationUrl.searchParams.set('returnUrl', getReturnUrl());
 
             if (tag) {
-                checkoutUrl.searchParams.set('tag', tag);
+                donationUrl.searchParams.set('tag', tag);
             }
 
-            window.location.href = checkoutUrl.toString();
+            var donationUrlString = donationUrl.toString();
+
+            setInteractive(false);
+            setFallbackLink(donationUrlString, true);
+            setStatus('Opening Give A Little’s secure donation page. This can take a few seconds.', 'success');
+            showDonationOverlay(donationUrlString);
+
+            window.setTimeout(function () {
+                window.location.href = donationUrlString;
+            }, 650);
+
+            window.setTimeout(function () {
+                updateDonationOverlayMessage('Give A Little is taking longer than usual. You can use the link below to try the donation page in a new tab.');
+                setStatus('Give A Little is taking longer than usual. You can use the link below to try the donation page in a new tab.', 'error');
+            }, 8000);
         });
     });
 
