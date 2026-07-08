@@ -101,9 +101,27 @@ $footerLinks = $navigationData['footer_links'] ?? [];
         <div class="footer-bottom">
             <p>&copy; <?php echo date('Y'); ?> Millbrook Church of the Nazarene. All rights reserved.</p>
             <p>Millbrook Community Centre, Drumahoe Road, Millbrook</p>
+            <p><button class="footer-cookie-link" type="button" data-cookie-settings>Cookie settings</button></p>
         </div>
     </div>
 </footer>
+
+<div class="cookie-consent" data-cookie-consent hidden>
+    <div class="cookie-consent__panel" role="dialog" aria-modal="false" aria-labelledby="cookie-consent-title" aria-describedby="cookie-consent-description">
+        <div class="cookie-consent__copy">
+            <p class="cookie-consent__kicker">Privacy choices</p>
+            <h2 id="cookie-consent-title">Analytics cookies</h2>
+            <p id="cookie-consent-description">
+                We use Google Analytics to understand how people use the website and improve it over time.
+                You can accept or reject analytics cookies.
+            </p>
+        </div>
+        <div class="cookie-consent__actions">
+            <button class="button button--primary" type="button" data-cookie-accept>Accept analytics</button>
+            <button class="button button--light" type="button" data-cookie-reject>Reject analytics</button>
+        </div>
+    </div>
+</div>
 
 <?php
 require_once __DIR__ . '/theme_assets.php';

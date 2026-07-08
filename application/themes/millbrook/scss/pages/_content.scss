@@ -2881,7 +2881,7 @@ td {
     .giving-fallback-link {
         justify-self: start;
         color: var(--brand-primary-dark);
-        font-family: $font-heading;
+        font-family: $font-family-heading;
         font-size: 0.92rem;
         font-weight: 800;
         text-decoration-color: var(--brand-highlight);
@@ -4228,7 +4228,7 @@ body.is-giving-donation-loading {
         border-radius: 8px;
         background: var(--brand-highlight);
         color: var(--brand-primary-dark);
-        font-family: $font-heading;
+        font-family: $font-family-heading;
         font-size: 0.95rem;
         font-weight: 800;
         line-height: 1.2;

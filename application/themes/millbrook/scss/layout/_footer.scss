@@ -91,3 +91,117 @@
 .footer-bottom p {
     color: var(--surface);
 }
+
+.footer-cookie-link {
+    appearance: none;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--surface);
+    cursor: pointer;
+    font: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--brand-highlight);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.18em;
+
+    &:hover,
+    &:focus-visible {
+        color: var(--brand-highlight);
+    }
+
+    &:focus-visible {
+        outline: 3px solid rgba($color-brand-highlight, 0.5);
+        outline-offset: 0.25rem;
+    }
+}
+
+.cookie-consent {
+    position: fixed;
+    right: clamp(1rem, 3vw, 2rem);
+    bottom: clamp(1rem, 3vw, 2rem);
+    z-index: 9999;
+    width: min(calc(100vw - 2rem), 42rem);
+
+    &[hidden] {
+        display: none;
+    }
+}
+
+.cookie-consent__panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: clamp(1rem, 3vw, 1.4rem);
+    align-items: end;
+    padding: clamp(1rem, 3vw, 1.3rem);
+    border: 1px solid rgba($color-brand-primary-dark, 0.16);
+    border-top: 4px solid var(--brand-highlight);
+    border-radius: 8px;
+    background: rgba($color-surface, 0.98);
+    box-shadow: 0 24px 60px rgba($color-brand-ink, 0.18);
+    color: var(--brand-ink);
+}
+
+.cookie-consent__kicker {
+    margin: 0 0 0.35rem;
+    color: var(--brand-primary);
+    font-family: $font-family-heading;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.cookie-consent__copy {
+    min-width: 0;
+
+    h2 {
+        margin: 0 0 0.45rem;
+        color: var(--brand-primary-dark);
+        font-size: clamp(1.2rem, 2vw, 1.45rem);
+        font-weight: 500;
+        line-height: 1.1;
+    }
+
+    p:not(.cookie-consent__kicker) {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 0.98rem;
+        line-height: 1.5;
+    }
+}
+
+.cookie-consent__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    justify-content: flex-end;
+
+    .button {
+        min-height: 2.7rem;
+        white-space: nowrap;
+    }
+}
+
+@include respond-max($breakpoint-mobile) {
+    .cookie-consent {
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        padding: 0.75rem;
+    }
+
+    .cookie-consent__panel {
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+
+    .cookie-consent__actions {
+        justify-content: stretch;
+
+        .button {
+            flex: 1 1 12rem;
+        }
+    }
+}

@@ -49,6 +49,16 @@ $ogImageUrl = millbrook_absolute_url($thumbnailUrl !== '' ? $thumbnailUrl : mill
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('consent', 'default', {
+            analytics_storage: 'denied',
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied'
+        });
+    </script>
     <?php Loader::element('header_required'); ?>
     <?php if ($isHomePage && $pageMetaDescription === '') { ?>
         <meta name="description" content="<?php echo h($homeMetaDescription); ?>">

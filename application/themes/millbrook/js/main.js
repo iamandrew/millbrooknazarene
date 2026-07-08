@@ -5,6 +5,151 @@ document.addEventListener('DOMContentLoaded', function () {
     var closeButtons = siteMenu ? siteMenu.querySelectorAll('[data-menu-close]') : [];
     var menuLinks = siteMenu ? siteMenu.querySelectorAll('a') : [];
     var sermonPlayers = {};
+    var analyticsMeasurementId = 'G-V7DZP0TZQD';
+    var analyticsConsentKey = 'millbrook_analytics_consent';
+    var cookieConsent = document.querySelector('[data-cookie-consent]');
+    var cookieAccept = document.querySelector('[data-cookie-accept]');
+    var cookieReject = document.querySelector('[data-cookie-reject]');
+    var cookieSettings = document.querySelectorAll('[data-cookie-settings]');
+
+    var getStoredAnalyticsConsent = function () {
+        try {
+            return window.localStorage.getItem(analyticsConsentKey);
+        } catch (error) {
+            return null;
+        }
+    };
+
+    var setStoredAnalyticsConsent = function (value) {
+        try {
+            window.localStorage.setItem(analyticsConsentKey, value);
+        } catch (error) {
+            // If storage is unavailable, keep the choice for this page view only.
+        }
+    };
+
+    var updateAnalyticsConsent = function (granted) {
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function () {
+            window.dataLayer.push(arguments);
+        };
+
+        window.gtag('consent', 'update', {
+            analytics_storage: granted ? 'granted' : 'denied',
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied'
+        });
+    };
+
+    var deleteCookie = function (name, domain) {
+        var domainPart = domain ? '; domain=' + domain : '';
+
+        document.cookie = name + '=; Max-Age=0; path=/' + domainPart + '; SameSite=Lax';
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + domainPart + '; SameSite=Lax';
+    };
+
+    var deleteAnalyticsCookies = function () {
+        var hostParts = window.location.hostname.split('.');
+        var domains = [''];
+        var cookieNames = [
+            '_ga',
+            '_gid',
+            '_gat',
+            '_ga_' + analyticsMeasurementId.replace(/^G-/, '')
+        ];
+
+        for (var index = 0; index < hostParts.length - 1; index += 1) {
+            domains.push('.' + hostParts.slice(index).join('.'));
+        }
+
+        cookieNames.forEach(function (name) {
+            domains.forEach(function (domain) {
+                deleteCookie(name, domain);
+            });
+        });
+    };
+
+    var loadAnalytics = function () {
+        if (window.millbrookAnalyticsLoaded) {
+            return;
+        }
+
+        window.millbrookAnalyticsLoaded = true;
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function () {
+            window.dataLayer.push(arguments);
+        };
+
+        if (!document.querySelector('script[src*="googletagmanager.com/gtag/js?id=' + analyticsMeasurementId + '"]')) {
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(analyticsMeasurementId);
+            document.head.appendChild(script);
+        }
+
+        window.gtag('js', new Date());
+        window.gtag('config', analyticsMeasurementId);
+    };
+
+    var showCookieConsent = function () {
+        if (cookieConsent) {
+            cookieConsent.hidden = false;
+        }
+    };
+
+    var hideCookieConsent = function () {
+        if (cookieConsent) {
+            cookieConsent.hidden = true;
+        }
+    };
+
+    var saveAnalyticsChoice = function (choice) {
+        var accepted = choice === 'accepted';
+
+        setStoredAnalyticsConsent(choice);
+        updateAnalyticsConsent(accepted);
+
+        if (accepted) {
+            loadAnalytics();
+        } else {
+            deleteAnalyticsCookies();
+        }
+
+        hideCookieConsent();
+    };
+
+    var storedAnalyticsConsent = getStoredAnalyticsConsent();
+
+    if (storedAnalyticsConsent === 'accepted') {
+        updateAnalyticsConsent(true);
+        loadAnalytics();
+    } else {
+        updateAnalyticsConsent(false);
+        deleteAnalyticsCookies();
+
+        if (storedAnalyticsConsent !== 'rejected' && (!document.body || !document.body.classList.contains('ccm-edit-mode'))) {
+            showCookieConsent();
+        }
+    }
+
+    if (cookieAccept) {
+        cookieAccept.addEventListener('click', function () {
+            saveAnalyticsChoice('accepted');
+        });
+    }
+
+    if (cookieReject) {
+        cookieReject.addEventListener('click', function () {
+            saveAnalyticsChoice('rejected');
+        });
+    }
+
+    cookieSettings.forEach(function (button) {
+        button.addEventListener('click', function () {
+            showCookieConsent();
+        });
+    });
 
     var closeMenu = function () {
         if (!toggle || !siteMenu) {
