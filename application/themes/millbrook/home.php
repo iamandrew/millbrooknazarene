@@ -6,6 +6,8 @@ require_once __DIR__ . '/elements/theme_assets.php';
 $themePath = $view->getThemePath();
 $homeHeroMarkup = millbrook_default_hero_image_markup($themePath);
 $homeLogoUrl = millbrook_theme_asset_url($themePath, 'images/logo-no-sub.svg');
+$homeLifeImageUrl = millbrook_theme_asset_url($themePath, 'images/content/general/home-church-life.jpeg');
+$homeWelcomeImageUrl = millbrook_theme_asset_url($themePath, 'images/content/general/home-welcome-coffee.jpeg');
 
 $renderArea = static function (string $areaName, $c, callable $fallback): void {
     $area = new Area($areaName);
@@ -124,6 +126,17 @@ $renderArea = static function (string $areaName, $c, callable $fallback): void {
                     <p>Church life is more than a Sunday service. We make space for prayer, youth, families, friendship, care, and practical involvement in the local community.</p>
                     <a class="text-link" href="/community">Explore church life</a>
                 <?php }); ?>
+
+                <figure class="home-life__photo">
+                    <img
+                        src="<?php echo h($homeLifeImageUrl); ?>"
+                        alt="People chatting at Millbrook Church."
+                        width="1600"
+                        height="900"
+                        loading="lazy"
+                        decoding="async"
+                    >
+                </figure>
             </div>
 
             <div class="home-life__rhythms">
@@ -200,6 +213,17 @@ $renderArea = static function (string $areaName, $c, callable $fallback): void {
             </div>
 
             <aside class="visit-side-card">
+                <figure class="visit-side-card__photo">
+                    <img
+                        src="<?php echo h($homeWelcomeImageUrl); ?>"
+                        alt="Tea and coffee being served at Millbrook Church."
+                        width="1200"
+                        height="675"
+                        loading="lazy"
+                        decoding="async"
+                    >
+                </figure>
+
                 <?php $renderArea('Home Contact Card', $c, static function (): void { ?>
                     <p class="section-eyebrow">New or unsure?</p>
                     <h2>We can help you feel at ease.</h2>

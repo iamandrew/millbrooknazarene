@@ -267,6 +267,24 @@
         }
     }
 
+    &__photo {
+        overflow: hidden;
+        margin: clamp(1.6rem, 4vw, 2.3rem) 0 0;
+        border: 1px solid rgba($color-surface, 0.16);
+        border-radius: 0.5rem;
+        background: rgba($color-surface, 0.08);
+        box-shadow: 0 1.3rem 2.6rem rgba($color-brand-ink, 0.2);
+
+        img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            height: auto;
+            object-fit: cover;
+            object-position: center;
+        }
+    }
+
     &__rhythms {
         display: grid;
         border-top: 1px solid rgba($color-surface, 0.18);
@@ -497,6 +515,23 @@
     .button {
         width: fit-content;
         margin-top: 0.4rem;
+    }
+
+    &__photo {
+        overflow: hidden;
+        margin: 0 0 0.45rem;
+        border: 1px solid rgba($color-brand-primary-dark, 0.12);
+        border-radius: 0.5rem;
+        background: rgba($color-brand-secondary, 0.08);
+
+        img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            height: auto;
+            object-fit: cover;
+            object-position: center;
+        }
     }
 }
 
