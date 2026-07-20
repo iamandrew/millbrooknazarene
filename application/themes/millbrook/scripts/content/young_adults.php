@@ -97,7 +97,7 @@ return [
       <p>Lucy can share the address, answer any questions, and help you know what to expect. You are welcome to come along and see how it feels.</p>
     </div>
     <div class="content-guide-cta__steps">
-      <p><strong>Ask about Young Adults</strong><br><a href="mailto:lucy@millbrooknazarene.co.uk">lucy@millbrooknazarene.co.uk</a></p>
+      <p><strong>Ask about Young Adults</strong><br><a href="mailto:lucy@millbrooknazarene.church">lucy@millbrooknazarene.church</a></p>
       <p><strong>Looking for other homegroups?</strong><br><a href="/community/homegroups">See Homegroups</a></p>
       <p><strong>Planning a Sunday visit?</strong><br><a href="/visit-us">Find out what to expect</a></p>
     </div>

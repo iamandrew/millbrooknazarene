@@ -1,0 +1,421 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+.site-main--kids-club {
+    background: transparent;
+}
+
+.kids-club-event {
+    --kids-club-signpost-width: clamp(17.5rem, 52vw, 27.5rem);
+    // Both artwork files include transparent breathing room. This reserve lets
+    // those transparent areas overlap while keeping the visible artwork close.
+    --kids-club-signpost-space: clamp(22rem, 65vw, 34.5rem);
+
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    background: transparent;
+}
+
+.kids-club-event__scene {
+    position: fixed;
+    z-index: 0;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: #76c8ef url('/application/themes/millbrook/images/kids-club-2026/scene-sky.webp') center / cover no-repeat;
+}
+
+.kids-club-event__hills {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    min-width: 68rem;
+    mix-blend-mode: multiply;
+}
+
+.kids-club-event__kite {
+    position: fixed;
+    top: calc(var(--header-shell-height, 5.75rem) + clamp(0.5rem, 1.5vw, 1.5rem));
+    right: clamp(-2rem, -2vw, -0.75rem);
+    width: clamp(15rem, 34vw, 26rem);
+    height: auto;
+    transform: rotate(-8deg);
+}
+
+.kids-club-event__hero,
+.kids-club-registration {
+    position: relative;
+    z-index: 1;
+}
+
+.kids-club-registration {
+    padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.kids-club-event .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.kids-club-event__hero-inner {
+    width: min(100% - 2rem, 74rem);
+    margin-inline: auto;
+    text-align: center;
+}
+
+.kids-club-event__logo {
+    display: block;
+    width: clamp(18rem, 56vw, 36rem);
+    height: auto;
+    margin: 0 auto;
+}
+
+.kids-club-registration__inner {
+    position: relative;
+    width: min(100%, 68rem);
+    margin-inline: auto;
+}
+
+.kids-club-registration__panel {
+    position: relative;
+    margin-top: var(--kids-club-signpost-space);
+    padding: clamp(1.15rem, 4vw, 3rem);
+    padding-bottom: clamp(1.25rem, 2vw, 2rem);
+    border: 2px solid rgba(41, 68, 94, 0.46);
+    border-top: 0.45rem solid #ef6068;
+    border-radius: 8px;
+    background: rgba(255, 250, 242, 0.94);
+    box-shadow: 0 0.35rem 0 rgba(41, 68, 94, 0.16);
+}
+
+.kids-club-registration__signpost {
+    position: absolute;
+    z-index: 2;
+    bottom: calc(100% - 1rem);
+    left: 50%;
+    display: block;
+    width: var(--kids-club-signpost-width);
+    height: auto;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.kids-club-registration__heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 1.8rem;
+    color: #29445e;
+    text-shadow: 0 1px 0 rgba($color-surface, 0.64);
+
+    &[hidden] { display: none; }
+
+    h2 {
+        margin: 0;
+        color: inherit;
+        font-size: clamp(2.2rem, 4.5vw, 3.7rem);
+        line-height: 1.03;
+        letter-spacing: 0;
+    }
+
+    p {
+        flex: 1 1 16rem;
+        max-width: 24rem;
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 700;
+        line-height: 1.5;
+    }
+}
+
+.kids-club-form {
+    display: grid;
+    gap: 1.15rem;
+    min-width: 0;
+
+    &[hidden] { display: none; }
+
+    fieldset {
+        min-width: 0;
+        margin: 0;
+    }
+
+    input,
+    textarea,
+    select {
+        width: 100%;
+        min-height: 3.2rem;
+        padding: 0.82rem 0.9rem;
+        border: 1px solid rgba($color-brand-primary-dark, 0.22);
+        border-radius: 6px;
+        background: rgba($color-surface, 0.94);
+        color: var(--text-main);
+        font: inherit;
+        line-height: 1.45;
+
+        &:focus {
+            border-color: var(--section-accent, #0f6b7a);
+            outline: 3px solid color-mix(in srgb, var(--section-accent, #0f6b7a) 28%, transparent);
+        }
+
+        &::placeholder {
+            color: rgba(41, 68, 94, 0.48);
+            opacity: 1;
+        }
+    }
+
+    textarea {
+        min-height: 7rem;
+        resize: vertical;
+    }
+
+    input[type='checkbox'],
+    input[type='radio'] {
+        width: 1.1rem;
+        min-height: 1.1rem;
+        flex: 0 0 1.1rem;
+        margin: 0.22rem 0 0;
+        padding: 0;
+        accent-color: #0f6b7a;
+    }
+}
+
+.kids-club-form__section {
+    --section-accent: #ef6068;
+    padding: clamp(1rem, 2.5vw, 1.35rem);
+    border: 0;
+    border-top: 2px dashed color-mix(in srgb, var(--section-accent) 62%, transparent);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+
+    &--purple { --section-accent: #917bd0; }
+    &--sky { --section-accent: #278fbd; }
+    &--lime { --section-accent: #8bbd3b; }
+
+    > legend {
+        padding: 0 0.45rem;
+        color: var(--section-accent);
+        font-family: 'Sora', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 1rem;
+        font-weight: 800;
+        line-height: 1.25;
+        text-transform: uppercase;
+    }
+}
+
+.kids-club-form__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: 1rem;
+    margin-top: 0.95rem;
+}
+
+.kids-club-form__field {
+    display: grid;
+    align-content: start;
+    gap: 0.45rem;
+    min-width: 0;
+
+    span {
+        color: var(--section-accent, #29445e);
+        font-family: 'Sora', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 0.92rem;
+        font-weight: 760;
+        line-height: 1.35;
+    }
+
+    small {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        line-height: 1.45;
+    }
+}
+
+.kids-club-form__field--wide { grid-column: 1 / -1; }
+
+.kids-club-form__field--honeypot {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.kids-club-form__checks {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 0.95rem;
+}
+
+.kids-club-form__radio {
+    display: grid;
+    gap: 0.7rem;
+    padding: 1rem;
+    border: 1px solid rgba($color-brand-primary-dark, 0.16);
+    border-left: 4px solid var(--section-accent, #ef6068);
+    border-radius: 6px;
+    background: rgba(255, 250, 242, 0.58);
+
+    legend {
+        padding: 0 0.45rem;
+        color: var(--section-accent, #29445e);
+        font-family: 'Sora', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 0.95rem;
+        font-weight: 800;
+    }
+
+    p { margin: 0; line-height: 1.55; }
+
+    label,
+    .kids-club-form__check {
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+        min-width: 0;
+    }
+}
+
+.kids-club-form__check {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    min-width: 0;
+    padding: 0.9rem 1rem;
+    border: 1px solid rgba($color-brand-primary-dark, 0.16);
+    border-left: 4px solid var(--section-accent, #ef6068);
+    border-radius: 6px;
+    background: rgba(255, 250, 242, 0.58);
+    color: var(--text-main);
+
+    span { line-height: 1.55; }
+}
+
+.kids-club-form__actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: 1rem;
+    align-items: center;
+    padding-top: 0.25rem;
+}
+
+.kids-club-submit {
+    min-height: 3.35rem;
+    padding: 0.9rem 1.35rem;
+    border: 2px solid #29445e;
+    border-radius: 8px;
+    background: #ef6068;
+    box-shadow: 0 0.22rem 0 #29445e;
+    color: #fffdf7;
+    font-family: 'Sora', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 0.98rem;
+    font-weight: 800;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+        background: #917bd0;
+        transform: translateY(1px);
+    }
+
+    &:focus-visible {
+        outline: 3px solid rgba($color-surface, 0.88);
+        outline-offset: 0.2rem;
+    }
+
+    &:disabled { cursor: wait; opacity: 0.68; }
+}
+
+.kids-club-form__status {
+    margin: 0;
+    padding: 0.85rem 1rem;
+    border-radius: 8px;
+    background: rgba($color-surface, 0.68);
+    color: #29445e;
+    font-size: 0.95rem;
+    font-weight: 650;
+    line-height: 1.5;
+
+    &[data-status='success'] { background: rgba(202, 235, 144, 0.86); }
+    &[data-status='error'] { background: rgba(255, 223, 219, 0.9); color: #7a2424; }
+}
+
+.kids-club-registration__confirmation {
+    width: min(100%, 48rem);
+    margin-inline: auto;
+    padding-block: clamp(1rem, 3vw, 2rem);
+    color: #29445e;
+    text-align: center;
+
+    &[hidden] { display: none; }
+
+    h2 {
+        margin: 0 0 1rem;
+        color: #29445e;
+        font-size: clamp(2rem, 4vw, 3rem);
+        line-height: 1.05;
+    }
+
+    p {
+        max-width: 35rem;
+        margin: 0 auto 1rem;
+        line-height: 1.6;
+    }
+
+    a {
+        color: #29445e;
+        font-weight: 750;
+        text-decoration: underline;
+        text-decoration-color: #8bbd3b;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 0.18em;
+    }
+}
+
+.kids-club-registration__confirmation-kicker {
+    color: #917bd0;
+    font-family: 'Sora', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.kids-club-registration__another {
+    min-height: 3.2rem;
+    margin-top: 0.5rem;
+    padding: 0.8rem 1.2rem;
+    border: 2px solid #29445e;
+    border-radius: 8px;
+    background: #917bd0;
+    box-shadow: 0 0.2rem 0 #29445e;
+    color: #fffdf7;
+    font: 800 0.95rem/1.2 'Sora', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+        background: #ef6068;
+        transform: translateY(1px);
+    }
+
+    &:focus-visible {
+        outline: 3px solid rgba($color-surface, 0.88);
+        outline-offset: 0.2rem;
+    }
+}
+
+@include respond-max($breakpoint-mobile) {
+    .kids-club-event__hills { width: auto; height: 42vh; min-width: 0; object-fit: cover; object-position: center bottom; }
+}

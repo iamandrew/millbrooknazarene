@@ -203,7 +203,7 @@ HTML,
   <p>If you are thinking of visiting, we would love to see you on a Sunday. And if you would like to ask anything before you come, please get in touch.</p>
   <div class="action-panel__buttons">
     <a class="button button--primary" href="/contact">Contact Us</a>
-    <a class="button button--secondary" href="mailto:info@millbrooknazarene.co.uk">Email the Church</a>
+    <a class="button button--secondary" href="mailto:info@millbrooknazarene.church">Email the Church</a>
   </div>
 </div>
 HTML,

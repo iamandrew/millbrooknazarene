@@ -22,7 +22,7 @@ return [
     <article class="contact-info-card">
       <p class="content-kicker">Email</p>
       <h3>General enquiries</h3>
-      <p><a href="mailto:info@millbrooknazarene.co.uk">info@millbrooknazarene.co.uk</a></p>
+      <p><a href="mailto:info@millbrooknazarene.church">info@millbrooknazarene.church</a></p>
     </article>
 
     <article class="contact-info-card contact-info-card--lime">
@@ -34,13 +34,13 @@ return [
     <article class="contact-info-card contact-info-card--purple">
       <p class="content-kicker">Safeguarding</p>
       <h3>Safeguarding enquiries</h3>
-      <p><a href="mailto:safeguarding@millbrooknazarene.co.uk">safeguarding@millbrooknazarene.co.uk</a></p>
+      <p><a href="mailto:safeguarding@millbrooknazarene.church">safeguarding@millbrooknazarene.church</a></p>
     </article>
 
     <article class="contact-info-card contact-info-card--coral">
       <p class="content-kicker">Pastoral support</p>
       <h3>Prayer, care, or support</h3>
-      <p><a href="mailto:victoria@millbrooknazarene.co.uk">victoria@millbrooknazarene.co.uk</a></p>
+      <p><a href="mailto:victoria@millbrooknazarene.church">victoria@millbrooknazarene.church</a></p>
     </article>
 
     <article class="contact-info-card">
@@ -96,7 +96,7 @@ HTML,
         'questionSetId' => 2026070101,
         'surveyName' => 'Contact form',
         'submitText' => 'Send message',
-        'recipientEmail' => 'info@millbrooknazarene.co.uk',
+        'recipientEmail' => 'info@millbrooknazarene.church',
         'thankyouMsg' => 'Thanks for getting in touch. Someone from the team will get back to you as soon as we can.',
         'questions' => [
             [

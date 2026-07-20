@@ -85,7 +85,7 @@ return [
     </div>
     <aside class="content-guide-note">
       <strong>Safeguarding details.</strong>
-      <p>If you would like to know more about our safeguarding arrangements, email <a href="mailto:safeguarding@millbrooknazarene.co.uk">safeguarding@millbrooknazarene.co.uk</a> or speak to a member of the leadership team on Sunday.</p>
+      <p>If you would like to know more about our safeguarding arrangements, email <a href="mailto:safeguarding@millbrooknazarene.church">safeguarding@millbrooknazarene.church</a> or speak to a member of the leadership team on Sunday.</p>
     </aside>
   </section>
 
@@ -96,7 +96,7 @@ return [
       <p>If your child is aged 0-4, you are welcome to consider using creche during the service.</p>
     </div>
     <div class="content-guide-cta__steps">
-      <p><strong>Questions about creche?</strong><br><a href="mailto:rhonda@millbrooknazarene.co.uk">rhonda@millbrooknazarene.co.uk</a></p>
+      <p><strong>Questions about creche?</strong><br><a href="mailto:rhonda@millbrooknazarene.church">rhonda@millbrooknazarene.church</a></p>
       <p><strong>Want to stay at first?</strong><br>That is completely fine. You can help your child settle at their own pace.</p>
       <p><strong>Planning your first Sunday?</strong><br><a href="/visit-us">Find out what to expect</a></p>
     </div>

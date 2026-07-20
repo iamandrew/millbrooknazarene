@@ -53,14 +53,14 @@ return [
         <p class="content-kicker">Sunday evenings</p>
         <h3>Abide women’s homegroup</h3>
         <p>A women-only homegroup led by Carolyn, connected with <a href="/community/womens-ministry">Abide Women’s Ministry</a>.</p>
-        <p><a href="mailto:megan@millbrooknazarene.co.uk">Ask about Abide</a></p>
+        <p><a href="mailto:megan@millbrooknazarene.church">Ask about Abide</a></p>
       </article>
 
       <article class="homegroup-option homegroup-option--blue">
         <p class="content-kicker">Wednesday evenings</p>
         <h3>John and Iris</h3>
         <p>A midweek homegroup for conversation, Bible discussion, prayer, and shared support.</p>
-        <p><a href="mailto:john@millbrooknazarene.co.uk">Ask about this homegroup</a></p>
+        <p><a href="mailto:john@millbrooknazarene.church">Ask about this homegroup</a></p>
       </article>
 
       <article class="homegroup-option homegroup-option--purple">
@@ -116,7 +116,7 @@ return [
       <p>If you would like to try homegroup, John can confirm what is happening that week, share the right address, and help you settle in.</p>
     </div>
     <div class="content-guide-cta__steps">
-      <p><strong>Questions about homegroups?</strong><br><a href="mailto:john@millbrooknazarene.co.uk">john@millbrooknazarene.co.uk</a></p>
+      <p><strong>Questions about homegroups?</strong><br><a href="mailto:john@millbrooknazarene.church">john@millbrooknazarene.church</a></p>
       <p><strong>New to Millbrook?</strong><br><a href="/visit-us">Plan a Sunday visit</a></p>
       <p><strong>Looking for other gatherings?</strong><br><a href="/community/whats-on">See What's On</a></p>
     </div>

@@ -118,7 +118,7 @@ return [
         <h3>Gift Aid can add 25p for every £1 you give.</h3>
         <ul class="giving-list">
           <li>If you are a UK taxpayer, Gift Aid allows the church to claim an extra 25p for every £1 you give, at no extra cost to you.</li>
-          <li>To register, complete a Gift Aid declaration <a href="/download_file/view/85/493">here</a> and send it to <a href="mailto:finance@millbrooknazarene.co.uk?subject=Gift%20Aid%20Declaration">finance@millbrooknazarene.co.uk</a>. A paper form can also be requested from the treasurer.</li>
+          <li>To register, complete a Gift Aid declaration <a href="/download_file/view/85/493">here</a> and send it to <a href="mailto:finance@millbrooknazarene.church?subject=Gift%20Aid%20Declaration">finance@millbrooknazarene.church</a>. A paper form can also be requested from the treasurer.</li>
           <li>Once registered, please include your Gift Aid number on bank transfers, online gifts where possible, and cash giving envelopes.</li>
           <li>If you are a higher rate taxpayer and need a giving statement for your self assessment tax return, please contact the treasurer.</li>
         </ul>
@@ -161,7 +161,7 @@ return [
       <p>We do not hold anyone's bank details for giving. The giving information we hold is limited to what is needed for Gift Aid and basic financial records, and is handled in line with data protection responsibilities.</p>
     </div>
     <div class="giving-privacy__actions">
-      <a href="mailto:finance@millbrooknazarene.co.uk">Email finance</a>
+      <a href="mailto:finance@millbrooknazarene.church">Email finance</a>
       <a href="/contact">Contact the church</a>
     </div>
   </section>

@@ -90,7 +90,7 @@ $footerLinks = $navigationData['footer_links'] ?? [];
                         BT40 2PF
                     </p>
                     <p>
-                        <a href="mailto:info@millbrooknazarene.co.uk">info@millbrooknazarene.co.uk</a>
+                        <a href="mailto:info@millbrooknazarene.church">info@millbrooknazarene.church</a>
                     </p>
                     <?php
                 }

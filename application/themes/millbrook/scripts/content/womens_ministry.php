@@ -103,7 +103,7 @@ return [
     </div>
     <div class="content-guide-cta__steps">
       <p><strong>Want to join the WhatsApp group?</strong> Megan can point you in the right direction.</p>
-      <p><strong>Questions about Abide?</strong><br><a href="mailto:megan@millbrooknazarene.co.uk">megan@millbrooknazarene.co.uk</a></p>
+      <p><strong>Questions about Abide?</strong><br><a href="mailto:megan@millbrooknazarene.church">megan@millbrooknazarene.church</a></p>
     </div>
   </section>
 </div>

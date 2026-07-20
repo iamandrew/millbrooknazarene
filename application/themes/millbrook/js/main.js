@@ -692,6 +692,11 @@ document.addEventListener('DOMContentLoaded', function () {
         var ageInput = form.querySelector('[data-kids-club-age-input]');
         var submittedAtInput = form.querySelector('[data-kids-club-submitted-at]');
         var status = form.querySelector('[data-kids-club-status]');
+        var registrationHeading = form.parentNode.querySelector('[data-kids-club-registration-heading]');
+        var confirmation = form.parentNode.querySelector('[data-kids-club-confirmation]');
+        var confirmationEmail = form.parentNode.querySelector('[data-kids-club-confirmation-email]');
+        var registerAnother = form.parentNode.querySelector('[data-kids-club-register-another]');
+        var initialStatus = status ? status.textContent : '';
         var firstClubDate = new Date('2026-08-12T12:00:00');
 
         var setStatus = function (message, type) {
@@ -708,6 +713,48 @@ document.addEventListener('DOMContentLoaded', function () {
                 field.disabled = !enabled;
             });
         };
+
+        var showConfirmation = function (emailSent) {
+            if (!confirmation) {
+                return;
+            }
+
+            if (confirmationEmail) {
+                confirmationEmail.innerHTML = emailSent === false
+                    ? 'Your registration has been received, but we could not send the confirmation email just now. Please email <a href="mailto:info@millbrooknazarene.church">info@millbrooknazarene.church</a> if you have any questions.'
+                    : 'Look out for a confirmation email shortly. If it does not arrive within a few minutes, please check your spam folder, then email <a href="mailto:info@millbrooknazarene.church">info@millbrooknazarene.church</a>.';
+            }
+
+            form.hidden = true;
+            if (registrationHeading) {
+                registrationHeading.hidden = true;
+            }
+            confirmation.hidden = false;
+            confirmation.focus();
+        };
+
+        if (registerAnother) {
+            registerAnother.addEventListener('click', function () {
+                form.reset();
+                syncAge();
+                setStatus(initialStatus, 'neutral');
+                confirmation.hidden = true;
+                if (registrationHeading) {
+                    registrationHeading.hidden = false;
+                }
+                form.hidden = false;
+
+                var firstField = form.querySelector('input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"])');
+                if (firstField) {
+                    firstField.focus();
+                }
+            });
+        }
+
+        if (typeof URLSearchParams !== 'undefined'
+            && new URLSearchParams(window.location.search).get('preview') === 'registration-success') {
+            showConfirmation(true);
+        }
 
         var syncAge = function () {
             if (!dobInput || !ageOutput || !ageInput) {
@@ -779,7 +826,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (typeof fetch === 'undefined') {
-                setStatus('This browser cannot send the form. Please email info@millbrooknazarene.co.uk.', 'error');
+                setStatus('This browser cannot send the form. Please email info@millbrooknazarene.church.', 'error');
                 return;
             }
 
@@ -813,9 +860,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 syncAge();
                 setInteractive(true);
                 setStatus(payload.message || 'Thank you. The registration has been sent to the Kids Club team.', 'success');
+                showConfirmation(payload.confirmation_email_sent !== false);
             }).catch(function (error) {
                 setInteractive(true);
-                setStatus(error.message || 'Sorry, the form could not be sent. Please try again or email info@millbrooknazarene.co.uk.', 'error');
+                setStatus(error.message || 'Sorry, the form could not be sent. Please try again or email info@millbrooknazarene.church.', 'error');
             });
         });
     });

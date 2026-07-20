@@ -31,6 +31,7 @@ $seedMap = [
     'kids-club-2026' => __DIR__ . '/add_kids_club_2026_page.php',
     'whats-on-express' => __DIR__ . '/migrate_whats_on_to_express.php',
     'launch-seo' => __DIR__ . '/set_launch_seo.php',
+    'email-domain' => __DIR__ . '/update_email_domain.php',
 ];
 
 $seedGroups = [

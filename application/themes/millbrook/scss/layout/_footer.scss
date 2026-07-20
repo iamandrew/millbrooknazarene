@@ -6,6 +6,7 @@
     padding: 0;
     background: linear-gradient(180deg, var(--brand-primary-dark), var(--brand-ink));
     color: rgba($color-surface, 0.82);
+    position: relative;
 
     .container {
         width: min(100% - 2.4rem, var(--container-width));

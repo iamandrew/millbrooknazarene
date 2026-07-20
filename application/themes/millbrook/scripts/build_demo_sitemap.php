@@ -396,7 +396,7 @@ HTML,
 
 <h3>Ways To Reach Us</h3>
 <ul>
-  <li>Email: info@millbrooknazarene.co.uk</li>
+  <li>Email: info@millbrooknazarene.church</li>
   <li>Sunday worship: 11:00am</li>
   <li>Location: Millbrook Community Centre, Larne</li>
   <li>Use the contact form for general enquiries</li>

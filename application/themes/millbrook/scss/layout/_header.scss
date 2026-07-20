@@ -592,6 +592,16 @@ body.menu-open {
     }
 }
 
+.site-header--hero.site-header--kids-club {
+    .header-shell {
+        background: #15a0b8;
+    }
+
+    &.scrolled .header-shell {
+        background: rgba(21, 160, 184, 0.96);
+    }
+}
+
 .site-header--overlay {
     position: absolute;
     inset: var(--toolbar-offset) 0 auto;

@@ -79,7 +79,7 @@ $page->addBlock($contentBlockType, $area, [
         <p class="content-kicker">Safeguarding</p>
         <h3>Ask about safeguarding.</h3>
         <p>If you have a safeguarding question or concern, please contact the safeguarding team directly.</p>
-        <p><a href="mailto:safeguarding@millbrooknazarene.co.uk">safeguarding@millbrooknazarene.co.uk</a></p>
+        <p><a href="mailto:safeguarding@millbrooknazarene.church">safeguarding@millbrooknazarene.church</a></p>
       </section>
       <section class="content-guide-card">
         <p class="content-kicker">Other questions</p>

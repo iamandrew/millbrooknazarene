@@ -104,7 +104,7 @@ $ogImageUrl = millbrook_absolute_url($thumbnailUrl !== '' ? $thumbnailUrl : mill
                     if ($topBarRight->getTotalBlocksInArea($c) > 0) {
                         $topBarRight->display($c);
                     } else {
-                        echo '<a href="mailto:info@millbrooknazarene.co.uk">info@millbrooknazarene.co.uk</a>';
+                        echo '<a href="mailto:info@millbrooknazarene.church">info@millbrooknazarene.church</a>';
                         echo '<a href="/contact">Get in touch</a>';
                     }
                     ?>
@@ -247,7 +247,7 @@ $ogImageUrl = millbrook_absolute_url($thumbnailUrl !== '' ? $thumbnailUrl : mill
 
                         <div class="site-menu__meta">
                             <p class="site-menu__eyebrow">Contact</p>
-                            <p><a href="mailto:info@millbrooknazarene.co.uk">info@millbrooknazarene.co.uk</a></p>
+                            <p><a href="mailto:info@millbrooknazarene.church">info@millbrooknazarene.church</a></p>
                             <p><a href="/contact">Get in touch</a></p>
                         </div>
                     </div>

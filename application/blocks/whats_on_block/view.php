@@ -113,7 +113,7 @@
                 <p>It is natural to feel unsure about walking into something new. If you message us before coming, we can let you know what to expect and help you find a friendly face.</p>
             </div>
             <div class="whats-on-help__links">
-                <p><strong>Check this week’s details</strong><br><a href="mailto:info@millbrooknazarene.co.uk">info@millbrooknazarene.co.uk</a></p>
+                <p><strong>Check this week’s details</strong><br><a href="mailto:info@millbrooknazarene.church">info@millbrooknazarene.church</a></p>
                 <p><strong>Coming on Sunday?</strong><br><a href="/visit-us">Plan your first visit</a></p>
                 <p><strong>Want the wider picture?</strong><br><a href="/community">Explore Church Life</a></p>
             </div>

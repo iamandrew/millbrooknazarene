@@ -58,7 +58,7 @@ return [
         <div>
           <p class="content-kicker">Teaching Pastor</p>
           <h3>Philip McAlister</h3>
-          <p><a href="mailto:revphilip@millbrooknazarene.co.uk">revphilip@millbrooknazarene.co.uk</a></p>
+          <p><a href="mailto:revphilip@millbrooknazarene.church">revphilip@millbrooknazarene.church</a></p>
         </div>
       </article>
 
@@ -69,7 +69,7 @@ return [
         <div>
           <p class="content-kicker">Community Pastor</p>
           <h3>Victoria Moore</h3>
-          <p><a href="mailto:victoria@millbrooknazarene.co.uk">victoria@millbrooknazarene.co.uk</a></p>
+          <p><a href="mailto:victoria@millbrooknazarene.church">victoria@millbrooknazarene.church</a></p>
         </div>
       </article>
 
@@ -80,7 +80,7 @@ return [
         <div>
           <p class="content-kicker">Youth and Community Worker</p>
           <h3>Lucy Barclay</h3>
-          <p><a href="mailto:lucy@millbrooknazarene.co.uk">lucy@millbrooknazarene.co.uk</a></p>
+          <p><a href="mailto:lucy@millbrooknazarene.church">lucy@millbrooknazarene.church</a></p>
         </div>
       </article>
 
@@ -91,7 +91,7 @@ return [
         <div>
           <p class="content-kicker">Student Pastor</p>
           <h3>Dwain McKay</h3>
-          <p><a href="mailto:dwain@millbrooknazarene.co.uk">dwain@millbrooknazarene.co.uk</a></p>
+          <p><a href="mailto:dwain@millbrooknazarene.church">dwain@millbrooknazarene.church</a></p>
         </div>
       </article>
     </div>

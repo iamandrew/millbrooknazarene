@@ -161,19 +161,65 @@ require_once DIR_APPLICATION . '/src/KidsClub/RegistrationSheet.php';
             if (strpos($exception->getMessage(), 'credentials') !== false) {
                 return $json([
                     'ok' => false,
-                    'message' => 'The registration form is ready, but the Google Sheet connection is not configured yet. Please email info@millbrooknazarene.co.uk.',
+                    'message' => 'The registration form is ready, but the Google Sheet connection is not configured yet. Please email info@millbrooknazarene.church.',
                 ], 503);
             }
 
             return $json([
                 'ok' => false,
-                'message' => 'Sorry, the registration could not be sent. Please try again or email info@millbrooknazarene.co.uk.',
+                'message' => 'Sorry, the registration could not be sent. Please try again or email info@millbrooknazarene.church.',
             ], 500);
+        }
+
+        $confirmationEmailSent = false;
+
+        try {
+            $guardianName = $value('guardian_name');
+            $childName = $value('child_name');
+            $childNameForHtml = htmlspecialchars($childName, ENT_QUOTES, 'UTF-8');
+            $publicUrl = rtrim((string) (getenv('MILLBROOK_PUBLIC_URL') ?: $request->getSchemeAndHttpHost()), '/');
+            $themeImageUrl = $publicUrl . '/application/themes/millbrook/images';
+            $emailSkyUrl = htmlspecialchars($themeImageUrl . '/kids-club-2026/email-sky.png', ENT_QUOTES, 'UTF-8');
+            $emailHeaderUrl = htmlspecialchars($themeImageUrl . '/kids-club-2026/email-logo.png', ENT_QUOTES, 'UTF-8');
+            $emailFooterLogoUrl = htmlspecialchars($themeImageUrl . '/main-logo.svg', ENT_QUOTES, 'UTF-8');
+            $mail = \Core::make('mail');
+
+            $mail->to($value('guardian_email'), $guardianName);
+            $mail->replyto('info@millbrooknazarene.church', 'Millbrook Church');
+            $mail->setSubject('The Big Picnic Kids Club registration received');
+            $mail->setBody(
+                "Hello {$guardianName},\n\n"
+                . "Thanks for registering {$childName} for The Big Picnic Kids Club.\n\n"
+                . "We have received the registration for 12-14 August 2026, 6:30-8:00pm at Millbrook Community Centre.\n\n"
+                . "We will be in touch if we need any further information. If you have a question in the meantime, reply to this email or contact info@millbrooknazarene.church.\n\n"
+                . "Millbrook Church\n"
+            );
+            $mail->setBodyHTML(
+                '<!doctype html><html><body style="margin:0;padding:0;background:#76c8ef;color:#29445e;font-family:Arial,sans-serif;line-height:1.55;">'
+                . '<table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center" background="' . $emailSkyUrl . '" style="padding:28px 16px;background:#76c8ef url(\'' . $emailSkyUrl . '\') center top / cover no-repeat;">'
+                . '<table role="presentation" width="600" cellspacing="0" cellpadding="0" style="width:100%;max-width:600px;">'
+                . '<tr><td align="center" style="padding:0 24px 22px;"><img src="' . $emailHeaderUrl . '" width="360" alt="The Big Picnic Kids Club" style="display:block;width:100%;max-width:360px;height:auto;border:0;"></td></tr>'
+                . '<tr><td style="padding:0 24px 28px;"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f1f8fb;border:2px solid #29445e;border-top:7px solid #ef6068;border-radius:8px;">'
+                . '<tr><td style="padding:32px;">'
+                . '<h1 style="margin:0 0 18px;color:#29445e;font-size:28px;line-height:1.2;">Registration received</h1>'
+                . '<p style="margin:0 0 16px;">Hello ' . htmlspecialchars($guardianName, ENT_QUOTES, 'UTF-8') . ',</p>'
+                . '<p style="margin:0 0 16px;">Thanks for registering ' . $childNameForHtml . ' for The Big Picnic Kids Club.</p>'
+                . '<p style="margin:0 0 22px;padding:16px;background:#d9eff9;border-left:4px solid #278fbd;"><strong>12-14 August 2026</strong><br>6:30-8:00pm<br>Millbrook Community Centre</p>'
+                . '<p style="margin:0 0 16px;">We will be in touch if we need any further information.</p>'
+                . '<p style="margin:0;">Questions? Reply to this email or contact <a href="mailto:info@millbrooknazarene.church" style="color:#29445e;">info@millbrooknazarene.church</a>.</p>'
+                . '</td></tr></table></td></tr>'
+                . '<tr><td align="center" style="padding:0 24px;"><img src="' . $emailFooterLogoUrl . '" width="220" alt="Millbrook Church of the Nazarene" style="display:block;width:100%;max-width:220px;height:auto;border:0;"></td></tr></table>'
+                . '</td></tr></table></body></html>'
+            );
+            $confirmationEmailSent = $mail->sendMail();
+        } catch (\Throwable $exception) {
+            error_log('[kids-club-2026] Confirmation email could not be sent: ' . $exception->getMessage());
         }
 
         return $json([
             'ok' => true,
             'message' => 'Thank you. The registration has been sent to the Kids Club team.',
+            'confirmation_email_sent' => $confirmationEmailSent,
         ]);
     },
     'kids_club_2026_register',

@@ -84,7 +84,7 @@ return [
       <p class="content-kicker">Care and safeguarding</p>
       <h3>Your child’s safety matters to us.</h3>
       <p>All Sunday School leaders are AccessNI checked and have been through relevant safeguarding training. We also have a safeguarding team who are there to protect, care for, and support children and families.</p>
-      <p>For safeguarding enquiries, email <a href="mailto:safeguarding@millbrooknazarene.co.uk">safeguarding@millbrooknazarene.co.uk</a>.</p>
+      <p>For safeguarding enquiries, email <a href="mailto:safeguarding@millbrooknazarene.church">safeguarding@millbrooknazarene.church</a>.</p>
     </div>
     <aside class="content-guide-note">
       <strong>If your child needs you.</strong>
@@ -99,7 +99,7 @@ return [
       <p>If you have questions before your child joins Sunday School or creche, Rhonda would be happy to help. You can also speak to the welcome team on Sunday and we will make sure you get to the right person.</p>
     </div>
     <div class="content-guide-cta__steps">
-      <p><strong>Questions about children’s provision?</strong><br><a href="mailto:rhonda@millbrooknazarene.co.uk">rhonda@millbrooknazarene.co.uk</a></p>
+      <p><strong>Questions about children’s provision?</strong><br><a href="mailto:rhonda@millbrooknazarene.church">rhonda@millbrooknazarene.church</a></p>
       <p><strong>Coming with a child under 5?</strong><br><a href="/community/creche">Read about creche</a></p>
       <p><strong>Planning your first visit?</strong><br><a href="/visit-us">What to expect on Sunday</a></p>
     </div>

@@ -108,7 +108,7 @@ return [
       <p>If you have a question or would like to check anything before coming, Lucy would be happy to help. You can also keep an eye on our social media for updates about youth nights, outings, and trips.</p>
     </div>
     <div class="content-guide-cta__steps">
-      <p><strong>Ask about Youth</strong><br><a href="mailto:lucy@millbrooknazarene.co.uk">lucy@millbrooknazarene.co.uk</a></p>
+      <p><strong>Ask about Youth</strong><br><a href="mailto:lucy@millbrooknazarene.church">lucy@millbrooknazarene.church</a></p>
       <p><strong>First visit?</strong> Please make sure we have parent permission and emergency contact details.</p>
       <p><strong>Bringing a friend?</strong> That is great. The same first-visit details are needed for them too.</p>
     </div>
