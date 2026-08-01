@@ -86,7 +86,7 @@ if (isset($renderer)) {
                     <p class="millbrook-turnstile-status" role="status" aria-live="polite" hidden></p>
                     <script>
                         (function (form) {
-                            const widget = form.querySelector('.cf-turnstile');
+                            const widget = form.querySelector('.millbrook-turnstile-widget');
                             if (!widget) {
                                 return;
                             }

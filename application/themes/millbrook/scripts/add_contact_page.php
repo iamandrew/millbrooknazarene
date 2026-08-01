@@ -14,6 +14,8 @@ use Concrete\Core\Express\ObjectManager;
 use Concrete\Core\Page\Page;
 use Concrete\Core\Page\Template as PageTemplate;
 use Concrete\Core\Page\Type\Type as PageType;
+use Concrete\Core\Tree\Node\Node;
+use Concrete\Core\User\Group\Group;
 use Doctrine\ORM\EntityManagerInterface;
 
 $contentBlockType = BlockType::getByHandle('content');
@@ -119,6 +121,11 @@ foreach ($controls as $handle => $control) {
     $entityManager->persist($control);
 }
 $entityManager->flush();
+
+$resultsNode = Node::getByID((int) $entity->getEntityResultsNodeId());
+if ($resultsNode) {
+    $resultsNode->assignPermissions(Group::getByID(GUEST_GROUP_ID), ['add_express_entries']);
+}
 
 if (!isset($controls['email_address'])) {
     $output->writeln('<error>Could not find the email address form field.</error>');
