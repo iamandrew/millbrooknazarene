@@ -184,6 +184,7 @@ require_once DIR_APPLICATION . '/src/KidsClub/RegistrationSheet.php';
             $emailFooterLogoUrl = htmlspecialchars($themeImageUrl . '/main-logo.svg', ENT_QUOTES, 'UTF-8');
             $mail = \Core::make('mail');
 
+            $mail->from('info@millbrooknazarene.church', 'Millbrook Church');
             $mail->to($value('guardian_email'), $guardianName);
             $mail->replyto('info@millbrooknazarene.church', 'Millbrook Church');
             $mail->setSubject('The Big Picnic Kids Club registration received');
@@ -211,6 +212,7 @@ require_once DIR_APPLICATION . '/src/KidsClub/RegistrationSheet.php';
                 . '<tr><td align="center" style="padding:0 24px;"><img src="' . $emailFooterLogoUrl . '" width="220" alt="Millbrook Church of the Nazarene" style="display:block;width:100%;max-width:220px;height:auto;border:0;"></td></tr></table>'
                 . '</td></tr></table></body></html>'
             );
+            $mail->setIsThrowOnFailure(true);
             $confirmationEmailSent = $mail->sendMail();
         } catch (\Throwable $exception) {
             error_log('[kids-club-2026] Confirmation email could not be sent: ' . $exception->getMessage());
