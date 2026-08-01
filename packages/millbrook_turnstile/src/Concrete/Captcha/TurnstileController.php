@@ -51,11 +51,7 @@ class TurnstileController extends AbstractController implements CaptchaInterface
         $config = $this->app->make('config');
 
         $config->save('captcha.turnstile.site_key', trim((string) ($data['site_key'] ?? '')));
-
-        $secretKey = trim((string) ($data['secret_key'] ?? ''));
-        if ($secretKey !== '') {
-            $config->save('captcha.turnstile.secret_key', $secretKey);
-        }
+        $config->save('captcha.turnstile.secret_key', '');
     }
 
     public function check(): bool
@@ -65,18 +61,25 @@ class TurnstileController extends AbstractController implements CaptchaInterface
             return false;
         }
 
-        $secretKey = (string) $this->app->make('config')->get('captcha.turnstile.secret_key');
+        $secretKey = trim((string) getenv('TURNSTILE_SECRET'));
         $token = trim((string) $request->request->get('cf-turnstile-response'));
         if ($secretKey === '' || $token === '') {
+            $this->logger?->notice('Cloudflare Turnstile verification could not start because the token or TURNSTILE_SECRET was missing.');
+
             return false;
         }
 
         try {
-            $client = new Client();
+            $client = $this->app->make(Client::class);
             $response = $client->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
-                'secret' => $secretKey,
-                'response' => $token,
-                'remoteip' => (string) $request->getClientIp(),
+                'headers' => ['Accept' => 'application/json'],
+                'form_params' => [
+                    'secret' => $secretKey,
+                    'response' => $token,
+                    'remoteip' => (string) $request->getClientIp(),
+                ],
+                'http_errors' => false,
+                'timeout' => 10,
             ]);
             $result = json_decode((string) $response->getBody(), true);
         } catch (\Throwable $exception) {
@@ -85,6 +88,18 @@ class TurnstileController extends AbstractController implements CaptchaInterface
             return false;
         }
 
-        return is_array($result) && !empty($result['success']) && ($result['action'] ?? '') === 'contact_enquiry';
+        $expectedHostname = strtolower((string) $request->getHost());
+        $valid = $response->getStatusCode() === 200
+            && is_array($result)
+            && !empty($result['success'])
+            && ($result['action'] ?? '') === 'contact_enquiry'
+            && strtolower((string) ($result['hostname'] ?? '')) === $expectedHostname;
+
+        if (!$valid) {
+            $errorCodes = is_array($result) && is_array($result['error-codes'] ?? null) ? implode(', ', $result['error-codes']) : 'unknown error';
+            $this->logger?->notice('Cloudflare Turnstile rejected a Contact form submission: ' . $errorCodes);
+        }
+
+        return $valid;
     }
 }
