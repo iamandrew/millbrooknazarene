@@ -59,15 +59,21 @@ class TurnstileController extends AbstractController implements CaptchaInterface
     {
         $request = $this->app->make('request');
         if (trim((string) $request->request->get('website')) !== '') {
-            return false;
+            return $this->fail('The security check could not be completed. Please refresh the page and try again.');
         }
 
         $secretKey = $this->getEnvironmentValue('TURNSTILE_SECRET');
         $token = trim((string) $request->request->get('cf-turnstile-response'));
-        if ($secretKey === '' || $token === '') {
-            $this->logger?->notice('Cloudflare Turnstile verification could not start because the token or TURNSTILE_SECRET was missing.');
+        if ($secretKey === '') {
+            $this->logger?->notice('Cloudflare Turnstile verification could not start because TURNSTILE_SECRET was missing.');
 
-            return false;
+            return $this->fail('The security check is not configured on the server yet. Please contact us by email instead.');
+        }
+
+        if ($token === '') {
+            $this->logger?->notice('Cloudflare Turnstile verification could not start because the response token was missing.');
+
+            return $this->fail('The security check did not complete in your browser. Please refresh the page and try again.');
         }
 
         try {
@@ -86,7 +92,7 @@ class TurnstileController extends AbstractController implements CaptchaInterface
         } catch (\Throwable $exception) {
             $this->logger?->error('Cloudflare Turnstile verification failed: ' . $exception->getMessage());
 
-            return false;
+            return $this->fail('We could not verify the security check just now. Please try again in a moment.');
         }
 
         $expectedHostname = strtolower((string) $request->getHost());
@@ -99,9 +105,26 @@ class TurnstileController extends AbstractController implements CaptchaInterface
         if (!$valid) {
             $errorCodes = is_array($result) && is_array($result['error-codes'] ?? null) ? implode(', ', $result['error-codes']) : 'unknown error';
             $this->logger?->notice('Cloudflare Turnstile rejected a Contact form submission: ' . $errorCodes);
+
+            if ($response->getStatusCode() !== 200) {
+                return $this->fail('The security check service returned an unexpected response. Please try again in a moment.');
+            }
+
+            if (!empty($result['success'])) {
+                return $this->fail('The security check was completed for a different site or form. Please refresh the page and try again.');
+            }
+
+            return $this->fail('Cloudflare could not verify the security check (' . $errorCodes . '). Please refresh the page and try again.');
         }
 
         return $valid;
+    }
+
+    private function fail(string $message): bool
+    {
+        $this->app->make('session')->getFlashBag()->add('millbrook_turnstile_error', $message);
+
+        return false;
     }
 
     private function getEnvironmentValue(string $name): string

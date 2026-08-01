@@ -4,6 +4,14 @@ defined('C5_EXECUTE') or die('Access Denied.');
 
 use Concrete\Core\Entity\Express\Control\AttributeKeyControl;
 
+$turnstileErrors = [];
+if (!empty($displayCaptcha)) {
+    $turnstileFlashBag = \Core::make('session')->getFlashBag();
+    if ($turnstileFlashBag->has('millbrook_turnstile_error')) {
+        $turnstileErrors = $turnstileFlashBag->get('millbrook_turnstile_error');
+    }
+}
+
 /** @var \Concrete\Core\Block\View\BlockView $view */
 /** @var \Concrete\Core\Express\Form\Renderer|null $renderer */
 /** @var string|null $success */
@@ -35,6 +43,10 @@ if (isset($renderer)) {
 
             <?php if (isset($error) && is_object($error)) { ?>
                 <div class="alert alert-danger"><?= $error->output() ?></div>
+            <?php } ?>
+
+            <?php foreach ($turnstileErrors as $turnstileError) { ?>
+                <div class="alert alert-danger"><?= h($turnstileError) ?></div>
             <?php } ?>
 
             <form id="express-form-<?= $bID ?>" enctype="multipart/form-data" class="form-stacked" method="post"
