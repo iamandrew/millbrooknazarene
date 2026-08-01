@@ -45,6 +45,19 @@ class TurnstileController extends AbstractController implements CaptchaInterface
         return '';
     }
 
+    public function saveOptions($data): void
+    {
+        $data = is_array($data) ? $data : [];
+        $config = $this->app->make('config');
+
+        $config->save('captcha.turnstile.site_key', trim((string) ($data['site_key'] ?? '')));
+
+        $secretKey = trim((string) ($data['secret_key'] ?? ''));
+        if ($secretKey !== '') {
+            $config->save('captcha.turnstile.secret_key', $secretKey);
+        }
+    }
+
     public function check(): bool
     {
         $request = $this->app->make('request');
