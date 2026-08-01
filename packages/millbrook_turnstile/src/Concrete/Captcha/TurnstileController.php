@@ -28,12 +28,12 @@ class TurnstileController extends AbstractController implements CaptchaInterface
         }
 
         echo '<script>window.millbrookTurnstileSuccess=function(){document.dispatchEvent(new CustomEvent("millbrook:turnstile-success"));};window.millbrookTurnstileExpired=function(){document.dispatchEvent(new CustomEvent("millbrook:turnstile-expired"));};window.millbrookTurnstileError=function(){document.dispatchEvent(new CustomEvent("millbrook:turnstile-error"));return true;};</script>';
-        echo '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>';
         echo '<div class="millbrook-turnstile-honeypot" aria-hidden="true">';
         echo '<label for="turnstile-website">Leave this field empty</label>';
         echo '<input id="turnstile-website" type="text" name="website" tabindex="-1" autocomplete="off">';
         echo '</div>';
         echo '<div class="cf-turnstile" data-sitekey="' . h($siteKey) . '" data-theme="light" data-size="flexible" data-action="contact_enquiry" data-appearance="interaction-only" data-response-field="true" data-callback="millbrookTurnstileSuccess" data-expired-callback="millbrookTurnstileExpired" data-error-callback="millbrookTurnstileError"></div>';
+        echo '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>';
     }
 
     public function showInput(): void
