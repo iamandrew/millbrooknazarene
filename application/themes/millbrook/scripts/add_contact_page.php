@@ -159,6 +159,20 @@ $page->update([
 ]);
 
 $area = Area::getOrCreate($page, 'Main');
+$existingFormBlock = null;
+foreach ($area->getAreaBlocksArray($page) as $block) {
+    if ($block->getBlockTypeHandle() === 'express_form') {
+        $existingFormBlock = $block;
+        break;
+    }
+}
+
+if ($existingFormBlock) {
+    $output->writeln('<info>Updated Contact Enquiry permissions without replacing the existing form block.</info>');
+
+    return 0;
+}
+
 foreach ($area->getAreaBlocksArray($page) as $block) {
     $block->deleteBlock();
 }
