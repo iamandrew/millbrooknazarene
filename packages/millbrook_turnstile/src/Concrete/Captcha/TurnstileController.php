@@ -27,12 +27,13 @@ class TurnstileController extends AbstractController implements CaptchaInterface
             return;
         }
 
+        echo '<script>window.millbrookTurnstileSuccess=function(){document.dispatchEvent(new CustomEvent("millbrook:turnstile-success"));};window.millbrookTurnstileExpired=function(){document.dispatchEvent(new CustomEvent("millbrook:turnstile-expired"));};window.millbrookTurnstileError=function(){document.dispatchEvent(new CustomEvent("millbrook:turnstile-error"));return true;};</script>';
         echo '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>';
         echo '<div class="millbrook-turnstile-honeypot" aria-hidden="true">';
         echo '<label for="turnstile-website">Leave this field empty</label>';
         echo '<input id="turnstile-website" type="text" name="website" tabindex="-1" autocomplete="off">';
         echo '</div>';
-        echo '<div class="cf-turnstile" data-sitekey="' . h($siteKey) . '" data-theme="light" data-size="flexible" data-action="contact_enquiry" data-appearance="interaction-only"></div>';
+        echo '<div class="cf-turnstile" data-sitekey="' . h($siteKey) . '" data-theme="light" data-size="flexible" data-action="contact_enquiry" data-appearance="interaction-only" data-response-field="true" data-callback="millbrookTurnstileSuccess" data-expired-callback="millbrookTurnstileExpired" data-error-callback="millbrookTurnstileError"></div>';
     }
 
     public function showInput(): void
@@ -61,7 +62,7 @@ class TurnstileController extends AbstractController implements CaptchaInterface
             return false;
         }
 
-        $secretKey = trim((string) getenv('TURNSTILE_SECRET'));
+        $secretKey = $this->getEnvironmentValue('TURNSTILE_SECRET');
         $token = trim((string) $request->request->get('cf-turnstile-response'));
         if ($secretKey === '' || $token === '') {
             $this->logger?->notice('Cloudflare Turnstile verification could not start because the token or TURNSTILE_SECRET was missing.');
@@ -101,5 +102,23 @@ class TurnstileController extends AbstractController implements CaptchaInterface
         }
 
         return $valid;
+    }
+
+    private function getEnvironmentValue(string $name): string
+    {
+        $value = getenv($name);
+        if (is_string($value) && trim($value) !== '') {
+            return trim($value);
+        }
+
+        // Apache with PHP-FPM may pass SetEnv values through the request instead.
+        foreach ([$name, 'REDIRECT_' . $name] as $serverName) {
+            $value = $_SERVER[$serverName] ?? '';
+            if (is_string($value) && trim($value) !== '') {
+                return trim($value);
+            }
+        }
+
+        return '';
     }
 }

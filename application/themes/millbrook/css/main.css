@@ -4536,6 +4536,11 @@ td {
 .page-content .contact-form-heading + :is(.ccm-block-type-form, .ccm-block-express-form) .captcha {
   margin: 1.25rem 0;
 }
+.page-content .contact-form-heading + :is(.ccm-block-type-form, .ccm-block-express-form) .millbrook-turnstile-status {
+  margin: 0.8rem 0 0;
+  color: var(--brand-primary-dark);
+  font-weight: 650;
+}
 .page-content .contact-form-heading + :is(.ccm-block-type-form, .ccm-block-express-form) .millbrook-turnstile-honeypot {
   position: absolute;
   width: 1px;

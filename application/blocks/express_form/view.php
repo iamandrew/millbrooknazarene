@@ -69,6 +69,44 @@ if (isset($renderer)) {
                 <div class="form-actions">
                     <button type="submit" name="Submit" class="btn btn-primary"><?= t($submitLabel) ?></button>
                 </div>
+
+                <?php if ($displayCaptcha) { ?>
+                    <p class="millbrook-turnstile-status" role="status" aria-live="polite" hidden></p>
+                    <script>
+                        (function (form) {
+                            const widget = form.querySelector('.cf-turnstile');
+                            if (!widget) {
+                                return;
+                            }
+
+                            const status = form.querySelector('.millbrook-turnstile-status');
+                            const showStatus = function (message) {
+                                status.textContent = message;
+                                status.hidden = false;
+                            };
+                            const hideStatus = function () {
+                                status.textContent = '';
+                                status.hidden = true;
+                            };
+
+                            document.addEventListener('millbrook:turnstile-success', hideStatus);
+                            document.addEventListener('millbrook:turnstile-expired', function () {
+                                showStatus('The security check has expired. Please wait a moment and try again.');
+                            });
+                            document.addEventListener('millbrook:turnstile-error', function () {
+                                showStatus('We could not complete the security check. Please refresh the page and try again.');
+                            });
+
+                            form.addEventListener('submit', function (event) {
+                                const token = form.querySelector('[name="cf-turnstile-response"]');
+                                if (!token || !token.value.trim()) {
+                                    event.preventDefault();
+                                    showStatus('Please wait for the security check to finish, then try again.');
+                                }
+                            });
+                        })(document.getElementById('express-form-<?= $bID ?>'));
+                    </script>
+                <?php } ?>
             </form>
         </div>
     <?php } else { ?>
