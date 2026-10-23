@@ -51,6 +51,21 @@ if (isset($renderer)) {
 
             <form id="express-form-<?= $bID ?>" enctype="multipart/form-data" class="form-stacked" method="post"
                   action="<?= $view->action('submit') ?>#form<?= $bID ?>">
+                <?php
+                /** @var \Application\Form\SilentSpamGuard|null $millbrookSpamGuard */
+                /** @var string|null $millbrookFormStarted */
+                /** @var string|null $millbrookFormSignature */
+                if (isset($millbrookSpamGuard, $millbrookFormStarted, $millbrookFormSignature)) {
+                    ?>
+                    <div class="millbrook-turnstile-honeypot" aria-hidden="true">
+                        <label for="millbrook-form-website-<?= $bID ?>">Leave this field empty</label>
+                        <input id="millbrook-form-website-<?= $bID ?>" type="text" name="<?= h($millbrookSpamGuard->honeypotFieldName()) ?>" value="" tabindex="-1" autocomplete="off">
+                    </div>
+                    <input type="hidden" name="<?= h($millbrookSpamGuard->startedFieldName()) ?>" value="<?= h($millbrookFormStarted) ?>">
+                    <input type="hidden" name="<?= h($millbrookSpamGuard->signatureFieldName()) ?>" value="<?= h($millbrookFormSignature) ?>">
+                    <?php
+                }
+                ?>
                 <?php $renderer->render(); ?>
 
                 <script>

@@ -68,6 +68,11 @@
  */
 
 require_once DIR_APPLICATION . '/src/KidsClub/RegistrationSheet.php';
+require_once DIR_APPLICATION . '/src/Form/SilentSpamGuard.php';
+
+$app->bind(\Application\Form\SilentSpamGuard::class, static function ($app) {
+    return new \Application\Form\SilentSpamGuard($app);
+});
 
 \Route::register(
     '/kids-club-2026/register',

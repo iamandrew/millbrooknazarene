@@ -27,10 +27,7 @@ class TurnstileController extends AbstractController implements CaptchaInterface
             return;
         }
 
-        echo '<div class="millbrook-turnstile-honeypot" aria-hidden="true">';
-        echo '<label for="turnstile-website">Leave this field empty</label>';
-        echo '<input id="turnstile-website" type="text" name="website" tabindex="-1" autocomplete="off">';
-        echo '</div>';
+        // Honeypot fields are rendered by the Express Form view so they stay present even if Turnstile is off.
         echo '<input class="millbrook-turnstile-response" type="hidden" name="cf-turnstile-response" value="">';
         echo '<div class="millbrook-turnstile-widget" aria-live="polite"></div>';
         echo '<script>(function(){var mount=document.currentScript.previousElementSibling;var response=mount.previousElementSibling;var render=function(){window.turnstile.render(mount,{sitekey:' . json_encode($siteKey) . ',theme:"light",size:"flexible",action:"contact_enquiry",appearance:"interaction-only","response-field":false,callback:function(token){response.value=token;document.dispatchEvent(new CustomEvent("millbrook:turnstile-success"));},"expired-callback":function(){response.value="";document.dispatchEvent(new CustomEvent("millbrook:turnstile-expired"));},"error-callback":function(){response.value="";document.dispatchEvent(new CustomEvent("millbrook:turnstile-error"));return true;}});};if(window.turnstile){render();return;}if(!window.millbrookTurnstileApi){window.millbrookTurnstileApi=new Promise(function(resolve,reject){var script=document.createElement("script");script.src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";script.async=true;script.onload=resolve;script.onerror=reject;document.head.appendChild(script);});}window.millbrookTurnstileApi.then(render).catch(function(){response.value="";document.dispatchEvent(new CustomEvent("millbrook:turnstile-error"));});})();</script>';
