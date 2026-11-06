@@ -2,6 +2,7 @@
 
 namespace Concrete\Controller\SinglePage\Dashboard\Users;
 
+use Concrete\Core\Error\UserMessageException;
 use Concrete\Core\Page\Controller\DashboardPageController;
 use Concrete\Core\Permission\Checker;
 use Concrete\Core\User\Group\GroupRepository;
@@ -20,6 +21,8 @@ class Add extends DashboardPageController
      */
     public function view()
     {
+        $this->checkAddUsersPermission();
+
         $locales = Localization::getAvailableInterfaceLanguageDescriptions();
         $attribs = UserAttributeKey::getRegistrationList();
         $assignment = PermissionKey::getByHandle('edit_user_properties')->getMyAssignment();
@@ -30,6 +33,7 @@ class Add extends DashboardPageController
         $this->set('ih', $this->app->make('helper/concrete/ui'));
         $this->set('av', $this->app->make('helper/concrete/avatar'));
         $this->set('dtt', $this->app->make('helper/form/date_time'));
+        $this->set('dh', $this->app->make('helper/date'));
         $this->set('gArray', $gArray);
         $this->set('assignment', $assignment);
         $this->set('locales', $locales);
@@ -42,6 +46,8 @@ class Add extends DashboardPageController
      */
     public function submit()
     {
+        $this->checkAddUsersPermission();
+
         $assignment = PermissionKey::getByHandle('edit_user_properties')->getMyAssignment();
         $postRequest = $this->request->request;
         $username = trim($postRequest->get('uName'));
@@ -77,6 +83,9 @@ class Add extends DashboardPageController
         if (!$this->error->has()) {
             // do the registration
             $data = ['uName' => $username, 'uPassword' => $password, 'uEmail' => $postRequest->get('uEmail'), 'uDefaultLanguage' => $postRequest->get('uDefaultLanguage',''), 'uHomeFileManagerFolderID' => ($postRequest->get('uHomeFileManagerFolderID', 0) == 0 ? '' : $postRequest->get('uHomeFileManagerFolderID'))];
+            if ($this->app->make('config')->get('concrete.misc.user_timezones') && $assignment->allowEditTimezone()) {
+                $data['uTimezone'] = $postRequest->get('uTimezone');
+            }
             $uo = $this->app['user/registration']->create($data);
             if (is_object($uo)) {
                 if ($assignment->allowEditAvatar()) {
@@ -128,5 +137,18 @@ class Add extends DashboardPageController
             $this->view();
         }
         return;
+    }
+
+    /**
+     * @throws \Concrete\Core\Error\UserMessageException when the current user may not add users
+     *
+     * @return void
+     */
+    private function checkAddUsersPermission()
+    {
+        $permissions = new Checker();
+        if (!$permissions->canAddUsers()) {
+            throw new UserMessageException(t('You do not have access to add users.'));
+        }
     }
 }

@@ -7,6 +7,7 @@ use Concrete\Attribute\Topics\Controller as TopicsController;
 use Concrete\Core\Attribute\Category\PageCategory;
 use Concrete\Core\Attribute\Key\CollectionKey;
 use Concrete\Core\Block\BlockController;
+use Concrete\Core\Block\Controller\SaveMode;
 use Concrete\Core\Block\View\BlockView;
 use Concrete\Core\Feature\Features;
 use Concrete\Core\Feature\UsesFeatureInterface;
@@ -141,6 +142,11 @@ class Controller extends BlockController implements UsesFeatureInterface
      * @var bool|int|string|null
      */
     public $paginate;
+
+    /**
+     * @var bool|int|string|null
+     */
+    public $excludeCanonicalPaging;
 
     /**
      * @var bool|int|string|null
@@ -285,6 +291,7 @@ class Controller extends BlockController implements UsesFeatureInterface
         $controller->displayFeaturedOnly = $this->request->get('displayFeaturedOnly') ?? false;
         $controller->displayAliases = $this->request->get('displayAliases') ?? false;
         $controller->paginate = $this->request->get('paginate') ?? false;
+        $controller->excludeCanonicalPaging = $this->request->get('excludeCanonicalPaging') ?? false;
         $controller->enableExternalFiltering = $this->request->get('enableExternalFiltering') ?? false;
         $controller->excludeCurrentPage = $this->request->get('excludeCurrentPage') ?? false;
         $controller->filterByRelated = $this->request->get('filterByRelated') ?? false;
@@ -396,8 +403,12 @@ class Controller extends BlockController implements UsesFeatureInterface
                 break;
 
             case 'between':
-                $start = "{$this->filterDateStart} 00:00:00";
-                $end = "{$this->filterDateEnd} 23:59:59";
+                if (!empty($this->filterDateStart)) {
+                    $start = "{$this->filterDateStart} 00:00:00";
+                }
+                if (!empty($this->filterDateEnd)) {
+                    $end = "{$this->filterDateEnd} 23:59:59";
+                }
                 break;
 
             case 'all':
@@ -467,7 +478,7 @@ class Controller extends BlockController implements UsesFeatureInterface
 
         $this->list->filterByExcludePageList(false);
 
-        if ((int) ($this->cParentID) != 0) {
+        if ((int) ($this->cParentID) !== 0 || (int) ($this->cThis) !== 0 || (int) ($this->cThisParent) !== 0) {
             $cParentID = ($this->cThis) ? $this->cID : (($this->cThisParent) ? $this->cPID : $this->cParentID);
             if ($this->includeAllDescendents) {
                 $this->list->filterByPath(Page::getByID($cParentID)->getCollectionPath());
@@ -476,7 +487,7 @@ class Controller extends BlockController implements UsesFeatureInterface
             }
         }
 
-        if ($this->paginate) {
+        if ($this->paginate && !$this->excludeCanonicalPaging) {
             $paging = $this->request->request($this->list->getQueryPaginationPageParameter());
             if ($paging && $paging >= 2) { // Canonicalize page 2 and greater only
                 /** @var SeoCanonical $seoCanonical */
@@ -523,9 +534,6 @@ class Controller extends BlockController implements UsesFeatureInterface
             $pages = $list->getResults();
         }
 
-        if ($showPagination) {
-            $this->requireAsset('css', 'core/frontend/pagination');
-        }
         $this->set('pages', $pages);
         $this->set('list', $list);
         $this->set('showPagination', $showPagination);
@@ -560,6 +568,7 @@ class Controller extends BlockController implements UsesFeatureInterface
         $this->set('enableExternalFiltering', false);
         $this->set('excludeCurrentPage', false);
         $this->set('paginate', false);
+        $this->set('excludeCanonicalPaging', false);
         $this->set('cParentID', 0);
         $this->set('cThis', false);
         $this->set('cThisParent', false);
@@ -769,7 +778,7 @@ class Controller extends BlockController implements UsesFeatureInterface
 
     public function save($args)
     {
-        $fromCIF = ($args['__fromCIF'] ?? null) === true;
+        $fromCIF = $this->saveMode === SaveMode::SAVE_MODE_IMPORT;
 
         // If we've gotten to the process() function for this class, we assume that we're in
         // the clear, as far as permissions are concerned (since we check permissions at several
@@ -796,6 +805,7 @@ class Controller extends BlockController implements UsesFeatureInterface
             'excludeCurrentPage' => 0,
             'truncateChars' => 0,
             'paginate' => 0,
+            'excludeCanonicalPaging' => 0,
             'rss' => 0,
             'pfID' => 0,
             'ptID' => 0,
@@ -812,7 +822,11 @@ class Controller extends BlockController implements UsesFeatureInterface
         if (!$fromCIF) {
             $args['cThis'] = ($args['cParentID'] === $this->cID) ? '1' : '0';
             $args['cThisParent'] = ($args['cParentID'] === $this->cPID) ? '1' : '0';
-            $args['cParentID'] = ($args['cParentID'] === 'OTHER') ? (empty($args['cParentIDValue']) ? null : $args['cParentIDValue']) : $args['cParentID'];
+            if ($args['cParentID'] === 'EVERYWHERE') {
+                $args['cParentID'] = 0;
+            } elseif ($args['cParentID'] === 'OTHER') {
+                $args['cParentID'] = empty($args['cParentIDValue']) ? null : $args['cParentIDValue'];
+            }
             if (!$args['cParentID']) {
                 $args['cParentID'] = 0;
             }
@@ -834,6 +848,7 @@ class Controller extends BlockController implements UsesFeatureInterface
         $args['excludeCurrentPage'] = ($args['excludeCurrentPage']) ? '1' : '0';
         $args['truncateChars'] = (int) ($args['truncateChars']);
         $args['paginate'] = (int) ($args['paginate']);
+        $args['excludeCanonicalPaging'] = (int) ($args['excludeCanonicalPaging'] ?? 0);
         $args['rss'] = (int) ($args['rss']);
         $args['ptID'] = (int) ($args['ptID']);
 
@@ -994,11 +1009,11 @@ class Controller extends BlockController implements UsesFeatureInterface
      */
     protected function getImportData($blockNode, $page)
     {
+        $this->saveMode = SaveMode::SAVE_MODE_IMPORT;
         if (!$this->cID && $page) {
             $this->cID = $page->getCollectionID();
         }
         $args = parent::getImportData($blockNode, $page);
-        $args['__fromCIF'] = true;
         $args['customTopicTreeNodeID'] = 0;
         $customTopicAttributeKeyHandle = (string) ($args['customTopicAttributeKeyHandle'] ?? '');
         $customTopicTreeNodePath = (string) ($args['customTopicTreeNodePath'] ?? '');

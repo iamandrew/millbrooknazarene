@@ -5,6 +5,7 @@ namespace Concrete\Controller\Backend;
 use Concrete\Core\Application\EditResponse;
 use Concrete\Core\Command\Batch\Batch as BatchBuilder;
 use Concrete\Core\Controller\Controller;
+use Concrete\Core\Database\Connection\Connection;
 use Concrete\Core\Entity\File\File as FileEntity;
 use Concrete\Core\Entity\File\Folder\FavoriteFolder;
 use Concrete\Core\Entity\File\Version as FileVersionEntity;
@@ -24,8 +25,12 @@ use Concrete\Core\Http\ResponseFactoryInterface;
 use Concrete\Core\Page\Page as CorePage;
 use Concrete\Core\Permission\Checker;
 use Concrete\Core\Tree\Node\Node;
+use Concrete\Core\Tree\Node\NodeType;
 use Concrete\Core\Tree\Node\Type\FileFolder;
-use Concrete\Core\Url\Url;
+use Concrete\Core\Url\Validation\InvalidRemoteUrlException;
+use Concrete\Core\Url\Validation\RemoteUrlRequestOptionsBuilder;
+use Concrete\Core\Url\Validation\RemoteUrlValidator;
+use Concrete\Core\Url\Validation\ValidatedRemoteUrl;
 use Concrete\Core\Utility\Service\Number;
 use Concrete\Core\Utility\Service\Validation\Strings;
 use Concrete\Core\Validation\CSRF\Token;
@@ -35,17 +40,14 @@ use Exception;
 use FileSet;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\RequestOptions;
-use IPLib\Factory as IPFactory;
-use IPLib\ParseStringFlag as IPParseStringFlag;
-use IPLib\Range\Type as IPRangeType;
 use Permissions as ConcretePermissions;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use ZipArchive;
 
 class File extends Controller
 {
+    private const MAX_DIRECTORY_NAME_LENGTH = 255;
+
     /**
      * The file to be replaced (if any).
      *
@@ -69,6 +71,10 @@ class File extends Controller
 
     public function star()
     {
+        $token = $this->app->make('token');
+        if (!$token->validate()) {
+            throw new UserMessageException($token->getErrorMessage(), 401);
+        }
         $fs = FileSet::createAndGetSet('Starred Files', FileSet::TYPE_STARRED);
         $files = $this->getRequestFiles();
         $r = new FileEditResponse();
@@ -87,6 +93,10 @@ class File extends Controller
 
     public function rescan()
     {
+        $token = $this->app->make('token');
+        if (!$token->validate()) {
+            throw new UserMessageException($token->getErrorMessage(), 401);
+        }
         $files = $this->getRequestFiles('edit_file_contents');
         $r = new FileEditResponse();
         $r->setFiles($files);
@@ -106,6 +116,10 @@ class File extends Controller
 
     public function rescanMultiple()
     {
+        $token = $this->app->make('token');
+        if (!$token->validate()) {
+            throw new UserMessageException($token->getErrorMessage(), 401);
+        }
         $files = $this->getRequestFiles('edit_file_contents');
         $batch = BatchBuilder::create(t('Rescan Files'), function() use ($files) {
             foreach ($files as $file) {
@@ -117,6 +131,10 @@ class File extends Controller
 
     public function approveVersion()
     {
+        $token = $this->app->make('token');
+        if (!$token->validate('approve_file_version')) {
+            throw new UserMessageException($token->getErrorMessage(), 401);
+        }
         $files = $this->getRequestFiles('edit_file_contents');
         $fvID = $this->request->request->get('fvID', $this->request->query->get('fvID'));
         $fvID = $this->app->make('helper/security')->sanitizeInt($fvID);
@@ -133,9 +151,7 @@ class File extends Controller
     public function deleteVersion()
     {
         $token = $this->app->make('token');
-        if (!$token->validate('delete-version')) {
-            $files = $this->getRequestFiles('edit_file_contents');
-        }
+        $files = $this->getRequestFiles('edit_file_contents');
         $fvID = $this->request->request->get('fvID', $this->request->query->get('fvID'));
         $fvID = $this->app->make('helper/security')->sanitizeInt($fvID);
         $fv = $files[0]->getVersion($fvID);
@@ -169,7 +185,8 @@ class File extends Controller
         $replacingFile = $this->getFileToBeReplaced();
         try {
             if ($post_max_size = $this->app->make('helper/number')->getBytes(ini_get('post_max_size'))) {
-                if ($post_max_size < $_SERVER['CONTENT_LENGTH']) {
+                $contentLength = (int) $this->request->server->get('CONTENT_LENGTH', 0);
+                if ($contentLength > 0 && $post_max_size < $contentLength) {
                     throw new UserMessageException(Importer::getErrorMessage(Importer::E_FILE_EXCEEDS_POST_MAX_FILE_SIZE), 400);
                 }
             }
@@ -253,6 +270,10 @@ class File extends Controller
 
     public function addFavoriteFolder($folderId)
     {
+        $token = $this->app->make('token');
+        if (!$token->validate()) {
+            throw new UserMessageException($token->getErrorMessage(), 401);
+        }
         $editResponse = new EditResponse();
         $errors = new ErrorList();
         $user = new \Concrete\Core\User\User();
@@ -300,6 +321,10 @@ class File extends Controller
     /** @noinspection DuplicatedCode */
     public function removeFavoriteFolder($folderId)
     {
+        $token = $this->app->make('token');
+        if (!$token->validate()) {
+            throw new UserMessageException($token->getErrorMessage(), 401);
+        }
         $editResponse = new EditResponse();
         $errors = new ErrorList();
         $user = new \Concrete\Core\User\User();
@@ -420,15 +445,15 @@ class File extends Controller
                     break;
             }
 
-            $validIps = (array) $this->checkRemoteURlsToImport($urls);
+            $validatedUrls = (array) $this->checkRemoteURlsToImport($urls);
 
             $originalPage = $this->getImportOriginalPage();
             $fi = $this->app->make(Importer::class);
             $volatileDirectory = $this->app->make(VolatileDirectory::class);
             foreach ($urls as $url) {
                 try {
-                    $host = (string) \League\Url\Url::createFromUrl($url)->getHost();
-                    $downloadedFile = $this->downloadRemoteURL($url, $volatileDirectory->getPath(), $validIps[$host] ?? null);
+                    $validatedUrlKey = $this->getValidatedRemoteUrlKeyFromUrl($url);
+                    $downloadedFile = $this->downloadRemoteURL($url, $volatileDirectory->getPath(), $validatedUrls[$validatedUrlKey] ?? null);
                     $fileVersion = $fi->import($downloadedFile, false, $replacingFile ?: $this->getDestinationFolder());
                     if (!$fileVersion instanceof FileVersionEntity) {
                         $errors->add($url . ': ' . $fi->getErrorMessage($fileVersion));
@@ -776,8 +801,8 @@ class File extends Controller
     /**
      * Check that a list of strings are valid "incoming" file names.
      *
-     * @param string $urls
-     * @return array<string, string> An array of domains and their validated IPs
+     * @param string[] $urls
+     * @return array<string, \Concrete\Core\Url\Validation\ValidatedRemoteUrl> An array of remote URL origins and their validated URLs
      *
      * @throws \Concrete\Core\Error\UserMessageException in case one or more of the specified URLs are not valid
      *
@@ -785,56 +810,45 @@ class File extends Controller
      */
     protected function checkRemoteURlsToImport(array $urls)
     {
-        $validIps = [];
+        $validator = new RemoteUrlValidator();
+        $validatedUrls = [];
         foreach ($urls as $u) {
             try {
-                $url = Url::createFromUrl($u);
-            } catch (RuntimeException $x) {
-                throw new UserMessageException(h(t('The URL "%s" is not valid: %s', $u, $x->getMessage())));
-            }
-            $scheme = (string)$url->getScheme();
-            if ($scheme === '') {
+                $validatedUrl = $validator->validate((string) $u);
+            } catch (InvalidRemoteUrlException $x) {
+                if ($x->getPrevious() !== null) {
+                    throw new UserMessageException(h(t('The URL "%s" is not valid: %s', $u, $x->getMessage())));
+                }
                 throw new UserMessageException(h(t('The URL "%s" is not valid.', $u)));
             }
-            $host = trim((string)$url->getHost());
-            if (in_array(strtolower($host), ['', '0', 'localhost'], true)) {
-                throw new UserMessageException(h(t('The URL "%s" is not valid.', $u)));
-            }
+            $validatedUrlKey = $this->getValidatedRemoteUrlKey($validatedUrl);
 
-            // If we've already validated this hostname just skip it.
-            if (array_key_exists($host, $validIps)) {
+            // If we've already validated this URL origin just skip it.
+            if (array_key_exists($validatedUrlKey, $validatedUrls)) {
                 continue;
             }
 
-            $ipFormatBlocks = [
-                '/^\d+$/', // No fully integer / octal hostnames http://2130706433 http://017700000001
-                '/^0x[0-9a-f]+$/i', // No Hexadecimal hostnames http://0x07f000001
-            ];
-
-            foreach ($ipFormatBlocks as $block) {
-                if (preg_match($block, $host) !== 0) {
-                    throw new UserMessageException(h(t('The URL "%s" is not valid.', $u)));
-                }
-            }
-
-            $ipFlags = IPParseStringFlag::IPV4_MAYBE_NON_DECIMAL | IPParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED | IPParseStringFlag::MAY_INCLUDE_PORT | IPParseStringFlag::MAY_INCLUDE_ZONEID;
-            $ip = IPFactory::parseAddressString($host, $ipFlags);
-            if ($ip === null) {
-                $dnsList = @dns_get_record($host, DNS_A | DNS_AAAA);
-                while ($ip === null && $dnsList !== false && count($dnsList) > 0) {
-                    $dns = array_shift($dnsList);
-                    $ip = IPFactory::parseAddressString($dns['ip']);
-                }
-            }
-
-            if ($ip !== null && $ip->getRangeType() !== IPRangeType::T_PUBLIC) {
-                throw new UserMessageException(h(t('The URL "%s" is not valid.', $u)));
-            }
-
-            $validIps[$host] = $ip->toString();
+            $validatedUrls[$validatedUrlKey] = $validatedUrl;
         }
 
-        return $validIps;
+        return $validatedUrls;
+    }
+
+    protected function getValidatedRemoteUrlKey(ValidatedRemoteUrl $validatedUrl): string
+    {
+        return sprintf('%s://%s:%d', $validatedUrl->getScheme(), strtolower($validatedUrl->getHost()), $validatedUrl->getPort());
+    }
+
+    protected function getValidatedRemoteUrlKeyFromUrl(string $url): string
+    {
+        $parsedUrl = \Concrete\Core\Url\Url::createFromUrl($url);
+        $scheme = strtolower((string) $parsedUrl->getScheme());
+        $host = strtolower(trim((string) $parsedUrl->getHost()));
+        $port = $parsedUrl->getPort();
+        $port = $port ? $port->get() : null;
+        $port = $port ? (int) $port : ($scheme === 'http' ? 80 : 443);
+
+        return sprintf('%s://%s:%d', $scheme, $host, $port);
     }
 
     /**
@@ -847,24 +861,13 @@ class File extends Controller
      * @throws \Concrete\Core\Error\UserMessageException in case of errors
      *
      */
-    protected function downloadRemoteURL($url, $temporaryDirectory, ?string $ip = null)
+    protected function downloadRemoteURL($url, $temporaryDirectory, ?ValidatedRemoteUrl $validatedUrl = null)
     {
         /** @var Client $client */
         $client = $this->app->make(Client::class);
         $request = new Request('GET', $url);
 
-        $config = [
-            RequestOptions::ALLOW_REDIRECTS => false,
-        ];
-
-        if ($ip) {
-            $host = parse_url($url, PHP_URL_HOST);
-            $scheme = parse_url($url, PHP_URL_SCHEME);
-            $port = parse_url($url, PHP_URL_PORT) ?: ($scheme === 'http' ? 80 : 443);
-
-            // Specify IP if one is provided.
-            $config['curl'] = [CURLOPT_RESOLVE => ["{$host}:{$port}:{$ip}"]];
-        }
+        $config = $validatedUrl ? (new RemoteUrlRequestOptionsBuilder())->build($validatedUrl) : [];
 
         $response = $client->send($request, $config);
 
@@ -1015,6 +1018,7 @@ class File extends Controller
     public function fetchDirectories()
     {
         $directories = [];
+        $hasMoreDirectories = false;
 
         $editResponse = new EditResponse();
         /** @var Token $token */
@@ -1030,24 +1034,44 @@ class File extends Controller
                 $folder = $filesystem->getRootFolder();
 
                 if ($folder instanceof FileFolder) {
-                    $nodes = $folder->getHierarchicalNodesOfType(
-                        "file_folder",
-                        1,
-                        true,
-                        true,
-                        20
-                    );
+                    $editResponse->setAdditionalDataAttribute('rootDirectory', $this->getDirectoryData($folder));
+                    $mode = (string) $this->request->get('mode');
+                    if ($mode === 'search') {
+                        $query = trim((string) $this->request->get('query'));
+                        if ($query !== '') {
+                            $searchResult = $this->searchDirectories($folder, $query);
+                            $directories = $searchResult['directories'];
+                            $hasMoreDirectories = $searchResult['hasMore'];
+                        }
+                    } elseif ($mode === 'directory') {
+                        $directoryID = (int) $this->request->get('directoryId');
+                        $directory = Node::getByID($directoryID);
+                        if ($directory instanceof FileFolder && $directory->getTreeID() === $folder->getTreeID()) {
+                            $directoryData = $this->getDirectoryData($directory, true);
+                            if ($directoryData['canAddFiles']) {
+                                $directories[] = $directoryData;
+                            }
+                        }
+                    } else {
+                        $nodes = $folder->getHierarchicalNodesOfType(
+                            'file_folder',
+                            1,
+                            true,
+                            true,
+                            20
+                        );
 
-                    foreach ($nodes as $node) {
-                        /** @var FileFolder $treeNodeObject */
-                        $treeNodeObject = $node["treeNodeObject"];
-                        $nodePermissions = new Checker($treeNodeObject);
-                        if ($nodePermissions->canAddFiles()) {
-                            $directories[] = [
-                                "directoryId" => $treeNodeObject->getTreeNodeID(),
-                                "directoryName" => $treeNodeObject->getTreeNodeName(),
-                                "directoryLevel" => $node["level"]
-                            ];
+                        foreach ($nodes as $node) {
+                            /** @var FileFolder $treeNodeObject */
+                            $treeNodeObject = $node['treeNodeObject'];
+                            $nodePermissions = new Checker($treeNodeObject);
+                            if ($nodePermissions->canAddFiles()) {
+                                $directories[] = [
+                                    'directoryId' => $treeNodeObject->getTreeNodeID(),
+                                    'directoryName' => $treeNodeObject->getTreeNodeName(),
+                                    'directoryLevel' => $node['level'],
+                                ];
+                            }
                         }
                     }
                 }
@@ -1061,8 +1085,103 @@ class File extends Controller
 
         $editResponse->setError($errors);
         $editResponse->setAdditionalDataAttribute("directories", $directories);
+        $editResponse->setAdditionalDataAttribute('hasMoreDirectories', $hasMoreDirectories);
 
         return $responseFactory->json($editResponse);
+    }
+
+    /**
+     * @return array<string, bool|int|string|array<int, int>>
+     */
+    private function getDirectoryData(FileFolder $directory, bool $includePathIDs = false): array
+    {
+        $permissions = new Checker($directory);
+
+        $data = [
+            'directoryId' => $directory->getTreeNodeID(),
+            'directoryName' => $directory->getTreeNodeName(),
+            'directoryPath' => $directory->getTreeNodeDisplayPath(),
+            'canAddFiles' => $permissions->canAddFiles(),
+        ];
+
+        if ($includePathIDs) {
+            $pathIDs = [];
+            foreach (array_reverse($directory->getTreeNodeParentArray()) as $parentDirectory) {
+                if ($parentDirectory instanceof FileFolder) {
+                    $pathIDs[] = (int) $parentDirectory->getTreeNodeID();
+                }
+            }
+            $pathIDs[] = (int) $directory->getTreeNodeID();
+            $data['directoryPathIds'] = $pathIDs;
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return array{
+     *     directories: array<int, array<string, bool|int|string>>,
+     *     hasMore: bool
+     * }
+     */
+    private function searchDirectories(FileFolder $rootFolder, string $query): array
+    {
+        $folderNodeType = NodeType::getByHandle('file_folder');
+        if (!$folderNodeType) {
+            return [
+                'directories' => [],
+                'hasMore' => false,
+            ];
+        }
+
+        /** @var Connection $connection */
+        $connection = $this->app->make(Connection::class);
+        $queryBuilder = $connection->createQueryBuilder();
+        $queryBuilder
+            ->select('n.treeNodeID')
+            ->from('TreeNodes', 'n')
+            ->where('n.treeID = :treeID')
+            ->andWhere('n.treeNodeTypeID = :treeNodeTypeID')
+            ->andWhere('n.treeNodeParentID > 0')
+            ->andWhere($queryBuilder->expr()->like('n.treeNodeName', ':folderName'))
+            ->orderBy('n.treeNodeName', 'ASC')
+            ->addOrderBy('n.treeNodeID', 'ASC')
+            ->setParameter('treeID', $rootFolder->getTreeID())
+            ->setParameter('treeNodeTypeID', $folderNodeType->getTreeNodeTypeID())
+            ->setParameter('folderName', '%' . $query . '%')
+        ;
+
+        $directories = [];
+        $hasMore = false;
+        $batchSize = 100;
+        $offset = 0;
+        do {
+            $rows = $queryBuilder
+                ->setFirstResult($offset)
+                ->setMaxResults($batchSize)
+                ->execute()
+                ->fetchAll()
+            ;
+            foreach ($rows as $row) {
+                $directory = Node::getByID((int) $row['treeNodeID']);
+                if ($directory instanceof FileFolder) {
+                    $directoryData = $this->getDirectoryData($directory);
+                    if ($directoryData['canAddFiles']) {
+                        if (count($directories) === 50) {
+                            $hasMore = true;
+                            break 2;
+                        }
+                        $directories[] = $directoryData;
+                    }
+                }
+            }
+            $offset += count($rows);
+        } while (count($rows) === $batchSize);
+
+        return [
+            'directories' => $directories,
+            'hasMore' => $hasMore,
+        ];
     }
 
     public function uploadComplete()
@@ -1126,8 +1245,14 @@ class File extends Controller
             if ($token->validate()) {
                 $directoryName = $this->request->request->get("directoryName", "");
 
-                if (!$stringValidator->notempty($directoryName)) {
+                if (!is_string($directoryName) || !$stringValidator->notempty($directoryName)) {
                     throw new UserMessageException(t('Folder Name cannot be empty.'), 401);
+                }
+                if (mb_strlen($directoryName) > self::MAX_DIRECTORY_NAME_LENGTH) {
+                    throw new UserMessageException(
+                        t('Folder Name cannot be longer than %s characters.', self::MAX_DIRECTORY_NAME_LENGTH),
+                        401
+                    );
                 }
 
                 $filesystem = new Filesystem();

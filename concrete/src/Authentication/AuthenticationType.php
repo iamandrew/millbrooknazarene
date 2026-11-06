@@ -4,8 +4,12 @@ namespace Concrete\Core\Authentication;
 use Concrete\Authentication\Concrete\Controller;
 use Concrete\Core\Backup\ContentImporter;
 use Concrete\Core\Database\Schema\Schema;
+use Concrete\Core\Filesystem\FileLocator;
+use Concrete\Core\Filesystem\TemplateService;
+use Concrete\Core\Filesystem\TemplateVariantLocator;
 use Concrete\Core\Foundation\ConcreteObject;
 use Concrete\Core\Package\PackageList;
+use Concrete\Core\Support\Facade\Application;
 use Core;
 use Environment;
 use Exception;
@@ -22,6 +26,20 @@ class AuthenticationType extends ConcreteObject
     protected $authTypeDisplayOrder;
     protected $authTypeIsEnabled;
     protected $pkgID;
+
+    /** @var FileLocator */
+    protected $locator;
+
+    /** @var TemplateService */
+    protected $templateService;
+
+    protected $addedPackageLocator = false;
+
+    public function __construct(FileLocator $locator, TemplateService $templateService)
+    {
+        $this->locator = $locator;
+        $this->templateService = $templateService;
+    }
 
     public static function getListSorted()
     {
@@ -77,7 +95,7 @@ class AuthenticationType extends ConcreteObject
             'authTypeIsEnabled',
             'pkgID',
         ];
-        $obj = new self();
+        $obj = Application::make(self::class);
         foreach ($extract as $key) {
             if (!isset($arr[$key])) {
                 return false;
@@ -159,8 +177,8 @@ class AuthenticationType extends ConcreteObject
         }
         $db = Loader::db();
         $db->Execute(
-           'INSERT INTO AuthenticationTypes (authTypeHandle, authTypeName, authTypeIsEnabled, authTypeDisplayOrder, pkgID) values (?, ?, ?, ?, ?)',
-           [$atHandle, $atName, 1, intval($order), $pkgID]);
+            'INSERT INTO AuthenticationTypes (authTypeHandle, authTypeName, authTypeIsEnabled, authTypeDisplayOrder, pkgID) values (?, ?, ?, ?, ?)',
+            [$atHandle, $atName, 1, intval($order), $pkgID]);
         $est = self::getByHandle($atHandle);
         $r = $est->mapAuthenticationTypeFilePath(FILENAME_AUTHENTICATION_DB);
         if ($r->exists()) {
@@ -266,8 +284,8 @@ class AuthenticationType extends ConcreteObject
     {
         $db = Loader::db();
         $db->Execute(
-           'UPDATE AuthenticationTypes SET authTypeName=? WHERE authTypeID=?',
-           [$authTypeName, $this->getAuthenticationTypeID()]);
+            'UPDATE AuthenticationTypes SET authTypeName=? WHERE authTypeID=?',
+            [$authTypeName, $this->getAuthenticationTypeID()]);
     }
 
     /**
@@ -280,8 +298,8 @@ class AuthenticationType extends ConcreteObject
     {
         $db = Loader::db();
         $db->Execute(
-           'UPDATE AuthenticationTypes SET authTypeDisplayOrder=? WHERE authTypeID=?',
-           [$order, $this->getAuthenticationTypeID()]);
+            'UPDATE AuthenticationTypes SET authTypeDisplayOrder=? WHERE authTypeID=?',
+            [$order, $this->getAuthenticationTypeID()]);
     }
 
     public function getAuthenticationTypeID()
@@ -319,8 +337,8 @@ class AuthenticationType extends ConcreteObject
         }
         $db = Loader::db();
         $db->Execute(
-           'UPDATE AuthenticationTypes SET authTypeIsEnabled=0 WHERE AuthTypeID=?',
-           [$this->getAuthenticationTypeID()]);
+            'UPDATE AuthenticationTypes SET authTypeIsEnabled=0 WHERE AuthTypeID=?',
+            [$this->getAuthenticationTypeID()]);
     }
 
     /**
@@ -331,8 +349,8 @@ class AuthenticationType extends ConcreteObject
     {
         $db = Loader::db();
         $db->Execute(
-           'UPDATE AuthenticationTypes SET authTypeIsEnabled=1 WHERE AuthTypeID=?',
-           [$this->getAuthenticationTypeID()]);
+            'UPDATE AuthenticationTypes SET authTypeIsEnabled=1 WHERE AuthTypeID=?',
+            [$this->getAuthenticationTypeID()]);
     }
 
     /**
@@ -397,21 +415,21 @@ class AuthenticationType extends ConcreteObject
      * Settings forms are expected to handle their own submissions and redirect to the appropriate page.
      * Otherwise, if the method exists, all $_REQUEST variables with the arrangement: HANDLE[]
      * in an array to the AuthenticationTypeController::saveTypeForm.
+     *
+     * @return void
      */
     public function renderTypeForm()
     {
-        $type_form = $this->mapAuthenticationTypeFilePath('type_form.php');
-        if ($type_form->exists()) {
-            ob_start();
-            $this->controller->edit();
-            extract($this->controller->getSets());
-            require_once $type_form->file; // We use the $this method to prevent extract overwrite.
-            $out = ob_get_contents();
-            ob_end_clean();
-            echo $out;
-        } else {
+        if (!$this->hasTemplate('type_form')) {
             echo '<p>' . t('This authentication type does not require any customization.') . '</p>';
+            return;
         }
+
+        if (method_exists($this->controller, 'edit')) {
+            $this->controller->edit();
+        }
+
+        echo $this->renderTemplate('type_form', []) ?? '';
     }
 
     /**
@@ -419,82 +437,68 @@ class AuthenticationType extends ConcreteObject
      *
      * @param string $element
      * @param array  $params
+     * @return void
      */
     public function renderForm($element = 'form', $params = [])
     {
-        $this->controller->requireAsset('javascript', 'backstretch');
+        if (str_contains($element, '.')) {
+            $element = explode('.', $element)[0];
+        }
+        if (in_array(strtolower($element), ['form', 'type_form', 'hook', 'hooked']) && !$this->hasTemplate($element)) {
+            echo $this->renderTemplate('form', $params, true) ?? '';
+            return;
+        }
+        // Preserve legacy callback routing: login/callback/<type>/<method>/... used to
+        // invoke the auth controller method even when no matching template existed, then
+        // render form.php as a fallback.
+        if (!$this->hasTemplate($element) && method_exists($this->controller, $element)) {
+            $params = array_values($params) === $params ? array_values($params) : [];
+            call_user_func_array([$this->controller, $element], $params);
 
-        $form_element = $this->mapAuthenticationTypeFilePath($element . '.php');
-        if (!$form_element->exists()) {
-            $form_element = $this->mapAuthenticationTypeFilePath('form.php');
-            if (method_exists($this->controller, 'form')) {
-                call_user_func_array([$this->controller, 'form'], $params);
+            $atHandle = $this->getAuthenticationTypeHandle();
+            $path = implode('/', [DIRNAME_AUTHENTICATION, $atHandle, 'form.php']);
+            $r = $this->getTemplateVariantLocator()->getRecord($path);
+            if ($r && $r->exists()) {
+                $sets = $this->controller->getSets();
+                if (is_array($sets)) {
+                    $params = array_merge($params, $sets);
+                }
+
+                echo $this->templateService->renderTemplate($r->getFile(), $params, $this);
+                return;
             }
         }
-        ob_start();
-        if (method_exists($this->controller, $element)) {
-            call_user_func_array([$this->controller, $element], array_values($params));
-        } else {
-            $this->controller->view();
-        }
-        extract(array_merge($params, $this->controller->getSets()));
-        require $form_element->file;
-        $out = ob_get_contents();
-        ob_end_clean();
-        echo $out;
+        echo $this->renderTemplate($element, $params, true) ?? $this->renderTemplate('form', $params, true) ?? '';
     }
 
     /**
      * Render the hook form for saving the profile settings.
      * All settings are expected to be saved by each individual authentication type.
+     *
+     * @return void
      */
     public function renderHook()
     {
-        $form_hook = $this->mapAuthenticationTypeFilePath('hook.php');
-        if (method_exists($this->controller, 'hook') || $form_hook->exists()) {
-            ob_start();
-            if (method_exists($this->controller, 'hook')) {
-                $this->controller->hook();
-            }
-            if ($form_hook->exists()) {
-                $controller = $this->controller;
-                extract($this->controller->getSets());
-                require_once $form_hook->file;
-            }
-            $out = ob_get_contents();
-            ob_end_clean();
-            echo $out;
-        }
-    }
-
-    public function hasHook()
-    {
-        $form_hook = $this->mapAuthenticationTypeFilePath('hook.php');
-
-        return method_exists($this->controller, 'hook') || $form_hook->exists();
+        echo $this->renderTemplate('hook') ?? '';
     }
 
     /**
-     * Render the a form to be displayed when the authentication type is already hooked.
+     * @return bool
+     */
+    public function hasHook()
+    {
+        return $this->hasTemplate('hook');
+    }
+
+    /**
+     * Render a form to be displayed when the authentication type is already hooked.
      * All settings are expected to be saved by each individual authentication type.
+     *
+     * @return void
      */
     public function renderHooked()
     {
-        $form_hooked = $this->mapAuthenticationTypeFilePath('hooked.php');
-        if (method_exists($this->controller, 'hooked') || $form_hooked->exists()) {
-            ob_start();
-            if (method_exists($this->controller, 'hooked')) {
-                $this->controller->hooked();
-            }
-            if ($form_hooked->exists()) {
-                $controller = $this->controller;
-                extract($this->controller->getSets());
-                require_once $form_hooked->file;
-            }
-            $out = ob_get_contents();
-            ob_end_clean();
-            echo $out;
-        }
+        echo $this->renderTemplate('hooked') ?? '';
     }
 
     /**
@@ -504,9 +508,7 @@ class AuthenticationType extends ConcreteObject
      */
     public function hasHooked()
     {
-        $form_hooked = $this->mapAuthenticationTypeFilePath('hooked.php');
-
-        return method_exists($this->controller, 'hooked') || $form_hooked->exists();
+        return $this->hasTemplate('hooked');
     }
 
     /**
@@ -526,5 +528,67 @@ class AuthenticationType extends ConcreteObject
         }
 
         return $result;
+    }
+
+    protected function hasTemplate(string $handle): bool
+    {
+        $atHandle = $this->getAuthenticationTypeHandle();
+        $path = implode('/', [DIRNAME_AUTHENTICATION, $atHandle, $handle . '.php']);
+        $r = $this->getTemplateVariantLocator()->getRecord($path);
+
+        return $r->exists();
+    }
+
+    /**
+     * Render the matching template for a given handle. The template can be either PHP or Twig
+     *
+     * @param string $handle
+     * @param array<string, mixed> $data
+     * @param bool $viewFallback
+     * @return string|null
+     */
+    protected function renderTemplate(string $handle, array $data = [], bool $viewFallback = false): ?string
+    {
+        if ($handle === '') {
+            return null;
+        }
+
+        $atHandle = $this->getAuthenticationTypeHandle();
+        $path = implode('/', [DIRNAME_AUTHENTICATION, $atHandle, $handle . '.php']);
+        $r = $this->getTemplateVariantLocator()->getRecord($path);
+        if (!$r->exists()) {
+            return null;
+        }
+
+        if (method_exists($this->controller, $handle)) {
+            $params = array_values($data) === $data ? array_values($data) : [];
+            call_user_func_array([$this->controller, $handle], $params);
+        } elseif ($viewFallback && method_exists($this->controller, 'view')) {
+            $this->controller->view();
+        }
+
+        $sets = $this->controller->getSets();
+        if (is_array($sets)) {
+            $data = array_merge($data, $this->controller->getSets());
+        }
+
+        return $this->templateService->renderTemplate($r->getFile(), $data, $this);
+    }
+
+    protected function getTemplateVariantLocator(): TemplateVariantLocator
+    {
+        return new TemplateVariantLocator($this->getLocator());
+    }
+
+    protected function getLocator(): FileLocator
+    {
+        if (!$this->addedPackageLocator) {
+            $this->addedPackageLocator = true;
+            $pkgHandle = $this->getPackageHandle();
+            if ($pkgHandle) {
+                $this->locator->addPackageLocation($pkgHandle);
+            }
+        }
+        return $this->locator;
     }
 }

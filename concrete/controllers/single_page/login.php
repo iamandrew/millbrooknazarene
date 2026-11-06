@@ -11,9 +11,10 @@ use Concrete\Core\Logging\LoggerAwareInterface;
 use Concrete\Core\Logging\LoggerAwareTrait;
 use Concrete\Core\Routing\RedirectResponse;
 use Concrete\Core\User\PostLoginLocation;
+use Concrete\Core\User\PostLoginLocationUrl;
+use Concrete\Core\User\User;
 use Exception;
 use PageController;
-use Concrete\Core\User\User;
 use UserAttributeKey;
 use UserInfo;
 
@@ -119,6 +120,14 @@ class Login extends PageController implements LoggerAwareInterface
     {
         $valt = $this->app->make('token');
         if (!$valt->validate('login_' . $type)) {
+            // The token is bound to the user id, so a duplicate submission of the login
+            // form fails validation once the first submission has logged the user in. They
+            // are already authenticated at this point, so send them to their post-login
+            // destination instead of showing a token error.
+            $u = $this->app->make(User::class);
+            if ($u->isRegistered()) {
+                return $this->app->make(PostLoginLocation::class)->getPostLoginRedirectResponse(true);
+            }
             $this->error->add($valt->getErrorMessage());
         } else {
             try {
@@ -459,7 +468,18 @@ class Login extends PageController implements LoggerAwareInterface
     public function forward($cID = 0)
     {
         $nh = $this->app->make('helper/validation/numbers');
-        if ($nh->integer($cID, 1)) {
+        $rcURL = '';
+        if ($this->request->query->has('rcURL')) {
+            $requestRcURL = $this->request->query->get('rcURL');
+            if (is_string($requestRcURL)) {
+                $pll = $this->app->make(PostLoginLocation::class);
+                $urlHelper = $this->app->make(PostLoginLocationUrl::class);
+                $rcURL = $urlHelper->getAllowedRedirectUrl($requestRcURL);
+            }
+        }
+        if ($rcURL !== '') {
+            $pll->setSessionPostLoginUrl($rcURL);
+        } elseif ($nh->integer($cID, 1)) {
             $rcID = (int) $cID;
             $this->set('rcID', $rcID);
             $pll = $this->app->make(PostLoginLocation::class);

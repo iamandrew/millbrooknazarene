@@ -20,6 +20,7 @@ use Concrete\Core\Block\Command\UpdatePageBlockCommand;
 use Concrete\Core\Api\Fractal\Transformer\BaseBlockTransformer;
 use Concrete\Core\Api\Fractal\Transformer\CollectionVersionTransformer;
 use Concrete\Core\Api\Resources;
+use Concrete\Core\Error\ErrorList\ErrorList;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Areas extends ApiController implements ApplicationAwareInterface
@@ -33,9 +34,10 @@ class Areas extends ApiController implements ApplicationAwareInterface
      * @OA\Post(
      *     path="/ccm/api/1.0/pages/{pageID}/{areaHandle}",
      *     tags={"areas"},
+     *     operationId="addBlockToPageArea",
      *     summary="Adds a block to a page area.",
      *     security={
-     *         {"authorization": {"pages:areas:add_blocks"}}
+     *         {"authorization": {"pages:areas:add_block"}}
      *     },
      *     @OA\Parameter(
      *         name="pageID",
@@ -67,6 +69,7 @@ class Areas extends ApiController implements ApplicationAwareInterface
     public function addBlock($pageID, $areaHandle)
     {
         $content = json_decode($this->request->getContent(), true);
+        $body = (array) ($content['value'] ?? []);
 
         $page = Page::getByID($pageID);
         if ($page && $page->isError() && $page->getError() == COLLECTION_NOT_FOUND) {
@@ -82,11 +85,18 @@ class Areas extends ApiController implements ApplicationAwareInterface
             return $this->error(t('You do not have permission to add this block type to this area on this page.', 403));
         }
 
+        $controller = $blockType->getController();
+        $controller->setAreaObject($area);
+        $errors = $controller->validate($body);
+        if ($errors instanceof ErrorList && $errors->has()) {
+            return $errors->createResponse(JsonResponse::HTTP_BAD_REQUEST);
+        }
+
         $command = new AddBlockToPageCommand();
         $command->setPage($page);
         $command->setArea($area);
         $command->setBlockType($blockType);
-        $command->setData($content['value']);
+        $command->setData($body);
 
         $block = $this->app->executeCommand($command);
 
@@ -99,9 +109,10 @@ class Areas extends ApiController implements ApplicationAwareInterface
      * @OA\Delete(
      *     path="/ccm/api/1.0/pages/{pageID}/{areaHandle}/{blockID}",
      *     tags={"areas"},
+     *     operationId="deleteBlockFromPageArea",
      *     summary="Deletes a block from a page area.",
      *     security={
-     *         {"authorization": {"pages:areas:delete_blocks"}}
+     *         {"authorization": {"pages:areas:delete_block"}}
      *     },
      *     @OA\Parameter(
      *         name="pageID",
@@ -185,9 +196,10 @@ class Areas extends ApiController implements ApplicationAwareInterface
      * @OA\Put(
      *     path="/ccm/api/1.0/pages/{pageID}/{areaHandle}/{blockID}",
      *     tags={"areas"},
+     *     operationId="updateBlockInPageArea",
      *     summary="Updates a block within a page area.",
      *     security={
-     *         {"authorization": {"pages:areas:update_blocks"}}
+     *         {"authorization": {"pages:areas:update_block"}}
      *     },
      *     @OA\Parameter(
      *         name="pageID",
@@ -263,7 +275,6 @@ class Areas extends ApiController implements ApplicationAwareInterface
 
         $block = $this->app->executeCommand($command);
 
-        $blockToEdit->update($body);
         $transformer = new BaseBlockTransformer();
         $transformer->setDefaultIncludes(['page']);
 

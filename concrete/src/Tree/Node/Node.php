@@ -181,20 +181,6 @@ abstract class Node extends ConcreteObject implements \Concrete\Core\Permission\
     }
 
     /**
-     * Transforms a node to another node.
-     *
-     * @param mixed $treeNodeType
-     */
-    public function transformNode($treeNodeType)
-    {
-        $class = self::getClassByType($treeNodeType);
-        $node = new $class();
-        $node->setPropertiesFromArray($this);
-
-        return $node;
-    }
-
-    /**
      * Returns an array of all parents of this tree node.
      */
     public function getTreeNodeParentArray()
@@ -640,10 +626,21 @@ where treeNodeDisplayOrder > ? and treeNodeParentID = ?',
             $db = app(Connection::class);
             $tree = $this->getTreeObject();
             $data = $tree ? $tree->getRequestData() : [];
+            switch ($data['orderBy'] ?? null) {
+                case 'name_asc':
+                    $orderBy = 'treeNodeName asc, treeNodeDisplayOrder asc';
+                    break;
+                case 'name_desc':
+                    $orderBy = 'treeNodeName desc, treeNodeDisplayOrder asc';
+                    break;
+                default:
+                    $orderBy = 'treeNodeDisplayOrder asc';
+                    break;
+            }
             if (isset($data['displayOnly']) && $data['displayOnly']) {
-                $rows = $db->fetchAll('select treeNodeID from TreeNodes tn inner join TreeNodeTypes tnt on tn.treeNodeTypeID = tnt.treeNodeTypeID where treeNodeParentID = ? and treeNodeTypeHandle = ? order by treeNodeDisplayOrder asc', [$this->treeNodeID, $data['displayOnly']]);
+                $rows = $db->fetchAll("select treeNodeID from TreeNodes tn inner join TreeNodeTypes tnt on tn.treeNodeTypeID = tnt.treeNodeTypeID where treeNodeParentID = ? and treeNodeTypeHandle = ? order by {$orderBy}", [$this->treeNodeID, $data['displayOnly']]);
             } else {
-                $rows = $db->fetchAll('select treeNodeID from TreeNodes where treeNodeParentID = ? order by treeNodeDisplayOrder asc', [$this->treeNodeID]);
+                $rows = $db->fetchAll("select treeNodeID from TreeNodes where treeNodeParentID = ? order by {$orderBy}", [$this->treeNodeID]);
             }
 
             foreach ($rows as $row) {

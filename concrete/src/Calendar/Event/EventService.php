@@ -6,6 +6,7 @@ use Concrete\Core\Application\ApplicationAwareTrait;
 use Concrete\Core\Board\Command\RegenerateRelevantBoardInstancesCommand;
 use Concrete\Core\Calendar\Event\Summary\Template\Populator;
 use Concrete\Core\Config\Repository\Repository;
+use Concrete\Core\Entity\Calendar\CalendarEventVersionOccurrence;
 use Concrete\Core\Foundation\Repetition\Comparator;
 use Concrete\Core\Calendar\Event\Event\DuplicateEventEvent;
 use Concrete\Core\Logging\Channels;
@@ -21,6 +22,7 @@ use Concrete\Core\Entity\Calendar\CalendarEvent;
 use Concrete\Core\Entity\Calendar\CalendarEventVersion;
 use Concrete\Core\Entity\Calendar\CalendarRelatedEvent;
 use Concrete\Core\Events\EventDispatcher;
+use Concrete\Core\Calendar\Event\Event\CalendarEventEvent;
 
 class EventService implements ApplicationAwareInterface, LoggerAwareInterface
 {
@@ -209,6 +211,7 @@ class EventService implements ApplicationAwareInterface, LoggerAwareInterface
         $this->app->executeCommand(new RegenerateRelevantBoardInstancesCommand('calendar_event', $event));
 
         $this->logger->info(t('Approved version %s of event %s', $version->getID(), $version->getName()));
+        $this->dispatcher->dispatch('on_calendar_event_version_approve', new CalendarEventEvent($version, ['entityManager' => $this->entityManager]));
     }
 
     public function unapprove(CalendarEvent $event)
@@ -230,6 +233,15 @@ class EventService implements ApplicationAwareInterface, LoggerAwareInterface
         $version->setAuthor($u->getUserInfoObject()->getEntityObject());
         $version->setIsApproved(false);
         $version->setName($version->getName() . ' ' . t('Copy'));
+        // The page of the original event must not be shared with the copy: the copy would link to it, and deleting the
+        // copy would delete it. If the calendar creates event pages, the copy gets its own page when it's approved.
+        $version->setPageID(0);
+        $version->setRelatedPageRelationType(null);
+        if ($calendar->enableMoreDetails() == 'A') {
+            // Associate the copy with the page set at the calendar level, as the event edit dialog does
+            $version->setPageID($calendar->getEventPageAssociatedID());
+            $version->setRelatedPageRelationType('A');
+        }
         $new->getVersions()->add($version);
         $version->setEvent($new);
 
@@ -278,6 +290,7 @@ class EventService implements ApplicationAwareInterface, LoggerAwareInterface
         $this->entityManager->flush();
 
         $this->logger->info(t('Calendar event %s (%s) deleted successfully.', $event->getName(), $eventID));
+        $this->dispatcher->dispatch('on_calendar_event_delete', new CalendarEventEvent($event, ['entityManager' => $this->entityManager]));
     }
 
     public function deleteVersion(CalendarEventVersion $version)
@@ -286,6 +299,7 @@ class EventService implements ApplicationAwareInterface, LoggerAwareInterface
         $this->entityManager->flush();
 
         $this->logger->info(t('Calendar event version %s deleted successfully.', $version->getID()));
+        $this->dispatcher->dispatch('on_calendar_event_version_delete', new CalendarEventEvent($version, ['entityManager' => $this->entityManager]));
     }
 
     public function isRelatedTo(CalendarEvent $event1, CalendarEvent $event2)
@@ -305,7 +319,7 @@ class EventService implements ApplicationAwareInterface, LoggerAwareInterface
     public function generateDefaultOccurrences(CalendarEventVersion $version)
     {
         $repetitions = $version->getRepetitionEntityCollection();
-        $query = $this->entityManager->createQuery('delete from calendar:CalendarEventVersionOccurrence o where o.version = :version');
+        $query = $this->entityManager->createQuery('delete from ' . CalendarEventVersionOccurrence::class . ' o where o.version = :version');
         $query->setParameter('version', $version);
         $query->execute();
 

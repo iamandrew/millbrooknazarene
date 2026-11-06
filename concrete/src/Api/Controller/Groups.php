@@ -28,6 +28,7 @@ class Groups extends ApiController
      * @OA\Get(
      *     path="/ccm/api/1.0/groups/{groupID}",
      *     tags={"groups"},
+     *     operationId="getGroupById",
      *     summary="Find a user group by its ID",
      *     security={
      *         {"authorization": {"groups:read"}}
@@ -78,6 +79,7 @@ class Groups extends ApiController
      * @OA\Get(
      *     path="/ccm/api/1.0/groups",
      *     tags={"groups"},
+     *     operationId="getGroups",
      *     summary="Returns a list of Group objects, sorted by ID ascending.",
      *     security={
      *         {"authorization": {"groups:read"}}
@@ -114,7 +116,8 @@ class Groups extends ApiController
     {
         $list = new GroupList();
         $list->setPermissionsChecker(function($group) {
-            return true;
+            $permissions = new Checker($group);
+            return $permissions->canViewTreeNode();
         });
         $groupIdColumn = new GroupIdColumn();
         $this->setupSortAndCursor($this->request, $list, $groupIdColumn, function($currentCursor) {
@@ -136,6 +139,7 @@ class Groups extends ApiController
      * @OA\Post(
      *     path="/ccm/api/1.0/groups",
      *     tags={"groups"},
+     *     operationId="addGroup",
      *     summary="Adds a Group object.",
      *     security={
      *         {"authorization": {"groups:add"}}

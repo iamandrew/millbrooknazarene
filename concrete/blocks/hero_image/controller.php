@@ -98,6 +98,7 @@ class Controller extends BlockController implements FileTrackableInterface, Uses
     protected $btCacheBlockOutput = true;
     protected $btCacheBlockOutputOnPost = true;
     protected $btCacheBlockOutputForRegisteredUsers = true;
+    protected $btCacheBlockOutputOnEditMode = true;
     protected $btCacheBlockOutputLifetime = 300;
     protected $btIgnorePageThemeGridFrameworkContainer = true;
     protected $btExportFileColumns = ['buttonFileLinkID', 'image'];
@@ -258,6 +259,7 @@ class Controller extends BlockController implements FileTrackableInterface, Uses
         }
 
         $args['image'] = is_numeric($args['image']) ? $args['image'] : 0;
+        $args['height'] = isset($args['height']) ? (int) $args['height'] : 0;
         $security = $this->app->make('helper/security');
         $args['icon'] = $security->sanitizeString($args['icon']);
 

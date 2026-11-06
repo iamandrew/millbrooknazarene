@@ -284,7 +284,7 @@ class Controller extends BlockController implements FileTrackableInterface, Uses
      */
     public function save($args)
     {
-        $args["includeDownloadLink"] = isset($args["includeDownloadLink"]) ? 1 : 0;
+        $args["includeDownloadLink"] = !empty($args["includeDownloadLink"]) ? 1 : 0;
 
         parent::save($args);
 
@@ -553,6 +553,11 @@ class Controller extends BlockController implements FileTrackableInterface, Uses
         $value = $choice['value'] ?? null;
         if (!is_string($value)) {
             $errors->add(t('Invalid choice provided: %s %s', $key, $value ?? ''));
+            return;
+        }
+
+        if (strpbrk($value, '<>') !== false) {
+            $errors->add(t('Invalid choice provided: %s %s', $key, $value));
         }
     }
 

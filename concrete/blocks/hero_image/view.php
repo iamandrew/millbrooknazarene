@@ -31,6 +31,8 @@ if ($image === null) {
     return;
 }
 
+$height = (int) $height;
+
 /**
  * Building the button
  */
@@ -38,6 +40,7 @@ if ($image === null) {
 $buttonColor = $buttonColor ?? null; // Don't know why I need this but #11025
 
 if (isset($button)) {
+    $button->setAttribute('href', h($button->getAttribute('href')));
 
     if ($buttonStyle == 'outline') {
         $button->addClass('btn btn-outline-' . $buttonColor) ;

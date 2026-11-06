@@ -6,9 +6,9 @@ return [
      *
      * @var string
      */
-    'version' => '9.4.6',
-    'version_installed' => '9.4.6',
-    'version_db' => '20250827152432', // the key of the latest database migration
+    'version' => '9.5.7',
+    'version_installed' => '9.5.7',
+    'version_db' => '20261020120000', // the key of the latest database migration
 
     /*
      * Installation status
@@ -867,6 +867,23 @@ return [
                 'allowed_attributes' => '',
             ],
         ],
+        'documents' => [
+            // XML/XSLT sanitization
+            //
+            // Plain XML documents can contain an xml-stylesheet processing
+            // instruction pointing at an externally hosted (and potentially
+            // attacker-controlled) XSLT stylesheet. If such a file is opened
+            // directly in a browser instead of being processed by the
+            // application, the browser will fetch and apply that stylesheet,
+            // which can emit arbitrary HTML/JavaScript in the origin serving
+            // the XML file. This setting controls how uploaded XML/XSLT
+            // documents are handled to prevent that.
+            'xml_sanitization' => [
+                // The operation that the XML sanitizer should perform.
+                // This must be a value of one of the Concrete\Core\File\Import\Processor\XmlProcessor::ACTION_... constants
+                'action' => 'sanitize',
+            ],
+        ],
         /*
          * Options for the results per page dropdown
          *
@@ -939,6 +956,14 @@ return [
          * @var bool
          */
         'toolbar_tooltips' => true,
+
+        /*
+         * Display the Help menu item/panel (dashboard toolbar, frontend edit toolbar, and the help panel/dialog
+         * routes themselves).
+         *
+         * @var bool
+         */
+        'display_help_system' => true,
     ],
 
     /*
@@ -1329,6 +1354,13 @@ return [
                 'show_notification_to_unregistered_users' => false,
             ],
         ],
+        /*
+         * Absolute post-login redirect URLs are only allowed when they match one of these base URLs.
+         * If empty, Concrete will default to the current canonical base URL.
+         *
+         * @var string[]
+         */
+        'post_login_redirect_url_allowlist' => [],
         'misc' => [
             /**
              * Content Security Policy (CSP) HTTP response header
@@ -1521,6 +1553,8 @@ return [
             // ['service_handle', 'Service Name', 'icon']
             // Where 'icon' is the handle of a FontAwesome 4 icon (see https://fontawesome.com/v4.7.0/icons/ )
         ],
+        // The URL schemes accepted for the social links besides http, https, mailto and tel (for example 'sms')
+        'additional_schemes' => [],
     ],
 
     'file_chooser' => [

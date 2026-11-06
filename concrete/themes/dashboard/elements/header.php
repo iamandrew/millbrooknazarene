@@ -34,6 +34,7 @@ if (!$frontendPageID) {
 $show_titles = (bool) $config->get('concrete.accessibility.toolbar_titles');
 $show_tooltips = (bool) $config->get('concrete.accessibility.toolbar_tooltips');
 $large_font = (bool) $config->get('concrete.accessibility.toolbar_large_font');
+$display_help_system = (bool) $config->get('concrete.accessibility.display_help_system');
 $colorScheme = $config->get('concrete.appearance.color_scheme');
 
 ?><!DOCTYPE html>
@@ -94,7 +95,7 @@ $colorScheme = $config->get('concrete.appearance.color_scheme');
                     }
                     $dashboardPanelClass = implode(' ', $dashboardPanelClasses);
                     ?>
-                    <a class="<?=$dashboardPanelClass; ?>" data-bs-placement="bottom" href="<?= URL::to('/dashboard'); ?>" title="<?= t('Dashboard – Change Site-wide Settings'); ?>"
+                    <a class="<?=$dashboardPanelClass; ?>" data-bs-trigger="hover" data-bs-placement="bottom" href="<?= URL::to('/dashboard'); ?>" title="<?= t('Dashboard – Change Site-wide Settings'); ?>"
                         data-launch-panel="dashboard"
                         data-panel-url="<?=URL::to('/system/panels/dashboard'); ?>"
                     >
@@ -107,7 +108,7 @@ $colorScheme = $config->get('concrete.appearance.color_scheme');
                     <li class="float-end d-none d-sm-none d-md-block">
                         <a <?php if ($show_tooltips) {
                             ?>class="launch-tooltip"<?php
-                        } ?>  data-bs-toggle="tooltip" data-bs-placement="bottom" href="#" data-panel-url="<?= URL::to('/ccm/system/panels/sitemap'); ?>" title="<?= t('Add Pages and Navigate Your Site'); ?>" data-launch-panel="sitemap">
+                        } ?>  data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="bottom" href="#" data-panel-url="<?= URL::to('/ccm/system/panels/sitemap'); ?>" title="<?= t('Add Pages and Navigate Your Site'); ?>" data-launch-panel="sitemap">
                             <svg><use xlink:href="#icon-sitemap" /></svg>
                             <span class="ccm-toolbar-accessibility-title ccm-toolbar-accessibility-title-add-page"><?= tc('toolbar', 'Pages'); ?></span>
                         </a>
@@ -124,10 +125,11 @@ $colorScheme = $config->get('concrete.appearance.color_scheme');
                     }
                 }
                 ?>
+                <?php if ($display_help_system) { ?>
                 <li data-guide-toolbar-action="help" class="float-end d-none d-sm-block">
                     <a <?php if ($show_tooltips) {
                         ?>class="launch-tooltip"<?php
-                    } ?> data-bs-toggle="tooltip"
+                    } ?> data-bs-toggle="tooltip" data-bs-trigger="hover"
                        data-bs-placement="bottom" href="#"
                        data-panel-url="<?= URL::to('/ccm/system/panels/help'); ?>"
                        title="<?= t('View help about the CMS.'); ?>" data-launch-panel="help">
@@ -135,6 +137,7 @@ $colorScheme = $config->get('concrete.appearance.color_scheme');
                                 class="ccm-toolbar-accessibility-title ccm-toolbar-accessibility-title-add-page"><?= tc('toolbar', 'Help'); ?></span>
                     </a>
                 </li>
+                <?php } ?>
                 <li class="ccm-toolbar-search float-end d-none d-sm-none d-lg-block">
                     <?php
                     $menu = Element::get('navigation/intelligent_search');

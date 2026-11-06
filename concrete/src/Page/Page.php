@@ -5,6 +5,7 @@ namespace Concrete\Core\Page;
 use Concrete\Core\Area\Area;
 use Block;
 use CacheLocal;
+use Concrete\Core\Block\Controller\SaveMode;
 use Concrete\Core\Entity\Page\Summary\CustomPageTemplateCollection;
 use Concrete\Core\Localization\Service\Date;
 use Concrete\Core\Page\Collection\Collection;
@@ -513,10 +514,21 @@ class Page extends Collection implements CategoryMemberInterface,
                 $class = core_class('Controller\\PageType\\' . camelcase($ptHandle), $prefix);
             } elseif ($this->isGeneratedCollection()) {
                 $file = $this->getCollectionFilename();
-                if (strpos($file, '/' . FILENAME_COLLECTION_VIEW) !== false) {
-                    $path = substr($file, 0, strpos($file, '/' . FILENAME_COLLECTION_VIEW));
-                } else {
-                    $path = substr($file, 0, strpos($file, '.php'));
+                $suffixes = [
+                    '/' . FILENAME_COLLECTION_VIEW,
+                    '.php',
+                    '/view.html.twig',
+                    '.html.twig',
+                ];
+                foreach ($suffixes as $suffix) {
+                    $pos = strpos($file, $suffix);
+                    if ($pos !== false) {
+                        $path = substr($file, 0, $pos);
+                        break;
+                    }
+                }
+                if (!isset($path)) {
+                    $path = $file;
                 }
                 $r = $env->getRecord(DIRNAME_CONTROLLERS . '/' . DIRNAME_PAGE_CONTROLLERS . $path . '.php', $this->getPackageHandle());
                 $prefix = $r->override ? true : $this->getPackageHandle();
@@ -1135,6 +1147,7 @@ class Page extends Collection implements CategoryMemberInterface,
             $cvSet['cvHandle'] = $data['aliasHandle'];
         }
         if ($data['customAliasName'] !== null) {
+            $data['customAliasName'] = trim((string) $app->make('helper/security')->sanitizeString($data['customAliasName']));
             $cvSet['cvName'] = $data['customAliasName'];
         }
         $db = $app->make(Connection::class);
@@ -1181,6 +1194,8 @@ class Page extends Collection implements CategoryMemberInterface,
             } else {
                 $newWindow = 0;
             }
+            $cLink = app('helper/security')->sanitizeURL($cLink);
+            $cName = app('helper/text')->sanitize($cName);
             $db->executeQuery('update CollectionVersions set cvName = ? where cID = ?', [$cName, $this->cID]);
             $db->executeQuery('update Pages set cPointerExternalLink = ?, cPointerExternalLinkNewWindow = ? where cID = ?', [$cLink, $newWindow, $this->cID]);
         }
@@ -1885,7 +1900,11 @@ class Page extends Collection implements CategoryMemberInterface,
      */
     public function getCustomAliasName(): ?string
     {
-        return $this->customAliasName;
+        if ($this->customAliasName === null) {
+            return null;
+        }
+
+        return trim((string) app('helper/security')->sanitizeString($this->customAliasName));
     }
 
     /**
@@ -2118,12 +2137,17 @@ class Page extends Collection implements CategoryMemberInterface,
     /**
      * Set the theme skin of this page.
      *
-     * @param SkinInterface $skin
+     * @param \Concrete\Core\StyleCustomizer\Skin\SkinInterface|null $skin NULL to let the page use the skin of the site
      */
-    public function setThemeSkin(SkinInterface $skin)
+    public function setThemeSkin(?SkinInterface $skin)
     {
+        $skinIdentifier = $skin === null ? null : $skin->getIdentifier();
         $db = Database::connection();
-        $db->executeQuery('update CollectionVersions set pThemeSkinIdentifier = ? where cID = ? and cvID = ?', [$skin->getIdentifier(), $this->cID, $this->vObj->getVersionID()]);
+        $db->executeQuery(
+            'update CollectionVersions set pThemeSkinIdentifier = ? where cID = ? and cvID = ?',
+            [$skinIdentifier, $this->cID, $this->vObj->getVersionID()]
+        );
+        $this->vObj->pThemeSkinIdentifier = $skinIdentifier;
     }
 
     /**
@@ -2840,12 +2864,12 @@ EOT
      *
      * @return \Concrete\Core\Block\Block
      */
-    public function addBlock($bt, $a, $data)
+    public function addBlock($bt, $a, $data, ?string $saveMode = SaveMode::SAVE_MODE_REQUEST)
     {
         if (is_string($a) && $a !== '') {
             $a = Area::getOrCreate($this, $a);
         }
-        $b = parent::addBlock($bt, $a, $data);
+        $b = parent::addBlock($bt, $a, $data, $saveMode);
         $btHandle = $bt->getBlockTypeHandle();
         if ($b->getBlockTypeHandle() == BLOCK_HANDLE_PAGE_TYPE_OUTPUT_PROXY) {
             $bi = $b->getInstance();

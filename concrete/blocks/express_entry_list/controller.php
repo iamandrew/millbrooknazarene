@@ -4,6 +4,7 @@ namespace Concrete\Block\ExpressEntryList;
 use Concrete\Controller\Element\Search\Express\CustomizeResults;
 use Concrete\Controller\Element\Search\SearchFieldSelector;
 use Concrete\Core\Block\BlockController;
+use Concrete\Core\Block\Controller\SaveMode;
 use Concrete\Core\Entity\Express\Association;
 use Concrete\Core\Entity\Express\Entity;
 use Concrete\Core\Entity\Search\Query;
@@ -17,11 +18,13 @@ use Concrete\Core\Express\Search\ColumnSet\DefaultSet;
 use Concrete\Core\Express\Search\SearchProvider;
 use Concrete\Core\Feature\Features;
 use Concrete\Core\Feature\UsesFeatureInterface;
+use Concrete\Core\Foundation\Serializer\SafeClassUnserializerTrait;
 use Concrete\Core\Localization\Localization;
 use Concrete\Core\Search\Column\AttributeKeyColumn;
 use Concrete\Core\Search\Column\Column as SearchColumn;
 use Concrete\Core\Search\Field\AttributeKeyField;
 use Concrete\Core\Search\Field\Field\KeywordsField;
+use Concrete\Core\Search\Field\FieldInterface;
 use Concrete\Core\Search\Field\ManagerFactory;
 use Concrete\Core\Search\Query\Modifier\AutoSortColumnRequestModifier;
 use Concrete\Core\Search\Query\Modifier\CustomItemsPerPageRequestModifier;
@@ -33,6 +36,7 @@ use Concrete\Core\Search\Result\ResultFactory;
 use Concrete\Core\Support\Facade\Facade;
 use Concrete\Core\Utility\Service\Xml;
 use Doctrine\ORM\EntityManagerInterface;
+use Illuminate\Support\Arr;
 use SimpleXMLElement;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,6 +44,8 @@ use Symfony\Component\Serializer\Encoder\JsonDecode;
 
 class Controller extends BlockController implements UsesFeatureInterface
 {
+    use SafeClassUnserializerTrait;
+
     /**
      * @var string|null
      */
@@ -278,11 +284,11 @@ class Controller extends BlockController implements UsesFeatureInterface
 
                 $query = new Query();
                 if ($this->filterFields) {
-                    $filterFields = unserialize($this->filterFields);
-                    $query->setFields($filterFields);
+                    $filterFields = static::safeUnserializeObjectArray($this->filterFields, FieldInterface::class);
+                    $query->setFields($filterFields ?? []);
                 }
 
-                $columns = unserialize($this->columns);
+                $columns = static::safeUnserializeObject($this->columns, ColumnSet::class);
                 if ($columns) {
                     $query->setColumns($columns);
                 }
@@ -348,7 +354,7 @@ class Controller extends BlockController implements UsesFeatureInterface
         if (is_object($entity)) {
             $filterFields = [];
             if ($this->filterFields) {
-                $filterFieldsUnserialized = unserialize($this->filterFields);
+                $filterFieldsUnserialized = static::safeUnserializeObjectArray($this->filterFields, FieldInterface::class);
                 if (is_array($filterFieldsUnserialized)) {
                     $filterFields = $filterFieldsUnserialized;
                 }
@@ -417,7 +423,7 @@ class Controller extends BlockController implements UsesFeatureInterface
             }
 
             // Use the columns saved in the instance
-            $columnSet = unserialize($this->columns);
+            $columnSet = static::safeUnserializeObject($this->columns, ColumnSet::class);
             if (!$columnSet) {
                 $columnSet = new DefaultSet($category);
             }
@@ -438,7 +444,6 @@ class Controller extends BlockController implements UsesFeatureInterface
             if ($pagination->haveToPaginate()) {
                 $pagination = $pagination->renderDefaultView();
                 $this->set('pagination', $pagination);
-                $this->requireAsset('css', 'core/frontend/pagination');
             } else {
                 $this->set('pagination', null);
             }
@@ -476,7 +481,11 @@ class Controller extends BlockController implements UsesFeatureInterface
     public function save($data)
     {
         $this->on_start();
-        $fromCIF = ($data['_fromCIF'] ?? null) === true;
+        $fromCIF = $this->saveMode === SaveMode::SAVE_MODE_IMPORT;
+        if (!$fromCIF) {
+            $data['columns'] = '';
+            $data['filterFields'] = '';
+        }
 
         if (isset($data['enableSearch']) && $data['enableSearch']) {
             if (isset($data['searchProperties']) && is_array($data['searchProperties'])) {
@@ -559,7 +568,7 @@ class Controller extends BlockController implements UsesFeatureInterface
     private function doGetImportData(SimpleXMLElement $blockNode, $page): array
     {
         $args = parent::getImportData($blockNode, $page);
-        $args['_fromCIF'] = true;
+        $this->saveMode = SaveMode::SAVE_MODE_IMPORT;
         $xRecord = $blockNode->data[0]->record[0];
 
         $entityID = (string) ($args['exEntityID'] ?? '');
@@ -584,7 +593,7 @@ class Controller extends BlockController implements UsesFeatureInterface
             if ($linkedPropertyHandle === '') {
                 continue;
             }
-            $linkedProperty = array_first(
+            $linkedProperty = Arr::first(
                 $entityAttributes,
                 static function($attribute) use ($linkedPropertyHandle) {
                     return $linkedPropertyHandle === $attribute->getAttributeKeyHandle();
@@ -602,7 +611,7 @@ class Controller extends BlockController implements UsesFeatureInterface
             if ($searchPropertyHandle === '') {
                 continue;
             }
-            $searchProperty = array_first(
+            $searchProperty = Arr::first(
                 $entityAttributes,
                 static function($attribute) use ($searchPropertyHandle) {
                     return $searchPropertyHandle === $attribute->getAttributeKeyHandle();
@@ -618,7 +627,7 @@ class Controller extends BlockController implements UsesFeatureInterface
         $searchAssociations = [];
         foreach ($xRecord->searchAssociation as $xSearchAssociation) {
             $searchAssociationUUID = (string) $xSearchAssociation;
-            $association = array_first(
+            $association = Arr::first(
                 $entityAssociations,
                 static function ($association) use ($searchAssociationUUID): bool {
                     return $searchAssociationUUID !== '' && $association->getId() === $searchAssociationUUID;
@@ -626,7 +635,7 @@ class Controller extends BlockController implements UsesFeatureInterface
             );
             if ($association === null) {
                 $searchAssociationName = (string) $xSearchAssociation['target-property-name'];
-                $association = array_first(
+                $association = Arr::first(
                     $entityAssociations,
                     static function ($association) use ($searchAssociationName): bool {
                         return $searchAssociationName !== '' && $association->getTargetPropertyName() === $searchAssociationName;
@@ -658,7 +667,7 @@ class Controller extends BlockController implements UsesFeatureInterface
             $availableColumns = $provider->getAvailableColumnSet()->getColumns();
             $findColumn = static function(string $key, string $name) use ($availableColumns) {
                 if ($key !== '') {
-                    $column = array_first(
+                    $column = Arr::first(
                         $availableColumns,
                         static function ($column) use ($key) { return $column->getColumnKey() === $key; }
                     );
@@ -667,7 +676,7 @@ class Controller extends BlockController implements UsesFeatureInterface
                     }
                 }
                 if ($name !== '') {
-                    $column = array_first(
+                    $column = Arr::first(
                         $availableColumns,
                         static function ($column) use ($name) { return $column->getColumnName() === $name; }
                     );
@@ -723,7 +732,7 @@ class Controller extends BlockController implements UsesFeatureInterface
         unset($xRecord->linkedProperties[0]);
         $linkedPropertyIDs = array_map('intval', (array) json_decode($this->linkedProperties));
         foreach ($linkedPropertyIDs as $linkedPropertyID) {
-            $linkedProperty = array_first(
+            $linkedProperty = Arr::first(
                 $entityAttributes,
                 static function($attribute) use ($linkedPropertyID) {
                     return $linkedPropertyID === (int) $attribute->getAttributeKeyID();
@@ -737,7 +746,7 @@ class Controller extends BlockController implements UsesFeatureInterface
         unset($xRecord->searchProperties[0]);
         $searchPropertyIDs = array_map('intval', (array) json_decode($this->searchProperties));
         foreach ($searchPropertyIDs as $searchPropertyID) {
-            $searchProperty = array_first(
+            $searchProperty = Arr::first(
                 $entityAttributes,
                 static function($attribute) use ($searchPropertyID): bool {
                     return $searchPropertyID === (int) $attribute->getAttributeKeyID();
@@ -750,7 +759,7 @@ class Controller extends BlockController implements UsesFeatureInterface
 
         $searchAssociationUUIDs = (array) json_decode($this->searchAssociations);
         foreach ($searchAssociationUUIDs as $searchAssociationUUID) {
-            $association = array_first(
+            $association = Arr::first(
                 $entityAssociations,
                 static function ($association) use ($searchAssociationUUID): bool {
                     return $association->getId() === $searchAssociationUUID;
@@ -765,10 +774,10 @@ class Controller extends BlockController implements UsesFeatureInterface
 
         unset($xRecord->filterFields[0]);
         $xFilterFields = $xRecord->addChild('filterFields');
-        $filterFields = $this->filterFields ? unserialize($this->filterFields) : [];
+        $filterFields = $this->filterFields ? static::safeUnserializeObjectArray($this->filterFields, FieldInterface::class) : [];
         if (is_array($filterFields)) {
             foreach ($filterFields as $filterField) {
-                if ($filterField instanceof \Concrete\Core\Search\Field\FieldInterface) {
+                if ($filterField instanceof FieldInterface) {
                     $filterField->export($xFilterFields);
                 }
             }
@@ -776,7 +785,7 @@ class Controller extends BlockController implements UsesFeatureInterface
 
         unset($xRecord->columns[0]);
         $xColumns = $xRecord->addChild('columns');
-        $columnSet = $this->columns ? unserialize($this->columns) : null;
+        $columnSet = $this->columns ? static::safeUnserializeObject($this->columns, ColumnSet::class) : null;
         if ($columnSet instanceof ColumnSet) {
             $defaultSortColumn = $columnSet->getDefaultSortColumn();
             if ($defaultSortColumn) {

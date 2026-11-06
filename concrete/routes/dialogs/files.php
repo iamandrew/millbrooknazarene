@@ -12,7 +12,6 @@ defined('C5_EXECUTE') or die('Access Denied.');
  * Namespace: Concrete\Controller\Dialog\File
  */
 
-$router->all('/upload_complete', 'UploadComplete::view');
 $router->all('/bulk/delete', 'Bulk\Delete::view');
 $router->all('/bulk/delete/delete_files', 'Bulk\Delete::deleteFiles');
 $router->all('/bulk/properties', 'Bulk\Properties::view');
@@ -43,7 +42,6 @@ $router->all('/jump_to_folder', 'JumpToFolder::view');
 $router->all('/thumbnails', 'Thumbnails::view');
 $router->all('/thumbnails/edit', 'Thumbnails\Edit::view');
 $router->all('/thumbnails/edit/submit', 'Thumbnails\Edit::submit');
-$router->all('/usage/{fID}', 'Usage::view');
 $router->all('/statistics/{fID}', 'Statistics::view');
 $router->all('/statistics/load_more/{fID}', 'Statistics::load_more');
 $router->all('/statistics/download/{fID}', 'Statistics::download');

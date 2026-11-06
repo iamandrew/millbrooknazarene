@@ -121,12 +121,13 @@ return [
         'core_sharing' => '\Concrete\Core\Sharing\SharingServiceProvider',
         'core_cookie' => '\Concrete\Core\Cookie\CookieServiceProvider',
         'core_http' => '\Concrete\Core\Http\HttpServiceProvider',
-        'core_error' => '\Concrete\Core\Error\Provider\ErrorHandlingServiceProvider',
         'core_element' => '\Concrete\Core\Filesystem\FilesystemServiceProvider',
         'core_notification' => '\Concrete\Core\Notification\NotificationServiceProvider',
         'core_mercure' => '\Concrete\Core\Notification\Events\MercureServiceProvider',
         'core_package' => '\Concrete\Core\Package\PackageServiceProvider',
         'core_url' => '\Concrete\Core\Url\UrlServiceProvider',
+        'core_templates' => \Concrete\Core\Filesystem\TemplateServiceProvider::class,
+        'core_error' => '\Concrete\Core\Error\Provider\ErrorHandlingServiceProvider',
         'core_devices' => '\Concrete\Core\Device\DeviceServiceProvider',
         'core_user' => '\Concrete\Core\User\UserServiceProvider',
         'core_service_manager' => '\Concrete\Core\Service\Manager\ServiceManagerServiceProvider',
@@ -163,7 +164,7 @@ return [
         // Api - has to come after Express (and possibly other items)
         'core_api' => 'Concrete\Core\Api\ApiServiceProvider',
 
-        'core_marketplace' => \Concrete\Core\Marketplace\MarketplaceServiceProvider::class
+        'core_marketplace' => \Concrete\Core\Marketplace\MarketplaceServiceProvider::class,
     ],
 
     /*
@@ -187,9 +188,7 @@ return [
         'URL' => '\Concrete\Core\Support\Facade\Url',
     ],
 
-    'entity_namespaces' => [
-        'calendar' => 'Concrete\Core\Entity\Calendar',
-    ],
+    'entity_namespaces' => [],
 
     'package_items' => [
         'antispam_library',
@@ -387,6 +386,7 @@ return [
     'import_processors' => [
         'ccm.file.exists' => Concrete\Core\File\Import\Processor\FileExistingValidator::class,
         'ccm.file.extension' => Concrete\Core\File\Import\Processor\FileExtensionValidator::class,
+        'ccm.file.xml' => Concrete\Core\File\Import\Processor\XmlProcessor::class,
         'ccm.image.autorotate' => Concrete\Core\File\Import\Processor\ImageAutorotator::class,
         'ccm.image.svg' => Concrete\Core\File\Import\Processor\SvgProcessor::class,
         'ccm.image.resize' => Concrete\Core\File\Import\Processor\ImageSizeConstrain::class,
@@ -570,6 +570,10 @@ return [
         'feature/maps/frontend' => [
             ['javascript', 'js/features/maps/frontend.js', ['minify' => false]],
             ['css', 'css/features/maps/frontend.css', ['minify' => false]],
+        ],
+
+        'feature/polls/frontend' => [
+            ['css', 'css/features/polls/frontend.css', ['minify' => false]],
         ],
 
         'feature/multilingual/frontend' => [
@@ -792,6 +796,12 @@ return [
             ],
         ],
 
+        'feature/polls/frontend' => [
+            [
+                ['css', 'feature/polls/frontend'],
+            ],
+        ],
+
         'feature/multilingual/frontend' => [
             [
                 ['javascript', 'feature/multilingual/frontend'],
@@ -893,5 +903,16 @@ return [
     'command_handlers' => [
 
     ],
+
+    'twig' => [
+        // bool|'auto' Set to `'auto'` to enable based on production mode
+        'debug' => 'auto',
+
+        // array<string, \Twig\Extension\ExtensionInterface> The twig extensions to enable
+        'extensions' => [
+            'debug' => \Twig\Extension\DebugExtension::class,
+            'core' => \Concrete\Core\Filesystem\Twig\CoreExtension::class,
+        ]
+    ]
 
 ];

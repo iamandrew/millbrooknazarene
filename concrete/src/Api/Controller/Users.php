@@ -4,6 +4,7 @@ namespace Concrete\Core\Api\Controller;
 
 use Concrete\Core\Attribute\Category\UserCategory;
 use Concrete\Core\Permission\Checker;
+use Concrete\Core\Permission\Key\Key;
 use Concrete\Core\Search\Pagination\PagerPagination;
 use Concrete\Core\User\RegistrationService;
 use Concrete\Core\User\Search\ColumnSet\Column\DateAddedColumn;
@@ -23,10 +24,16 @@ class Users extends ApiController
     use SetListLimitFromQueryTrait;
     use SupportsCursorTrait;
 
+    protected function getEditUserPropertiesAssignment()
+    {
+        return Key::getByHandle('edit_user_properties')->getMyAssignment();
+    }
+
     /**
      * @OA\Get(
      *     path="/ccm/api/1.0/users/{userID}",
      *     tags={"users"},
+     *     operationId="getUserById",
      *     summary="Find a user by its ID",
      *     security={
      *         {"authorization": {"users:read"}}
@@ -82,6 +89,7 @@ class Users extends ApiController
      * @OA\Get(
      *     path="/ccm/api/1.0/users",
      *     tags={"users"},
+     *     operationId="getUsers",
      *     summary="Returns a list of user objects, sorted by date added descending. The most recent user objects appear first.",
      *     security={
      *         {"authorization": {"users:read"}}
@@ -160,6 +168,7 @@ class Users extends ApiController
      * @OA\Post(
      *     path="/ccm/api/1.0/users",
      *     tags={"users"},
+     *     operationId="addUser",
      *     summary="Adds a user object.",
      *     security={
      *         {"authorization": {"users:add"}}
@@ -170,10 +179,19 @@ class Users extends ApiController
      *         description="Successful files operation",
      *         @OA\JsonContent(ref="#/components/schemas/User"),
      *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="You do not have the proper permissions to add this resource."
+     *     ),
      * )
      */
     public function add()
     {
+        $permissions = new Checker();
+        if (!$permissions->canAddUsers()) {
+            return $this->error(t('You do not have access to add users.'), 401);
+        }
+
         $content = json_decode($this->request->getContent(), true);
 
         $e = $this->app->make('error');
@@ -199,6 +217,7 @@ class Users extends ApiController
      * @OA\Delete(
      *     path="/ccm/api/1.0/users/{userID}",
      *     tags={"users"},
+     *     operationId="deleteUserById",
      *     summary="Delete a user by its ID",
      *     security={
      *         {"authorization": {"users:delete"}}
@@ -253,6 +272,7 @@ class Users extends ApiController
      * @OA\Put(
      *     path="/ccm/api/1.0/users/{userID}",
      *     tags={"users"},
+     *     operationId="updateUserById",
      *     summary="Update a user by its ID",
      *     security={
      *         {"authorization": {"users:update"}}
@@ -296,23 +316,46 @@ class Users extends ApiController
 
         $checker = new Checker($user);
         if (!$checker->canEditUser()) {
-            return $this->error(t('You do not have access to delete this user.', 401));
+            return $this->error(t('You do not have access to update this user.'), 401);
         }
 
+        $assignment = $this->getEditUserPropertiesAssignment();
         $content = json_decode($this->request->getContent(), true);
         $data = [];
         $e = $this->app->make('error');
         if (isset($content['username'])) {
+            if (!$assignment->allowEditUserName()) {
+                return $this->error(t('You do not have access to edit the username for this user.'), 401);
+            }
             $this->app->make('validator/user/name')->isValid($content['username'], $e);
             $data['uName'] = $content['username'];
         }
         if (isset($content['email'])) {
+            if (!$assignment->allowEditEmail()) {
+                return $this->error(t('You do not have access to edit the email address for this user.'), 401);
+            }
             $this->app->make('validator/user/email')->isValid($content['email'], $e);
             $data['uEmail'] = $content['email'];
         }
 
         if (isset($content['language']) && $content['language'] !== '') {
+            if (!$assignment->allowEditDefaultLanguage()) {
+                return $this->error(t('You do not have access to edit the default language for this user.'), 401);
+            }
             $data['uDefaultLanguage'] = $content['language'];
+        }
+
+        $attributeMap = null;
+        if (isset($content['attributes'])) {
+            $category = $this->app->make(UserCategory::class);
+            $attributeValueMapFactory = $this->app->make(AttributeValueMapFactory::class);
+            $attributeMap = $attributeValueMapFactory->createFromRequestData($category, $content['attributes']);
+            foreach ($attributeMap->getEntries() as $entry) {
+                $attributeKey = $entry->getAttributeKey();
+                if (!in_array($attributeKey->getAttributeKeyID(), $assignment->getAttributesAllowedArray())) {
+                    return $this->error(t('You do not have access to edit the attribute %s for this user.', $attributeKey->getAttributeKeyDisplayName()), 401);
+                }
+            }
         }
 
         if ($e->has()) {
@@ -323,10 +366,7 @@ class Users extends ApiController
             $user->update($data);
         }
 
-        if (isset($content['attributes'])) {
-            $category = $this->app->make(UserCategory::class);
-            $attributeValueMapFactory = $this->app->make(AttributeValueMapFactory::class);
-            $attributeMap = $attributeValueMapFactory->createFromRequestData($category, $content['attributes']);
+        if ($attributeMap !== null) {
             foreach ($attributeMap->getEntries() as $entry) {
                 $user->setAttribute($entry->getAttributeKey(), $entry->getAttributeValue());
             }
@@ -339,6 +379,7 @@ class Users extends ApiController
      * @OA\Post(
      *     path="/ccm/api/1.0/users/{userID}/change_password",
      *     tags={"users"},
+     *     operationId="changeUserPassword",
      *     summary="Change a user's password",
      *     security={
      *         {"authorization": {"users:update"}}
@@ -383,6 +424,11 @@ class Users extends ApiController
         $checker = new Checker($user);
         if (!$checker->canEditUser()) {
             return $this->error(t('You do not have access to change the password for this user.', 401));
+        }
+
+        $assignment = $this->getEditUserPropertiesAssignment();
+        if (!$assignment->allowEditPassword()) {
+            return $this->error(t('You do not have access to change the password for this user.'), 401);
         }
 
         $e = $this->app->make('error');

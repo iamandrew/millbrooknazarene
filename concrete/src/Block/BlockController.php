@@ -4,6 +4,7 @@ namespace Concrete\Core\Block;
 use Concrete\Core\Area\Area;
 use Concrete\Core\Backup\ContentExporter;
 use Concrete\Core\Backup\ContentImporter;
+use Concrete\Core\Block\Controller\SaveMode;
 use Concrete\Core\Block\View\BlockViewTemplate;
 use Concrete\Core\Database\Connection\Connection;
 use Concrete\Core\Editor\LinkAbstractor;
@@ -15,6 +16,7 @@ use Concrete\Core\Page\Controller\PageController;
 use Concrete\Core\Page\Type\Type;
 use Concrete\Core\Permission\Checker;
 use Concrete\Core\Statistics\UsageTracker\AggregateTracker;
+use Concrete\Core\Statistics\UsageTracker\TrackableInterface;
 use Concrete\Core\StyleCustomizer\Inline\StyleSet;
 use Concrete\Core\Utility\Service\Xml;
 use Config;
@@ -45,11 +47,38 @@ class BlockController extends \Concrete\Core\Controller\AbstractController
     /** @var string | int  */
     protected $btInterfaceHeight = "400";
     protected $btHasRendered = false;
+    /**
+     * @var bool Defaults to true. When block caching is enabled, this means that the block's database record data will
+     *           also be cached. This can almost always be set to true.
+     */
     protected $btCacheBlockRecord = true;
+    /**
+     * @var bool Defaults to false. When block caching is enabled, enabling this boolean means that the output of the
+     *           block will be saved and delivered without rendering the view() function or hitting the database at all.
+     */
     protected $btCacheBlockOutput = false;
+    /**
+     * @var int Defaults to no time limit (0). When block caching is enabled and output caching is enabled for a block,
+     *          this is the value in seconds that the cache will last before being refreshed.
+     */
     protected $btCacheBlockOutputLifetime = 0;
+    /**
+     * @var bool Defaults to false. This determines whether a block will cache its output on POST. Some blocks can
+     *           cache their output but must serve uncached output on POST in order to show error messages, etc…
+     */
     protected $btCacheBlockOutputOnPost = false;
+    /**
+     * @var bool Defaults to false. Determines whether a block that can cache its output will continue to cache its
+     *           output even if the current user viewing it is logged in.
+     */
     protected $btCacheBlockOutputForRegisteredUsers = false;
+    /**
+     * @var bool Defaults to false. This determines whether a block will cache its output on edit mode.
+     *           If the block show messages like "This block is disabled in edit mode" for editing users but still
+     *           enable to cache it's output for other users, consider keeping this value false and set true for
+     *           $btCacheBlockOutputForRegisteredUsers.
+     */
+    protected $btCacheBlockOutputOnEditMode = false;
     protected $bActionCID;
 
     /**
@@ -127,6 +156,8 @@ class BlockController extends \Concrete\Core\Controller\AbstractController
      * Note: do not rely on these being here. These are going to be moved.
      */
     public static $btTitleFormats = ['h1' => 'H1', 'h2' => 'H2', 'h3' => 'H3', 'h4' => 'H4', 'h5' => 'H5', 'h6' => 'H6', 'p' => 'Normal'];
+
+    public $saveMode = SaveMode::SAVE_MODE_REQUEST;
 
     /**
      * Set this to true if the data sent to the save/performSave methods can contain NULL values that should be persisted.
@@ -292,6 +323,9 @@ class BlockController extends \Concrete\Core\Controller\AbstractController
                     $this->{$field} = $args[$field] ?? null;
                 }
             }
+        }
+
+        if ($this instanceof TrackableInterface) {
             $this->app->make(AggregateTracker::class)->track($this);
         }
     }
@@ -513,7 +547,7 @@ class BlockController extends \Concrete\Core\Controller\AbstractController
         $blockData = [];
 
         $bt = \Concrete\Core\Block\BlockType\BlockType::getByHandle($this->btHandle);
-        $b = $page->addBlock($bt, $arHandle, $args);
+        $b = $page->addBlock($bt, $arHandle, $args, SaveMode::SAVE_MODE_IMPORT);
         $bName = (string) $blockNode['name'];
         $bFilename = (string) $blockNode['custom-template'];
         if ($bName) {
@@ -556,7 +590,7 @@ class BlockController extends \Concrete\Core\Controller\AbstractController
             );
         }
 
-        if ($this instanceof FileTrackableInterface) {
+        if ($this instanceof TrackableInterface) {
             $blockController = $b->getController(); // We have to do this because we need it loaded with the right block object, data.
             $this->app->make(AggregateTracker::class)->track($blockController);
         }
@@ -786,6 +820,11 @@ class BlockController extends \Concrete\Core\Controller\AbstractController
         return $this->btCacheBlockOutputOnPost;
     }
 
+    public function cacheBlockOutputOnEditMode()
+    {
+        return $this->btCacheBlockOutputOnEditMode;
+    }
+
     public function getBlockTypeCacheOutputLifetime()
     {
         return $this->btCacheBlockOutputLifetime;
@@ -885,7 +924,7 @@ class BlockController extends \Concrete\Core\Controller\AbstractController
                 $ni->delete();
             }
         }
-        if ($this instanceof FileTrackableInterface) {
+        if ($this instanceof TrackableInterface) {
             $this->app->make(AggregateTracker::class)->forget($this);
         }
     }

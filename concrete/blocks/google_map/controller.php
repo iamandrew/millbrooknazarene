@@ -65,6 +65,10 @@ class Controller extends BlockController implements UsesFeatureInterface
 
     protected $btCacheBlockOutputOnPost = true;
 
+    protected $btCacheBlockOutputForRegisteredUsers = true;
+
+    protected $btCacheBlockOutputOnEditMode = false;
+
     public function getBlockTypeDescription()
     {
         return t('Enter an address and a Google Map of that location will be placed in your page.');
@@ -98,7 +102,6 @@ class Controller extends BlockController implements UsesFeatureInterface
     public function validate($args)
     {
         $args += [
-            'apiKey' => null,
             'location' => null,
             'latitude' => '',
             'longitude' => '',
@@ -107,7 +110,8 @@ class Controller extends BlockController implements UsesFeatureInterface
 
         $error = $this->app->make('helper/validation/error');
 
-        if (!trim($args['apiKey'])) {
+        // the API key belongs to the site, not to the block: only the form of the block asks for it
+        if (array_key_exists('apiKey', $args) && !trim((string) $args['apiKey'])) {
             $error->add(t('Please enter a valid API key.'));
         }
 
@@ -149,11 +153,13 @@ class Controller extends BlockController implements UsesFeatureInterface
             'width' => null,
             'height' => null,
             'scrollwheel' => 0,
-            'apiKey' => '',
             'titleFormat' => 'h3',
         ];
 
-        Config::save('app.api_keys.google.maps', trim($data['apiKey']));
+        // the API key belongs to the site: let's keep the one it has when we aren't given a new one
+        if (array_key_exists('apiKey', $data)) {
+            Config::save('app.api_keys.google.maps', trim((string) $data['apiKey']));
+        }
 
         $args['title'] = trim($data['title']);
         $args['location'] = trim($data['location']);

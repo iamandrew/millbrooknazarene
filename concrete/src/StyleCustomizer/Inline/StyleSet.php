@@ -41,11 +41,18 @@ class StyleSet
     public static function import(SimpleXMLElement $node)
     {
         $xmlService = app(Xml::class);
+        $values = app(StyleValues::class);
         $o = new StyleSetEntity();
-        $o->setCustomClass((string) $node->customClass);
-        $o->setCustomID((string) $node->customID);
-        $o->setCustomElementAttribute((string) $node->customElementAttribute);
-        $o->setBackgroundColor((string) $node->backgroundColor);
+        $o->setCustomClass($values->sanitizeClasses(preg_split('/\s+/', trim((string) $node->customClass), -1, PREG_SPLIT_NO_EMPTY) ?: []));
+        $o->setCustomID(trim((string) $node->customID));
+        try {
+            $customElementAttribute = $values->sanitizeElementAttribute((string) $node->customElementAttribute);
+        } catch (UserMessageException $x) {
+            // a CIF is read for what holds in it, and an attribute whose quotes are not closed does not
+            $customElementAttribute = '';
+        }
+        $o->setCustomElementAttribute($customElementAttribute);
+        $o->setBackgroundColor($values->sanitizeColor($node->backgroundColor));
         $filename = (string) $node->backgroundImage;
         if ($filename) {
             $inspector = app('import/value_inspector');
@@ -55,32 +62,48 @@ class StyleSet
                 $o->setBackgroundImageFileID($fID);
             }
         }
-        $o->setBackgroundRepeat((string) $node->backgroundRepeat);
-        $o->setBackgroundSize((string) $node->backgroundSize);
-        $o->setBackgroundPosition((string) $node->backgroundPosition);
-        $o->setBorderColor((string) $node->borderColor);
-        $o->setBorderStyle((string) $node->borderStyle);
-        $o->setBorderWidth((string) $node->borderWidth);
-        $o->setBorderRadius((string) $node->borderRadius);
-        $o->setBaseFontSize((string) $node->baseFontSize);
-        $o->setAlignment((string) $node->alignment);
-        $o->setTextColor((string) $node->textColor);
-        $o->setLinkColor((string) $node->linkColor);
-        $o->setMarginTop((string) $node->marginTop);
-        $o->setMarginBottom((string) $node->marginBottom);
-        $o->setMarginLeft((string) $node->marginLeft);
-        $o->setMarginRight((string) $node->marginRight);
-        $o->setPaddingTop((string) $node->paddingTop);
-        $o->setPaddingBottom((string) $node->paddingBottom);
-        $o->setPaddingLeft((string) $node->paddingLeft);
-        $o->setPaddingRight((string) $node->paddingRight);
-        $o->setRotate((string) $node->rotate);
-        $o->setBoxShadowHorizontal((string) $node->boxShadowHorizontal);
-        $o->setBoxShadowVertical((string) $node->boxShadowVertical);
-        $o->setBoxShadowBlur((string) $node->boxShadowBlur);
-        $o->setBoxShadowSpread((string) $node->boxShadowSpread);
-        $o->setBoxShadowColor((string) $node->boxShadowColor);
-        $o->setBoxShadowInset($xmlService->getBool($node->boxShadowInset));
+        $o->setBackgroundRepeat($values->sanitizeBackgroundRepeat($node->backgroundRepeat));
+        $o->setBackgroundSize($values->sanitizeBackgroundSize($node->backgroundSize));
+        $o->setBackgroundPosition($values->sanitizeBackgroundPosition($node->backgroundPosition));
+        $o->setBorderColor($values->sanitizeColor($node->borderColor));
+        $o->setBorderStyle($values->sanitizeBorderStyle($node->borderStyle));
+        $o->setBorderWidth($values->sanitizeLength($node->borderWidth, false, false));
+        $o->setBorderRadius($values->sanitizeLength($node->borderRadius, false, false));
+        $o->setBaseFontSize($values->sanitizeLength($node->baseFontSize, false, false));
+        $o->setAlignment($values->sanitizeAlignment($node->alignment));
+        $o->setTextColor($values->sanitizeColor($node->textColor));
+        $o->setLinkColor($values->sanitizeColor($node->linkColor));
+        $o->setMarginTop($values->sanitizeLength($node->marginTop, true, false));
+        $o->setMarginBottom($values->sanitizeLength($node->marginBottom, true, false));
+        $o->setMarginLeft($values->sanitizeLength($node->marginLeft, true, false));
+        $o->setMarginRight($values->sanitizeLength($node->marginRight, true, false));
+        $o->setPaddingTop($values->sanitizeLength($node->paddingTop, false, false));
+        $o->setPaddingBottom($values->sanitizeLength($node->paddingBottom, false, false));
+        $o->setPaddingLeft($values->sanitizeLength($node->paddingLeft, false, false));
+        $o->setPaddingRight($values->sanitizeLength($node->paddingRight, false, false));
+        $o->setRotate($values->sanitizeRotation($node->rotate, false));
+        $boxShadowHorizontal = $values->sanitizeLength($node->boxShadowHorizontal, true, false);
+        $boxShadowVertical = $values->sanitizeLength($node->boxShadowVertical, true, false);
+        $boxShadowBlur = $values->sanitizeLength($node->boxShadowBlur, false, false);
+        $boxShadowSpread = $values->sanitizeLength($node->boxShadowSpread, true, false);
+        if ($boxShadowHorizontal !== '' || $boxShadowVertical !== '' || $boxShadowBlur !== '' || $boxShadowSpread !== '') {
+            // the sizes the shadow says nothing about are the zeroes the dialog stores
+            $boxShadowHorizontal = $boxShadowHorizontal ?: '0px';
+            $boxShadowVertical = $boxShadowVertical ?: '0px';
+            $boxShadowBlur = $boxShadowBlur ?: '0px';
+            $boxShadowSpread = $boxShadowSpread ?: '0px';
+            $boxShadowColor = $values->sanitizeColor($node->boxShadowColor);
+            $boxShadowInset = $xmlService->getBool($node->boxShadowInset);
+        } else {
+            $boxShadowColor = '';
+            $boxShadowInset = false;
+        }
+        $o->setBoxShadowHorizontal($boxShadowHorizontal);
+        $o->setBoxShadowVertical($boxShadowVertical);
+        $o->setBoxShadowBlur($boxShadowBlur);
+        $o->setBoxShadowSpread($boxShadowSpread);
+        $o->setBoxShadowColor($boxShadowColor);
+        $o->setBoxShadowInset($boxShadowInset);
         $o->setHideOnExtraSmallDevice($xmlService->getBool($node->hideOnExtraSmallDevice));
         $o->setHideOnSmallDevice($xmlService->getBool($node->hideOnSmallDevice));
         $o->setHideOnMediumDevice($xmlService->getBool($node->hideOnMediumDevice));
@@ -89,20 +112,6 @@ class StyleSet
         $o->save();
 
         return $o;
-    }
-
-    /**
-     * @param string[] $cssClasses
-     */
-    protected static function sanitizeCssClasses(array $cssClasses): ?string
-    {
-        $cssClasses = array_filter($cssClasses, function ($class) {
-            return preg_match('/^[^<>\'"]+$/', $class);
-        });
-        if (count($cssClasses) > 0) {
-            return implode(' ', $cssClasses);
-        }
-        return null;
     }
 
     /**
@@ -117,23 +126,29 @@ class StyleSet
     public static function populateFromRequest(Request $request)
     {
         $post = $request->request;
+        $values = app(StyleValues::class);
         $set = new StyleSetEntity();
         $return = false;
 
-        if ($post->has('backgroundColor') && trim($post->get('backgroundColor')) !== '') {
-            $set->setBackgroundColor($post->get('backgroundColor'));
-            $set->setBackgroundRepeat($post->get('backgroundRepeat'));
-            $set->setBackgroundSize($post->get('backgroundSize'));
-            $set->setBackgroundPosition($post->get('backgroundPosition'));
+        $backgroundRepeat = $values->sanitizeBackgroundRepeat($post->get('backgroundRepeat')) ?: 'no-repeat';
+        $backgroundSize = $values->sanitizeBackgroundSize($post->get('backgroundSize')) ?: 'auto';
+        $backgroundPosition = $values->sanitizeBackgroundPosition($post->get('backgroundPosition')) ?: 'left top';
+
+        $v = $values->sanitizeColor($post->get('backgroundColor'));
+        if ($v !== '') {
+            $set->setBackgroundColor($v);
+            $set->setBackgroundRepeat($backgroundRepeat);
+            $set->setBackgroundSize($backgroundSize);
+            $set->setBackgroundPosition($backgroundPosition);
             $return = true;
         }
 
         $fID = (int) $post->get('backgroundImageFileID');
         if ($fID > 0) {
             $set->setBackgroundImageFileID($fID);
-            $set->setBackgroundRepeat($post->get('backgroundRepeat'));
-            $set->setBackgroundSize($post->get('backgroundSize'));
-            $set->setBackgroundPosition($post->get('backgroundPosition'));
+            $set->setBackgroundRepeat($backgroundRepeat);
+            $set->setBackgroundSize($backgroundSize);
+            $set->setBackgroundPosition($backgroundPosition);
             $return = true;
         }
 
@@ -157,110 +172,111 @@ class StyleSet
             }
         }
 
-        $v = trim($post->get('linkColor', ''));
+        $v = $values->sanitizeColor($post->get('linkColor', ''));
         if ($v !== '') {
             $set->setLinkColor($v);
             $return = true;
         }
 
-        $v = trim($post->get('textColor', ''));
+        $v = $values->sanitizeColor($post->get('textColor', ''));
         if ($v !== '') {
             $set->setTextColor($v);
             $return = true;
         }
 
-        $v = trim($post->get('baseFontSize', ''));
-        if (!in_array($v, ['', '0px'], true)) {
+        $v = $values->sanitizeLength($post->get('baseFontSize', ''), false, false);
+        if ($v !== '') {
             $set->setBaseFontSize($v);
             $return = true;
         }
 
-        $v = trim($post->get('marginTop', ''));
-        if (!in_array($v, ['', '0px'], true)) {
+        $v = $values->sanitizeLength($post->get('marginTop', ''), true, false);
+        if ($v !== '') {
             $set->setMarginTop($v);
             $return = true;
         }
 
-        $v = trim($post->get('marginRight', ''));
-        if (!in_array($v, ['', '0px'], true)) {
+        $v = $values->sanitizeLength($post->get('marginRight', ''), true, false);
+        if ($v !== '') {
             $set->setMarginRight($v);
             $return = true;
         }
 
-        $v = trim($post->get('marginBottom', ''));
-        if (!in_array($v, ['', '0px'], true)) {
+        $v = $values->sanitizeLength($post->get('marginBottom', ''), true, false);
+        if ($v !== '') {
             $set->setMarginBottom($v);
             $return = true;
         }
 
-        $v = trim($post->get('marginLeft', ''));
-        if (!in_array($v, ['', '0px'], true)) {
+        $v = $values->sanitizeLength($post->get('marginLeft', ''), true, false);
+        if ($v !== '') {
             $set->setMarginLeft($v);
             $return = true;
         }
 
-        $v = trim($post->get('paddingTop', ''));
-        if (!in_array($v, ['', '0px'], true)) {
+        $v = $values->sanitizeLength($post->get('paddingTop', ''), false, false);
+        if ($v !== '') {
             $set->setPaddingTop($v);
             $return = true;
         }
 
-        $v = trim($post->get('paddingRight', ''));
-        if (!in_array($v, ['', '0px'], true)) {
+        $v = $values->sanitizeLength($post->get('paddingRight', ''), false, false);
+        if ($v !== '') {
             $set->setPaddingRight($v);
             $return = true;
         }
 
-        $v = trim($post->get('paddingBottom', ''));
-        if (!in_array($v, ['', '0px'], true)) {
+        $v = $values->sanitizeLength($post->get('paddingBottom', ''), false, false);
+        if ($v !== '') {
             $set->setPaddingBottom($v);
             $return = true;
         }
 
-        $v = trim($post->get('paddingLeft', ''));
-        if (!in_array($v, ['', '0px'], true)) {
+        $v = $values->sanitizeLength($post->get('paddingLeft', ''), false, false);
+        if ($v !== '') {
             $set->setPaddingLeft($v);
             $return = true;
         }
 
-        $v = trim($post->get('borderWidth', ''));
-        if (!in_array($v, ['', '0px'], true)) {
+        $v = $values->sanitizeLength($post->get('borderWidth', ''), false, false);
+        if ($v !== '') {
             $set->setBorderWidth($v);
-            $set->setBorderStyle($post->get('borderStyle'));
-            $set->setBorderColor($post->get('borderColor'));
+            $set->setBorderStyle($values->sanitizeBorderStyle($post->get('borderStyle')));
+            $set->setBorderColor($values->sanitizeColor($post->get('borderColor')));
             $return = true;
         }
 
-        $v = trim($post->get('borderRadius', ''));
-        if (!in_array($v, ['', '0px'], true)) {
+        $v = $values->sanitizeLength($post->get('borderRadius', ''), false, false);
+        if ($v !== '') {
             $set->setBorderRadius($v);
             $return = true;
         }
 
-        $v = trim($post->get('alignment', ''));
+        $v = $values->sanitizeAlignment($post->get('alignment', ''));
         if ($v !== '') {
             $set->setAlignment($v);
             $return = true;
         }
 
-        $v = $post->get('rotate');
-        if ($v) {
+        $v = $values->sanitizeRotation($post->get('rotate'), false);
+        if ($v !== '') {
             $set->setRotate($v);
             $return = true;
         }
 
         if ($post->has('boxShadowColor')) {
-            $boxShadowHorizontal = trim($post->get('boxShadowHorizontal', '')) ?: '0px';
-            $boxShadowVertical = trim($post->get('boxShadowVertical', '')) ?: '0px';
-            $boxShadowBlur = trim($post->get('boxShadowBlur', '')) ?: '0px';
-            $boxShadowSpread = trim($post->get('boxShadowSpread', '')) ?: '0px';
+            $boxShadowHorizontal = $values->sanitizeLength($post->get('boxShadowHorizontal', ''), true, false);
+            $boxShadowVertical = $values->sanitizeLength($post->get('boxShadowVertical', ''), true, false);
+            $boxShadowBlur = $values->sanitizeLength($post->get('boxShadowBlur', ''), false, false);
+            $boxShadowSpread = $values->sanitizeLength($post->get('boxShadowSpread', ''), true, false);
             $boxShadowInset = (bool) $post->get('boxShadowInset');
-            if ($boxShadowHorizontal !== '0px' || $boxShadowVertical !== '0px' || $boxShadowBlur !== '0px' || $boxShadowSpread !== '0px') {
-                $set->setBoxShadowColor($post->get('boxShadowColor'));
-                $set->setBoxShadowBlur($boxShadowBlur);
-                $set->setBoxShadowHorizontal($boxShadowHorizontal);
-                $set->setBoxShadowVertical($boxShadowVertical);
-                $set->setBoxShadowSpread($boxShadowSpread);
+            if ($boxShadowHorizontal !== '' || $boxShadowVertical !== '' || $boxShadowBlur !== '' || $boxShadowSpread !== '') {
+                // the sizes the shadow says nothing about are the zeroes the dialog stores
+                $set->setBoxShadowColor($values->sanitizeColor($post->get('boxShadowColor')));
+                $set->setBoxShadowBlur($boxShadowBlur ?: '0px');
+                $set->setBoxShadowHorizontal($boxShadowHorizontal ?: '0px');
+                $set->setBoxShadowVertical($boxShadowVertical ?: '0px');
+                $set->setBoxShadowSpread($boxShadowSpread ?: '0px');
                 $set->setBoxShadowInset($boxShadowInset);
                 $return = true;
             }
@@ -268,8 +284,8 @@ class StyleSet
 
         $v = $post->get('customClass');
         if (is_array($v)) {
-            $customClasses = self::sanitizeCssClasses($v);
-            if ($customClasses !== null) {
+            $customClasses = $values->sanitizeClasses($v);
+            if ($customClasses !== '') {
                 $set->setCustomClass($customClasses);
                 $return = true;
             }
@@ -281,25 +297,61 @@ class StyleSet
             $return = true;
         }
 
-        $v = trim($post->get('customElementAttribute', ''));
+        $v = $values->sanitizeElementAttribute($post->get('customElementAttribute', ''));
         if ($v !== '') {
-            // strip class attributes
-            $pattern = '/(class\s*=\s*["\'][^\'"]*["\'])/i';
-            $customElementAttribute = preg_replace($pattern, '', $v);
-            // strip ID attributes
-            $pattern = '/(id\s*=\s*["\'][^\'"]*["\'])/i';
-            $customElementAttribute = preg_replace($pattern, '', $customElementAttribute);
-            // don't save if there are odd numbers of single/double quotes
-            $singleQuoteCount = preg_match_all('/([\'])/i', $customElementAttribute);
-            $doubleQuoteCount = preg_match_all('/(["])/i', $customElementAttribute);
-
-            if ($singleQuoteCount % 2 !== 0 || $doubleQuoteCount % 2 !== 0) {
-                throw new UserMessageException(t('Custom Element Attribute input: unclosed quote(s)'));
-            }
-            $set->setCustomElementAttribute(trim($customElementAttribute));
+            $set->setCustomElementAttribute($v);
             $return = true;
         }
 
         return $return ? $set : null;
+    }
+
+    /**
+     * @deprecated use \Concrete\Core\StyleCustomizer\Inline\StyleValues::sanitizeClasses()
+     *
+     * @param string[] $cssClasses
+     */
+    protected static function sanitizeCssClasses(array $cssClasses): ?string
+    {
+        return self::orNull(app(StyleValues::class)->sanitizeClasses($cssClasses));
+    }
+
+    /**
+     * @deprecated use \Concrete\Core\StyleCustomizer\Inline\StyleValues::sanitizeColor()
+     */
+    protected static function sanitizeCssColor($value): ?string
+    {
+        return self::orNull(app(StyleValues::class)->sanitizeColor($value));
+    }
+
+    /**
+     * @deprecated use \Concrete\Core\StyleCustomizer\Inline\StyleValues::sanitizeLength()
+     */
+    protected static function sanitizeCssLength($value, bool $allowNegative = true): ?string
+    {
+        return self::orNull(app(StyleValues::class)->sanitizeLength($value, $allowNegative));
+    }
+
+    /**
+     * @deprecated use \Concrete\Core\StyleCustomizer\Inline\StyleValues::sanitizeRotation()
+     */
+    protected static function sanitizeCssRotation($value): ?string
+    {
+        return self::orNull(app(StyleValues::class)->sanitizeRotation($value));
+    }
+
+    /**
+     * @deprecated use \Concrete\Core\StyleCustomizer\Inline\StyleValues::sanitizeEnum()
+     *
+     * @param string[] $allowed
+     */
+    protected static function sanitizeCssEnum($value, array $allowed): ?string
+    {
+        return self::orNull(app(StyleValues::class)->sanitizeEnum($value, $allowed));
+    }
+
+    private static function orNull(string $value): ?string
+    {
+        return $value === '' ? null : $value;
     }
 }

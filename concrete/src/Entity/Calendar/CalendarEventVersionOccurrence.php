@@ -39,7 +39,7 @@ class CalendarEventVersionOccurrence implements ObjectInterface, CategoryMemberI
 
     public function setAttribute($ak, $value)
     {
-        $this->version->setAttribute($ak, $value);
+        return $this->version->setAttribute($ak, $value);
     }
 
     /**
@@ -60,14 +60,17 @@ class CalendarEventVersionOccurrence implements ObjectInterface, CategoryMemberI
      */
     protected $occurrence;
 
+
+    /**
+     * @return \stdClass
+     */
     public function getJSONObject()
     {
-        $ev = $this->getEvent();
         $r = array();
         $r['start'] = $this->occurrence->getStart();
         $r['end'] = $this->occurrence->getEnd();
 
-        return (object) array_merge($r, (array) $ev->getJSONObject());
+        return (object) array_merge($r, $this->version->jsonSerialize());
     }
 
     public function __construct(CalendarEventVersion $version, CalendarEventRepetition $repetition, $start, $end, $cancelled = false)

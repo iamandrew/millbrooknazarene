@@ -2,7 +2,6 @@
 
 namespace Concrete\Controller\Frontend;
 
-use Concrete\Core\File\Image\BitmapFormat;
 use Concrete\Core\File\Type\Type as FileType;
 use Concrete\Core\File\Upload\Dropzone;
 use Concrete\Core\Filesystem\FileLocator;
@@ -149,7 +148,8 @@ var ccmi18n_editor = ' . json_encode([
     'insertLinkToFile' => t('Insert Link to File'),
     'insertLinkToPage' => t('Link to Page'),
     'lightboxFeatures' => t('Lightbox Features'),
-    'sitemap' => t('Sitemap'),
+    'selectFile' => t('Select file'),
+    'sitemap' => t('Select page'),
     'snippets' => t('Snippets'),
     'cancelPrompt' => t('Are you sure you want to revert changes made to this block?'),
     'cancelPromptButton' => t('Yes, revert changes'),
@@ -270,12 +270,15 @@ var ccmi18n_fileuploader = ' . json_encode([
 var ccmi18n_filemanager = ' . json_encode([
     'add' => t('Add'),
     'addFiles' => t('Add Files'),
+    'browseFolders' => t('Browse Folders'),
     'cancel' => t('Cancel'),
+    'cancelFolderCreation' => t('Cancel Folder Creation'),
     'choose' => t('Choose'),
     'chooseFile' => t('Choose File'),
     'chooseNew' => t('Choose New File'),
     'chosenTooMany' => t('You may only select a single file.'),
     'clear' => t('Clear'),
+    'createInside' => t('Create inside'),
     'createNewFolder' => t('Create New Folder'),
     'deleteFile' => t('Delete'),
     'download' => t('Download'),
@@ -295,7 +298,9 @@ var ccmi18n_filemanager = ' . json_encode([
     'initialExternalFileProviderChooserTip' => t("Let's get some info on what you're looking for."),
     'initialSearchChooserTip' => t("Let's get some info on what you're looking for."),
     'jumpToFolder' => t('Jump to Folder'),
+    'moreFoldersFound' => t('More folders found. Refine your search.'),
     'name' => t('Name'),
+    'newFolderName' => t('New folder name'),
     'pending' => t('Pending'),
     'permissions' => t('Permissions'),
     'properties' => t('Properties'),
@@ -306,6 +311,7 @@ var ccmi18n_filemanager = ' . json_encode([
     'recentlyUploaded' => t('Recently Uploaded'),
     'rescan' => t('Rescan'),
     'search' => t('Search'),
+    'searchFolders' => t('Search Folders'),
     'searchPresets' => t('Search Presets'),
     'select' => t('Choose'),
     'selectFileSet' => t('Select a Set'),
@@ -736,6 +742,18 @@ jQuery.ui.fancytree.prototype.options.strings.loadError = ' . json_encode(t('Loa
             $content = @file_get_contents($found);
             if ($content === false) {
                 $content = "/* jQueryUI: failed to read translations for {$alternative} */";
+            } else {
+                $content = <<<EOT
+                (function() {
+                    function ready() {
+                        {$content}
+                    }
+                    if (window.jQuery?.datepicker || document.readyState !== 'loading') {
+                        return ready();
+                    }
+                    document.addEventListener('DOMContentLoaded', ready);
+                })();
+                EOT;
             }
         } else {
             $content = '/* jQueryUI: no translations for ' . implode(', ', $alternatives) . ' */';

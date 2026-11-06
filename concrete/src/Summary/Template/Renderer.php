@@ -4,6 +4,7 @@ namespace Concrete\Core\Summary\Template;
 
 use Concrete\Core\Entity\Summary\Template;
 use Concrete\Core\Filesystem\FileLocator;
+use Concrete\Core\Filesystem\TemplateService;
 use Concrete\Core\Foundation\Serializer\JsonSerializer;
 use Concrete\Core\Logging\Channels;
 use Concrete\Core\Logging\LoggerAwareInterface;
@@ -60,6 +61,10 @@ class Renderer implements LoggerAwareInterface
      * @var SummaryObjectInspector
      */
     protected $summaryObjectInspector;
+    /**
+     * @var TemplateService
+     */
+    private $templateService;
 
     public function __construct(
         JsonSerializer $serializer,
@@ -69,6 +74,7 @@ class Renderer implements LoggerAwareInterface
         FileLocator $fileLocator,
         SummaryObjectExtractor $summaryObjectExtractor,
         SummaryObjectInspector $summaryObjectInspector,
+        TemplateService $templateService,
         ?Page $currentPage = null
     ) {
         $this->serializer = $serializer;
@@ -79,6 +85,7 @@ class Renderer implements LoggerAwareInterface
         $this->summaryObjectExtractor = $summaryObjectExtractor;
         $this->summaryObjectInspector = $summaryObjectInspector;
         $this->currentPage = $currentPage;
+        $this->templateService = $templateService;
     }
 
     public function getLoggerChannel()
@@ -113,14 +120,13 @@ class Renderer implements LoggerAwareInterface
         $template = $summaryObject->getTemplate();
         $file = $this->templateLocator->getFileToRender($template);
         if ($file) {
-            $summaryObjectInspector = $this->summaryObjectInspector; // This is included here for use in the template.
             $summaryObjectFields = $this->summaryObjectExtractor->getData($summaryObject);
             if ($this->summaryObjectSupportsTemplate($summaryObjectFields, $template)) {
                 // note: we used to include <span class="ccm-summary-template-header"></span> around this, but it's
                 // too prescriptive and annoying, it causes problems with more advanced flexbox styling.
-
-                extract($summaryObjectFields, EXTR_OVERWRITE);
-                include $file;
+                $summaryObjectFields['summaryObjectInspector'] = $this->summaryObjectInspector;
+                $summaryObjectFields['summaryObject'] = $summaryObject;
+                echo $this->templateService->renderTemplate($file, $summaryObjectFields);
             }
         } else {
             if ($template->getHandle()) {

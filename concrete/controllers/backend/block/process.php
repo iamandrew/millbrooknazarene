@@ -77,6 +77,13 @@ class Process extends AbstractController
             throw new UserMessageException(t('Unable to find the specified block'));
         }
 
+        if ($isOrphanedBlock) {
+            $bp = new Checker($b);
+            if (!$bp->canDeleteBlock()) {
+                throw new UserMessageException(t('Access Denied'));
+            }
+        }
+
         $bID = $b->getBlockID();
 
         $b->setBlockAreaObject($ax);
@@ -158,7 +165,7 @@ class Process extends AbstractController
         }
         if ($a->isGlobalArea()) {
             $ax = STACKS_AREA_NAME;
-            $cx = Stack::getByName($arHandle);
+            $cx = Stack::getGlobalAreaStackFromName($c, $arHandle);
             if (!$cx || $cx->isError()) {
                 throw new UserMessageException(t('Unable to find the stack specified.'));
             }

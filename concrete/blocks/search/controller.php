@@ -12,6 +12,8 @@ use Core;
 use Database;
 use Page;
 use Request;
+use Concrete\Core\Support\Facade\Config;
+use Concrete\Core\Url\SeoCanonical;
 
 class Controller extends BlockController implements UsesFeatureInterface
 {
@@ -164,8 +166,8 @@ class Controller extends BlockController implements UsesFeatureInterface
             return $fulltext;
         }
 
-        $this->hText = $fulltext;
-        $this->hHighlight = $highlight;
+        $this->hText = h($fulltext);
+        $this->hHighlight = h($highlight);
         $this->hText = @preg_replace('#' . preg_quote($this->hHighlight, '#') . '#ui', '<span style="background-color:' . $this->hColor . ';">$0</span>', $this->hText);
 
         return $this->hText;
@@ -270,6 +272,29 @@ class Controller extends BlockController implements UsesFeatureInterface
     }
 
     /**
+     * Default on_start().
+     */
+    public function on_start()
+    {
+        $seoCanonical = $this->app->make(SeoCanonical::class);
+        $includedQueryParams = $seoCanonical->getIncludedQuerystringParameters();
+        $paging = $this->request->request(Config::get('concrete.seo.paging_string'));
+        if ($paging && $paging >= 2) {
+            // ccm_paging_p hardwired in config // Seemingly no effect if removed // concrete/site.php
+            if (!in_array(Config::get('concrete.seo.paging_string'), $includedQueryParams)) {
+                $seoCanonical->addIncludedQuerystringParameter(Config::get('concrete.seo.paging_string'));
+            }
+            $this->addHeaderItem('<meta name="robots" content="noindex">');
+        }
+
+        if (!empty($this->request->request('query'))) {
+            if (!in_array('query', $includedQueryParams)) {
+                $seoCanonical->addIncludedQuerystringParameter('query');
+            }
+        }
+    }
+
+    /**
      * Default view method.
      */
     public function view()
@@ -360,7 +385,7 @@ class Controller extends BlockController implements UsesFeatureInterface
             'postTo_cID' => null,
             'resultsURL' => '',
             'search_all' => 0,
-            'allow_users_options' => 0,
+            'allow_user_options' => 0,
         ];
         switch ($data['baseSearchPath']) {
             case 'THIS':
@@ -433,7 +458,7 @@ class Controller extends BlockController implements UsesFeatureInterface
         } elseif ((string) ($args['resultsURL'] ?? '') !== '') {
             $args['resultsPageKind'] = 'URL';
         }
-        $args['allowUserOptions'] = empty($args['allowUserOptions']) ? 0 : 'ALLOW';
+        $args['allowUserOptions'] = empty($args['allow_user_options']) ? 0 : 'ALLOW';
 
         return $args;
     }

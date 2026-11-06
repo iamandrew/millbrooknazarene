@@ -112,6 +112,20 @@ class ImportException extends UserMessageException
     const E_FILE_MISSING_ROOT_FOLDER = 21;
 
     /**
+     * concrete5 internal error: the file is not a well formed XML document.
+     *
+     * @var int
+     */
+    const E_FILE_MALFORMED_XML = 22;
+
+    /**
+     * concrete5 internal error: the file contains potentially harmful contents.
+     *
+     * @var int
+     */
+    const E_FILE_HARMFUL_CONTENTS = 23;
+
+    /**
      * Create a new instance given the error code.
      *
      * @param string $code
@@ -139,6 +153,10 @@ class ImportException extends UserMessageException
                 return t('Invalid file.');
             case static::E_FILE_INVALID_EXTENSION:
                 return t('Invalid file extension.');
+            case static::E_FILE_MALFORMED_XML:
+                return t('The file is not a well formed XML document.');
+            case static::E_FILE_HARMFUL_CONTENTS:
+                return t('The file contains elements that could be potentially harmful.');
             case static::E_PHP_FILE_PARTIAL_UPLOAD:
                 return t('The file was only partially uploaded.');
             case static::E_FILE_INVALID_STORAGE_LOCATION:
@@ -156,7 +174,7 @@ class ImportException extends UserMessageException
                 return t('Missing a temporary folder.');
             case static::E_PHP_CANT_WRITE:
                 return t('Failed to write file to disk.');
-            case static::E_PHP_CANT_WRITE:
+            case static::E_PHP_EXTENSION:
                 return t('A PHP extension stopped the file upload.');
             case static::E_FILE_MISSING_ROOT_FOLDER:
                 return t('The root folder does not exist.');

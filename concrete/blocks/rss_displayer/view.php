@@ -24,12 +24,12 @@ if (isset($errorMsg) && strlen($errorMsg) > 0) {
 		
 		<div class="ccm-block-rss-displayer-item">
 			<div class="ccm-block-rss-displayer-item-title">
-				<a href="<?= $item->getLink();
+				<a href="<?= h($item->getLink());
         ?>" <?php if ($rssObj->launchInNewWindow) {
     echo 'target="_blank"';
 }
         ?> >
-					<?= $item->getTitle();
+					<?= h($item->getTitle());
         ?>
 				</a>
 			</div>

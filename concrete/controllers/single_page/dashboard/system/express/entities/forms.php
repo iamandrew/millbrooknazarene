@@ -1,6 +1,7 @@
 <?php
 namespace Concrete\Controller\SinglePage\Dashboard\System\Express\Entities;
 
+use Concrete\Core\Controller\Traits\DashboardExpressEntityBreadcrumbTrait;
 use Concrete\Core\Entity\Express\Entity;
 use Concrete\Core\Entity\Express\FieldSet;
 use Concrete\Core\Entity\Express\Form;
@@ -9,6 +10,8 @@ use Doctrine\ORM\Id\UuidGenerator;
 
 class Forms extends DashboardPageController
 {
+    use DashboardExpressEntityBreadcrumbTrait;
+
     protected $repository;
     protected $formRepository;
     protected $fieldSetRepository;
@@ -159,6 +162,12 @@ class Forms extends DashboardPageController
     {
         $control = $this->controlRepository->findOneById($controlID);
         if ($control) {
+            if (!$this->token->validate('save_control')) {
+                $this->error->add($this->token->getErrorMessage());
+            }
+            if ($this->error->has()) {
+                return;
+            }
             $saver = $control->getControlSaveHandler();
             $control = $saver->saveFromRequest($control, $this->request);
             $this->entityManager->persist($control);

@@ -21,6 +21,7 @@ class Versions extends ApiController
      * @OA\Get(
      *     path="/ccm/api/1.0/page_versions/{pageID}/{versionID}",
      *     tags={"page_versions"},
+     *     operationId="getPageVersionByPageIdAndVersionId",
      *     summary="Find a page version by its ID and the ID of its page.",
      *     security={
      *         {"authorization": {"pages:versions:read"}}
@@ -81,6 +82,7 @@ class Versions extends ApiController
      * @OA\Get(
      *     path="/ccm/api/1.0/page_versions/{pageID}",
      *     tags={"page_versions"},
+     *     operationId="getPageVersionsByPageId",
      *     summary="Returns a list of page version objects for a given page ID, sorted by date created descending.",
      *     security={
      *         {"authorization": {"pages:versions:read"}}
@@ -142,9 +144,80 @@ class Versions extends ApiController
     }
 
     /**
+     * @OA\Post(
+     *     path="/ccm/api/1.0/page_versions/{pageID}",
+     *     tags={"page_versions"},
+     *     operationId="addPageVersionByPageId",
+     *     summary="Create or return an editable RECENT draft page version.",
+     *     description="Matches Collection::getVersionToModify() semantics: if the current RECENT version is already a draft (isNew), it is returned unchanged; otherwise a new draft is cloned (blocks remain aliases until edited). After cloning, read blocks with version=recent. Approving or publishing is out of scope — use the update endpoint.",
+     *     security={
+     *         {"authorization": {"pages:versions:add"}}
+     *     },
+     *     @OA\Parameter(
+     *         name="pageID",
+     *         in="path",
+     *         description="ID of page",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\RequestBody(ref="#/components/requestBodies/NewPageVersion"),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/PageVersion"),
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="You do not have the proper permissions to create a draft for this page."
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Page not found"
+     *     ),
+     * )
+     */
+    public function add($pageID)
+    {
+        $cache = $this->app->make('cache/request');
+        $cache->disable();
+
+        $page = Page::getByID($pageID, 'RECENT');
+        if (!$page) {
+            return $this->error(t('Page not found'), 404);
+        }
+        if ($page->isError() && $page->getError() == COLLECTION_NOT_FOUND) {
+            return $this->error(t('Page not found'), 404);
+        }
+
+        $checker = new Checker($page);
+        if (!$checker->canEditPageContents()) {
+            return $this->error(t('You do not have access to create a draft version of this page.'), 401);
+        }
+
+        $versionComments = null;
+        $body = json_decode($this->request->getContent(), true);
+        if (is_array($body) && isset($body['comments']) && is_string($body['comments'])) {
+            $versionComments = $body['comments'];
+        }
+
+        // Match Collection::getVersionToModify(), with optional clone comments.
+        $version = $page->getVersionObject();
+        if (!$page->isMasterCollection() && !$version->isNew()) {
+            $page = $page->cloneVersion($versionComments);
+            $version = $page->getVersionObject();
+        }
+
+        return $this->transform($version, new CollectionVersionTransformer(), Resources::RESOURCE_PAGE_VERSIONS);
+    }
+
+    /**
      * @OA\Delete(
      *     path="/ccm/api/1.0/page_versions/{pageID}/{versionID}",
      *     tags={"page_versions"},
+     *     operationId="deletePageVersionByPageIdAndVersionId",
      *     summary="Delete a page version.",
      *     security={
      *         {"authorization": {"pages:versions:delete"}}
@@ -211,6 +284,7 @@ class Versions extends ApiController
      * @OA\Put(
      *     path="/ccm/api/1.0/page_versions/{pageID}/{versionID}",
      *     tags={"page_versions"},
+     *     operationId="updatePageVersionByPageIdAndVersionId",
      *     summary="Update a page version",
      *     security={
      *         {"authorization": {"pages:versions:update"}}

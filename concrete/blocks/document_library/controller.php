@@ -449,7 +449,7 @@ class Controller extends BlockController implements UsesFeatureInterface
                     // Show files in ANY of the sets
                     $expr = $query->expr()->orX($this->hideFolders ? '1=0' : 'nt.treeNodeTypeHandle = "file_folder"');
                     foreach ($sets as $set) {
-                        $expr->add($query->expr()->eq('fsf.fsID', $set));
+                        $expr->add($query->expr()->eq('fsf.fsID', (int) $set));
                     }
 
                     $query->andWhere($expr);
@@ -760,9 +760,9 @@ class Controller extends BlockController implements UsesFeatureInterface
             case 'filename':
                 return $file->getFileName();
             case 'description':
-                return $file->getDescription();
+                return h($file->getDescription());
             case 'tags':
-                return $file->getTags();
+                return h($file->getTags());
             case 'date':
                 return $this->app->make('date')->formatDate($file->getDateAdded(), false);
             case 'extension':
@@ -877,8 +877,6 @@ class Controller extends BlockController implements UsesFeatureInterface
 
     public function view()
     {
-        $this->loadData();
-
         $list = new FolderItemList();
         $list = $this->setupFolderFileSetFilter($list);
         $list = $this->setupFolderFileFolderFilter($list);
@@ -1008,7 +1006,7 @@ class Controller extends BlockController implements UsesFeatureInterface
             'viewProperties' => json_encode(is_array($args['viewProperties']) ? $args['viewProperties'] : []),
             'searchProperties' => json_encode(is_array($args['searchProperties']) ? $args['searchProperties'] : []),
             'expandableProperties' => json_encode(is_array($args['expandableProperties']) ? $args['expandableProperties'] : []),
-            'setIds' => json_encode(is_array($args['fsID']) ? $args['fsID'] : []),
+            'setIds' => json_encode(is_array($args['fsID']) ? array_map('intval', $args['fsID']) : []),
             'setMode' => $args['setMode'] == 'all' ? 'all' : 'any',
             'onlyCurrentUser' => empty($args['onlyCurrentUser']) ? 0 : 1,
             'allowInPageFileManagement' => empty($args['allowInPageFileManagement']) ? 0 : 1,
@@ -1058,6 +1056,7 @@ class Controller extends BlockController implements UsesFeatureInterface
         $this->fixExportAttributeKeyArray($record, 'viewProperties', true);
         $this->fixExportAttributeKeyArray($record, 'expandableProperties', false);
         $this->fixExportAttributeKeyArray($record, 'searchProperties', false);
+        $this->fixExportAttributeKey($record, 'orderBy');
         $addFilesToSet = null;
         if (isset($record->addFilesToSetID)) {
             $setID = (int) (string) $record->addFilesToSetID[0];
@@ -1091,6 +1090,7 @@ class Controller extends BlockController implements UsesFeatureInterface
         $this->fixImportAttributeKeyArray($data, 'viewProperties', true);
         $this->fixImportAttributeKeyArray($data, 'expandableProperties', false);
         $this->fixImportAttributeKeyArray($data, 'searchProperties', false);
+        $this->fixImportAttributeKey($data, 'orderBy');
         if (is_string($addFilesToSetName = $data['addFilesToSetName'] ?? null) && $addFilesToSetName !== '') {
             $addFilesToSet = Set::getByName($addFilesToSetName);
             if ($addFilesToSet) {
@@ -1238,6 +1238,41 @@ class Controller extends BlockController implements UsesFeatureInterface
             }
         }
         $xml->createChildElement($recordNode, 'setNames', json_encode($setNames));
+    }
+
+    /**
+     * Replace the ID of the file attribute held by a column with its handle, since a CIF file can't refer
+     * to it by its ID.
+     */
+    private function fixExportAttributeKey(SimpleXMLElement $recordNode, string $fieldName): void
+    {
+        $value = isset($recordNode->{$fieldName}) ? (string) $recordNode->{$fieldName} : '';
+        $m = null;
+        if (!preg_match('/^ak_(?<id>[1-9]\d*)$/', $value, $m)) {
+            return;
+        }
+        $ak = $this->app->make(FileCategory::class)->getAttributeKeyByID((int) $m['id']);
+        if (!$ak) {
+            return;
+        }
+        unset($recordNode->{$fieldName}[0]);
+        $this->app->make(Xml::class)->createChildElement($recordNode, $fieldName, "ak_{$ak->getAttributeKeyHandle()}");
+    }
+
+    /**
+     * Replace the handle of the file attribute held by a column with its ID.
+     */
+    private function fixImportAttributeKey(array &$data, string $fieldName): void
+    {
+        $value = (string) ($data[$fieldName] ?? '');
+        $m = null;
+        if (!preg_match('/^ak_(?<handle>\S+)$/', $value, $m)) {
+            return;
+        }
+        $ak = $this->app->make(FileCategory::class)->getAttributeKeyByHandle($m['handle']);
+        if ($ak) {
+            $data[$fieldName] = "ak_{$ak->getAttributeKeyID()}";
+        }
     }
 
     private function fixExportAttributeKeyArray(SimpleXMLElement $recordNode, string $fieldName, bool $replaceKeys): void

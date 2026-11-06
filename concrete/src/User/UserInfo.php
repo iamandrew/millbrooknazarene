@@ -57,7 +57,9 @@ use Concrete\Core\Events\EventDispatcher;
 
 class UserInfo extends ConcreteObject implements AttributeObjectInterface, PermissionObjectInterface, ExportableInterface
 {
-    use ObjectTrait;
+    use ObjectTrait {
+        setAttribute as protected setAttributeValue;
+    }
 
     /**
      * @var AvatarServiceInterface
@@ -492,6 +494,9 @@ class UserInfo extends ConcreteObject implements AttributeObjectInterface, Permi
      */
     public function update($data)
     {
+        $data = is_array($data) ? $data : [];
+        $allowPasswordUpdate = ($data['_allowPasswordUpdate'] ?? null) === true;
+        $allowIgnoredIPMismatchesUpdate = ($data['_allowIgnoredIPMismatchesUpdate'] ?? null) === true;
         $uID = (int)$this->getUserID();
         if ($uID === 0) {
             $result = false;
@@ -531,7 +536,7 @@ class UserInfo extends ConcreteObject implements AttributeObjectInterface, Permi
                     $values[] = $data['uHomeFileManagerFolderID'];
                 }
             }
-            if (isset($data['uPassword']) && (string)$data['uPassword'] !== '') {
+            if ($allowPasswordUpdate && isset($data['uPassword']) && (string)$data['uPassword'] !== '') {
                 if (isset($data['uPasswordConfirm']) && $data['uPassword'] === $data['uPasswordConfirm']) {
                     $passwordChangedOn = $this->application->make('date')->getOverridableNow();
                     $fields[] = 'uPassword = ?';
@@ -546,7 +551,7 @@ class UserInfo extends ConcreteObject implements AttributeObjectInterface, Permi
                     $result = null;
                 }
             }
-            if (is_array($data['ignoredIPMismatches'] ?? null)) {
+            if ($allowIgnoredIPMismatchesUpdate && is_array($data['ignoredIPMismatches'] ?? null)) {
                 $fields[] = 'ignoredIPMismatches = ?';
                 $values[] = (new SimpleArrayType())->convertToDatabaseValue($data['ignoredIPMismatches'], $this->connection->getDatabasePlatform());
             }
@@ -710,6 +715,7 @@ class UserInfo extends ConcreteObject implements AttributeObjectInterface, Permi
     public function changePassword($newPassword)
     {
         return $this->update([
+            '_allowPasswordUpdate' => true,
             'uPassword' => $newPassword,
             'uPasswordConfirm' => $newPassword,
             'uIsPasswordReset' => false,
@@ -901,6 +907,14 @@ class UserInfo extends ConcreteObject implements AttributeObjectInterface, Permi
     }
 
     /**
+     * @see \Concrete\Core\Entity\User\User::getUserValidationStatus()
+     */
+    public function getValidationStatus()
+    {
+        return $this->entity->getUserValidationStatus();
+    }
+
+    /**
      * @see \Concrete\Core\Entity\User\User::isUserFullRecord()
      */
     public function isFullRecord()
@@ -1013,12 +1027,10 @@ class UserInfo extends ConcreteObject implements AttributeObjectInterface, Permi
             $controller = $uak->getController();
             $controller->setAttributeObject($this);
             $value = $controller->createAttributeValueFromRequest();
-            $this->setAttribute($uak, $value);
+            $this->setAttributeValue($uak, $value);
         }
 
-        $ue = new UserInfoWithAttributesEvent($this);
-        $ue->setAttributes($attributes);
-        $this->getDirector()->dispatch('on_user_attributes_saved', $ue);
+        $this->dispatchUserAttributesSavedEvent($attributes);
     }
 
     /**
@@ -1031,10 +1043,32 @@ class UserInfo extends ConcreteObject implements AttributeObjectInterface, Permi
             if (method_exists($controller, 'createDefaultAttributeValue')) {
                 $value = $controller->createDefaultAttributeValue();
                 if ($value !== null) {
-                    $this->setAttribute($uak, $value);
+                    $this->setAttributeValue($uak, $value);
                 }
             }
         }
+        $this->dispatchUserAttributesSavedEvent($attributes);
+    }
+
+    /**
+     * Sets one user attribute and dispatches the user attributes saved event for just that attribute.
+     *
+     * @param \Concrete\Core\Attribute\AttributeKeyInterface|string $ak
+     * @param mixed $value
+     * @param bool $doReindexImmediately
+     *
+     * @return \Concrete\Core\Attribute\AttributeValueInterface
+     */
+    public function setAttribute($ak, $value, $doReindexImmediately = true)
+    {
+        $attributeValue = $this->setAttributeValue($ak, $value, $doReindexImmediately);
+        $this->dispatchUserAttributesSavedEvent([$attributeValue->getAttributeKey()]);
+
+        return $attributeValue;
+    }
+
+    protected function dispatchUserAttributesSavedEvent(array $attributes)
+    {
         $ue = new UserInfoWithAttributesEvent($this);
         $ue->setAttributes($attributes);
         $this->getDirector()->dispatch('on_user_attributes_saved', $ue);

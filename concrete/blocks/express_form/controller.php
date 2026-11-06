@@ -12,6 +12,7 @@ use Concrete\Core\Entity\Express\Control\AttributeKeyControl;
 use Concrete\Core\Entity\Express\Control\Control;
 use Concrete\Core\Entity\Express\Control\TextControl;
 use Concrete\Core\Entity\Express\Entity;
+use Concrete\Core\Entity\Express\Entry;
 use Concrete\Core\Entity\Express\FieldSet;
 use Concrete\Core\Entity\Express\Form;
 use Concrete\Core\Error\UserMessageException;
@@ -43,6 +44,7 @@ use Concrete\Core\Utility\Service\Xml;
 use Concrete\Core\Validator\String\EmailValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Id\UuidGenerator;
+use Illuminate\Support\Arr;
 use SimpleXMLElement;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Concrete\Core\Permission\Checker;
@@ -106,7 +108,6 @@ class Controller extends BlockController implements NotificationProviderInterfac
 
     protected $btInterfaceWidth = 640;
     protected $btInterfaceHeight = 700;
-    protected $btCacheBlockOutput = false;
     protected $btTable = 'btExpressForm';
     protected $btExportPageColumns = ['redirectCID'];
     protected $btExportFileFolderColumns = ['addFilesToFolder'];
@@ -136,8 +137,17 @@ class Controller extends BlockController implements NotificationProviderInterfac
         ];
     }
 
+    protected function assertCanMutateFormDefinition(): void
+    {
+        $block = $this->getBlockObject();
+        if (is_object($block) && !$this->validateEditBlockPassThruAction($block)) {
+            throw new UserMessageException(t('Access Denied'));
+        }
+    }
+
     public function action_add_new_form()
     {
+        $this->assertCanMutateFormDefinition();
         $token = app('token');
         if ($token->validate('add_new_form')) {
             $session = $this->app->make('session');
@@ -192,6 +202,7 @@ class Controller extends BlockController implements NotificationProviderInterfac
 
     public function action_update_control_order()
     {
+        $this->assertCanMutateFormDefinition();
         $token = app('token');
         if ($token->validate('update_control_order')) {
             $fieldSet = $this->getFormFieldSet();
@@ -217,6 +228,7 @@ class Controller extends BlockController implements NotificationProviderInterfac
 
     public function action_delete_control()
     {
+        $this->assertCanMutateFormDefinition();
         $token = app('token');
         if ($token->validate('delete_control')) {
             $fieldSet = $this->getFormFieldSet();
@@ -267,6 +279,7 @@ class Controller extends BlockController implements NotificationProviderInterfac
 
     public function action_add_control()
     {
+        $this->assertCanMutateFormDefinition();
         $token = app('token');
         if ($token->validate('add_control')) {
             $entityManager = $this->app->make(EntityManagerInterface::class);
@@ -361,6 +374,7 @@ class Controller extends BlockController implements NotificationProviderInterfac
 
     public function action_update_control()
     {
+        $this->assertCanMutateFormDefinition();
         $token = app('token');
         if ($token->validate('update_control')) {
             $fieldSet = $this->getFormFieldSet();
@@ -473,6 +487,17 @@ class Controller extends BlockController implements NotificationProviderInterfac
             $data['addFilesToFolder'] = $existingAddFilesToFolder;
         }
 
+        // Make form name actually saveable. Fixes #12753
+        $formName = (string) $data['formName'];
+        $entity->setName($formName);
+
+        $entityManager->persist($entity);
+        $entityManager->flush();
+
+        $nodeId = $entity->getEntityResultsNodeId();
+        $node = Node::getByID($nodeId);
+        $node->setTreeNodeName($formName);
+
         $session = $this->app->make('session');
         $session->remove('block.express_form.new');
 
@@ -529,7 +554,7 @@ class Controller extends BlockController implements NotificationProviderInterfac
                         $entity = $entityHandle === '' ? null : $em->getRepository(Entity::class)->findOneBy(['handle' => $entityHandle]);
                     }
                     if ($entity !== null) {
-                        $form = array_first(
+                        $form = Arr::first(
                             $entity->getForms()->toArray(),
                             static function ($form) use ($formName) { return $form->getName() === $formName; }
                         );
@@ -571,9 +596,7 @@ class Controller extends BlockController implements NotificationProviderInterfac
                 }
                 if ($this->displayCaptcha) {
                     $this->set('captcha', $this->app->make('helper/validation/captcha'));
-                    $this->requireAsset('css', 'core/frontend/captcha');
                 }
-                $this->requireAsset('css', 'core/frontend/errors');
                 $this->set('renderer', $renderer);
             }
         }
@@ -770,7 +793,7 @@ class Controller extends BlockController implements NotificationProviderInterfac
                     $entry = $manager->createEntry($entity);
                 }
                 if ($this->areFormSubmissionsStored()) {
-                    $submittedAttributeValues = $entry->getEntryAttributeValues();
+                    $submittedAttributeValues = $this->getStoredSubmittedAttributeValuesInFormOrder($form, $entry);
                 } else {
                     $submittedAttributeValues = $manager->getEntryAttributeValuesForm($form, $entry);
                 }
@@ -803,6 +826,37 @@ class Controller extends BlockController implements NotificationProviderInterfac
             }
         }
         $this->view();
+    }
+
+    /**
+     * When submissions are stored, use the persisted values but present them in form control order.
+     */
+    protected function getStoredSubmittedAttributeValuesInFormOrder(Form $form, Entry $entry): array
+    {
+        $attributeValuesByKeyID = [];
+        foreach ($entry->getAttributes() as $attributeValue) {
+            $attributeKey = $attributeValue->getAttributeKey();
+            if ($attributeKey) {
+                $attributeValuesByKeyID[$attributeKey->getAttributeKeyID()] = $attributeValue;
+            }
+        }
+
+        $submittedAttributeValues = [];
+        foreach ($form->getControls() as $control) {
+            if (!$control instanceof AttributeKeyControl) {
+                continue;
+            }
+            $attributeKey = $control->getAttributeKey();
+            if (!$attributeKey) {
+                continue;
+            }
+            $attributeKeyID = $attributeKey->getAttributeKeyID();
+            if (isset($attributeValuesByKeyID[$attributeKeyID])) {
+                $submittedAttributeValues[] = $attributeValuesByKeyID[$attributeKeyID];
+            }
+        }
+
+        return $submittedAttributeValues;
     }
 
     protected function loadResultsFolderInformation()
@@ -905,7 +959,7 @@ class Controller extends BlockController implements NotificationProviderInterfac
 
         if ($this->addFilesToFolder) {
             $filesystem = new Filesystem();
-            $addFilesToFolder = $filesystem->getFolder($this->addFilesToFolder);
+            $addFilesToFolder = $filesystem->getFolder($this->addFilesToFolder)?:$filesystem->getRootFolder();
             $fp = new Checker($addFilesToFolder);
             if ($fp->canSearchFiles()) {
                 $this->set('addFilesToFolder', $addFilesToFolder);

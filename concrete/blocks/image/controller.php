@@ -3,6 +3,7 @@
 namespace Concrete\Block\Image;
 
 use Concrete\Core\Block\BlockController;
+use Concrete\Core\Block\Controller\SaveMode;
 use Concrete\Core\Database\Connection\Connection;
 use Concrete\Core\Error\Error;
 use Concrete\Core\Feature\Features;
@@ -87,7 +88,8 @@ class Controller extends BlockController implements FileTrackableInterface, Uses
     protected $btCacheBlockRecord = true;
     protected $btCacheBlockOutput = true;
     protected $btCacheBlockOutputOnPost = true;
-    protected $btCacheBlockOutputForRegisteredUsers = false;
+    protected $btCacheBlockOutputForRegisteredUsers = true;
+    protected $btCacheBlockOutputOnEditMode = false;
     protected $btWrapperClass = 'ccm-ui';
     protected $btExportFileColumns = ['fID', 'fOnstateID', 'fileLinkID'];
     protected $btExportPageColumns = ['internalLinkCID'];
@@ -515,15 +517,19 @@ class Controller extends BlockController implements FileTrackableInterface, Uses
             $e->add(t('Please select an image.'));
         }
 
-        if (isset($args['cropImage']) && ((int) $args['maxWidth'] <= 0 || ((int) $args['maxHeight'] <= 0)) && !$svg) {
+        if (!empty($args['cropImage']) && ((int) $args['maxWidth'] <= 0 || ((int) $args['maxHeight'] <= 0)) && !$svg) {
             $e->add(t('Cropping an image requires setting a max width and max height.'));
         }
 
-        if ($svg && isset($args['cropImage'])) {
+        if ($svg && !empty($args['cropImage'])) {
             $e->add(t('SVG images cannot be cropped.'));
         }
 
-        $this->app->make(DestinationPicker::class)->decode('imageLink', $this->getImageLinkPickers(), $e, t('Image Link'), $args);
+        if (isset($args['imageLink__which'])) {
+            // that's the destination picker of the form of the block: a CIF file and the API carry the
+            // columns it fills (see the save() method below)
+            $this->app->make(DestinationPicker::class)->decode('imageLink', $this->getImageLinkPickers(), $e, t('Image Link'), $args);
+        }
 
         return $e;
     }
@@ -546,7 +552,7 @@ class Controller extends BlockController implements FileTrackableInterface, Uses
      */
     public function save($args)
     {
-        $fromCIF = ($args['__fromCIF'] ?? null) === true;
+        $fromCIF = $this->saveMode === SaveMode::SAVE_MODE_IMPORT;
         /** @var Connection $db */
         $db = $this->app->make(Connection::class);
 
@@ -562,7 +568,7 @@ class Controller extends BlockController implements FileTrackableInterface, Uses
 
         $args['fID'] = $args['fID'] != '' ? $args['fID'] : 0;
         $args['fOnstateID'] = $args['fOnstateID'] != '' ? $args['fOnstateID'] : 0;
-        $args['cropImage'] = isset($args['cropImage']) ? 1 : 0;
+        $args['cropImage'] = empty($args['cropImage']) ? 0 : 1;
         $args['maxWidth'] = (int) $args['maxWidth'] > 0 ? (int) $args['maxWidth'] : 0;
         $args['maxHeight'] = (int) $args['maxHeight'] > 0 ? (int) $args['maxHeight'] : 0;
 
@@ -610,8 +616,8 @@ class Controller extends BlockController implements FileTrackableInterface, Uses
      */
     protected function getImportData($blockNode, $page)
     {
+        $this->saveMode = SaveMode::SAVE_MODE_IMPORT;
         $args = parent::getImportData($blockNode, $page);
-        $args['__fromCIF'] = true;
         foreach (['internalLinkCID', 'fileLinkID'] as $field) {
             $args[$field] = empty($args[$field]) ? 0 : (int) $args[$field];
         }

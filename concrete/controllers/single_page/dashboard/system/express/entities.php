@@ -4,6 +4,7 @@ namespace Concrete\Controller\SinglePage\Dashboard\System\Express;
 
 use Concrete\Core\Api\Command\SynchronizeScopesCommand;
 use Concrete\Core\Attribute\Category\SearchIndexer\ExpressSearchIndexer;
+use Concrete\Core\Controller\Traits\DashboardExpressEntityBreadcrumbTrait;
 use Concrete\Core\Entity\Express\Entity;
 use Concrete\Core\Entity\Express\Form;
 use Concrete\Core\Express\Command\PublishEntityCommand;
@@ -21,6 +22,10 @@ use Concrete\Core\Routing\Redirect;
 
 class Entities extends DashboardPageController
 {
+    use DashboardExpressEntityBreadcrumbTrait {
+        getEntityBreadcrumbActionName as getDefaultEntityBreadcrumbActionName;
+    }
+
     public function add()
     {
         $this->set('pageTitle', t('Add Data Object'));
@@ -162,6 +167,13 @@ class Entities extends DashboardPageController
 
         if (!is_object($entity)) {
             $this->error->add(t("Invalid express entity."));
+        } else {
+            // Removing the entity cascades to every one of its entries by way of
+            // Concrete\Core\Express\Entity\Listener, so this needs the same rights as clearing them.
+            $permissions = new Checker($entity);
+            if (!$permissions->canDeleteExpressEntries()) {
+                $this->error->add(t('You do not have access to delete this object.'));
+            }
         }
         if (!$this->token->validate('delete_entity')) {
             $this->error->add($this->token->getErrorMessage());
@@ -174,6 +186,9 @@ class Entities extends DashboardPageController
             return Redirect::to('/dashboard/system/express/entities');
         }
 
+        // Without this the action falls through to the default view, which renders without the
+        // variables view() sets and fatals - so the error above would never reach the user.
+        $this->view();
     }
 
     public function rescan_entries()
@@ -197,6 +212,19 @@ class Entities extends DashboardPageController
         $this->view_entity($this->request->request->get('entity_id'));
     }
 
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see \Concrete\Core\Controller\Traits\DashboardExpressEntityBreadcrumbTrait::getEntityBreadcrumbActionName()
+     */
+    protected function getEntityBreadcrumbActionName(): string
+    {
+        $actionName = $this->getDefaultEntityBreadcrumbActionName();
+
+        // The object details are already represented by the entity item
+        return $actionName === t('Object Details') ? '' : $actionName;
+    }
 
     public function view_entity($id = null)
     {
@@ -226,20 +254,34 @@ class Entities extends DashboardPageController
 
         if (!is_object($entity)) {
             $this->error->add(t('Invalid express entity.'));
+        } else {
+            // A CSRF token proves the request was not forged; it says nothing about whether this user
+            // is allowed to destroy the data. view() already filters the listing through
+            // canViewExpressEntries(), so the granular model is expected to apply on this page.
+            $permissions = new Checker($entity);
+            if (!$permissions->canDeleteExpressEntries()) {
+                $this->error->add(t('You do not have access to delete the entries of this object.'));
+            }
         }
 
         if (!$this->token->validate('clear_entries')) {
             $this->error->add($this->token->getErrorMessage());
         }
 
-        foreach ($entity->getEntries() as $entry){
-            $this->entityManager->remove($entry);
+        if (!$this->error->has()) {
+            foreach ($entity->getEntries() as $entry){
+                $this->entityManager->remove($entry);
+            }
+
+            $this->entityManager->flush();
+
+            $this->flash('success', t('All Entries were successfully cleared.'));
+            return Redirect::to('/dashboard/system/express/entities', 'view_entity', $entity->getId());
         }
 
-        $this->entityManager->flush();
-
-        $this->flash('success', t('All Entries were successfully cleared.'));
-        return Redirect::to('/dashboard/system/express/entities', 'view_entity', $entity->getId());
+        // Without this the action falls through to the default view, which renders without the
+        // variables view() sets and fatals - so the error above would never reach the user.
+        $this->view_entity($this->request->request->get('entity_id'));
     }
 
     /**
@@ -264,6 +306,10 @@ class Entities extends DashboardPageController
             $this->flash('success', t('Entity published successfully.'));
             return Redirect::to('/dashboard/system/express/entities', 'view_entity', $entity->getId());
         }
+
+        // Without this the action falls through to the default view, which renders without the
+        // variables view() sets and fatals - so the error above would never reach the user.
+        $this->view_entity($this->request->request->get('entity_id'));
     }
 
     public function clear_entries($id = null)
@@ -276,6 +322,7 @@ class Entities extends DashboardPageController
 
         $this->set('entity', $entity);
         $this->set('token', new Token());
+        $this->set('pageTitle', t('Clear Entries'));
         $this->render('/dashboard/system/express/entities/clear_entries');
     }
 

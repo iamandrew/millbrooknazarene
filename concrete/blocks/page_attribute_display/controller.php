@@ -67,6 +67,8 @@ class Controller extends BlockController implements UsesFeatureInterface
     protected $btCacheBlockOutputOnPost = true;
     /** @var bool */
     protected $btCacheBlockOutputForRegisteredUsers = false;
+    /** @var bool */
+    protected $btCacheBlockOutputOnEditMode = false;
 
     public function getBlockTypeDescription()
     {
@@ -131,7 +133,6 @@ class Controller extends BlockController implements UsesFeatureInterface
             Features::BASICS
         ];
     }
-
 
     /**
      * @return mixed AttributeValue
@@ -377,7 +378,7 @@ class Controller extends BlockController implements UsesFeatureInterface
             $template->setBlockCustomTemplate("templates/" . $this->attributeHandle . '.php');
             $info = pathinfo($template->getTemplate());
 
-            if ($info['basename'] != 'view.php') {
+            if ($info['basename'] != 'view.php' && file_exists($template->getTemplate())) {
                 $this->render('templates/' . $info['filename'] );
             }
         }
